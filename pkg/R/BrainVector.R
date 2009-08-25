@@ -32,10 +32,10 @@
 
    if ( (dim(data)[1] == nvols) && (dim(data)[2] == nelements) ) {
      #fourth dimension is rows
-     bvec <- new("BrainVector", .Data=t(data), space=space)        
+     new("BrainVector", .Data=t(data), space=space)        
    } else if ((dim(data)[2] == nvols) && (dim(data)[1] == nelements )) {
      #fourth dimension is columns
-     bvec <- new("BrainVector", .Data=data, space=space)
+     new("BrainVector", .Data=data, space=space)
    } else {
      stop(paste("illegal matrix dimension ", dim(data)))
    }
@@ -59,7 +59,7 @@
     if (is.null(indices)) {
       nels <- prod(dim(space)[1:3])
     } else {
-      nels = length(indices)
+      nels <- length(indices)
     }
 
     if (nels == NROW(data)) {
@@ -78,7 +78,7 @@
                         reptime=nvols)
     }
   } else {
-    stop(paste("incorrect dimensions : ", dim(space)))
+    stop(paste("space argument has incorrect dimensions : ", dim(space)))
   }
 }
       
@@ -89,11 +89,9 @@ BrainVector <- function(data, space, indices=NULL) {
   
   space <- .createVectorSpaceFromData(data, space, indices)
   
-
   bvec <- NULL
   
-  if (is.null(indices)) {
-    
+  if (is.null(indices)) {    
     if (is.matrix(data)) {
       bvec <- .BrainVectorFromMatrix(data, space)
     } else if ( all(dim(space) == dim(data)) ) {
@@ -102,8 +100,7 @@ BrainVector <- function(data, space, indices=NULL) {
       data <- array(data, c(dim(space)[1], dim(space)[2], dim(space)[3], dim(space)[4]))
       bvec <- new("BrainVector", .Data=data, space=space)
     }      
-  } else {
-  
+  } else {  
     bvec <- .BrainVectorFromIndices(data, space, indices)
   }
 
@@ -149,7 +146,6 @@ loadSeries <- function(filename, indices, volidx=NULL, reduce=T, demean=F, verbo
   ENDIAN <- endian(header)
   retmat <- matrix(0, length(volidx), length(indices))
 
-  
   for (i in 1:length(volidx)) {
     vol <- volidx[i]
     VOLSTART <- VOLSIZE*(vol-1)*dsize + offset
@@ -163,9 +159,6 @@ loadSeries <- function(filename, indices, volidx=NULL, reduce=T, demean=F, verbo
         readBin(conn, what=rstorage, n=1,size=dsize, endian=ENDIAN)
       })
     } else {
-      if (verbose) {
-        print("bulk read ...")
-      }
       seek(conn, VOLSTART, origin="start")
       vals <- readBin(conn, what=rstorage, n=VOLSIZE,size=dsize, endian=ENDIAN)
       retmat[i,] <- vals[indices]
@@ -182,12 +175,14 @@ loadSeries <- function(filename, indices, volidx=NULL, reduce=T, demean=F, verbo
     retmat <- rowMeans(retmat)
   }
    
-  close(conn)
+  
 
   
   if (is.matrix(retmat) && NCOL(retmat) == 1) {
     retmat <- retmat[,1]
   }
+
+  close(conn)
 
   retmat
 }
@@ -217,8 +212,8 @@ loadSeries <- function(filename, indices, volidx=NULL, reduce=T, demean=F, verbo
   mat <- readData(nfile, ind)
   
   space <- createSpace(header)
-  vec <- SparseBrainVector(mat, space, indices=ind)
-  return(vec)
+  SparseBrainVector(mat, space, indices=ind)
+  
 }
   
 
@@ -252,14 +247,13 @@ loadVector  <- function(filename, volRange=NULL, mask=NULL) {
   data <- readData(nfile)
   data <- array(data, ddim)
   space <- createSpace(header)
-  vec <- new("BrainVector", .Data=data, space=space)
-  return(vec)
+  new("BrainVector", .Data=data, space=space)
+  
 }
 
 setMethod("sliceMeans", signature(x="BrainVector"),
           function(x) {
-             res = t(colMeans(x, dims=2))
-             return(res)
+             t(colMeans(x, dims=2))
            })
 
 setMethod("takeVolume", signature(x="BrainVector", i="numeric"),
@@ -291,8 +285,7 @@ setMethod("concat", signature(x="BrainVector", y="BrainVolume"),
             ndim <- c(d1[1:3], dim(x)[4] + 1)
             nspace <- BrainSpace(ndim, origin(x@space), spacing(x@space),
                                  orientation(x@space), trans(x@space), reptime=1)
-            ret <- BrainVector(ndat, nspace)
-            ret
+            BrainVector(ndat, nspace)
           })
             
 setMethod("concat", signature(x="BrainVolume", y="BrainVolume"),
@@ -319,7 +312,7 @@ setMethod("concat", signature(x="BrainVolume", y="BrainVolume"),
               }
             }
 
-            return(ret)
+            ret
             
           })
 
@@ -350,7 +343,7 @@ setMethod("concat", signature(x="BrainVolume", y="BrainVolume"),
             }
             
 
-            return(ret)
+            ret
 
           })
 
@@ -396,7 +389,7 @@ setMethod("pick", signature(x="BrainVector", mask="vector"),
               ## 3d mask
               #mask <- as.logical(mask)
               NVOL <- dim(x)[4]
-              #browser()
+              
               args <- lapply(1:NVOL, function(i) mask) 
               imask <- do.call("abind", c(args, along=4))
               
@@ -410,9 +403,9 @@ setMethod("pick", signature(x="BrainVector", mask="vector"),
               #}
 
               if (reduce) {
-                return(apply(mat, 2, FUN))
+                apply(mat, 2, FUN)
               } else {
-                return(mat)
+                mat
               }
             }
           })
@@ -448,7 +441,7 @@ setAs(from="BrainVector", to="matrix",
         d4 <- dm[4]
         
         dim(data) <- c(d123,d4)
-        return(data)
+        data
           
       })
 
