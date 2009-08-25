@@ -1,7 +1,6 @@
 \name{createSpace-methods}
 \docType{methods}
 \alias{createSpace-methods}
-\alias{createSpace,NIFTIHeader-method}
 \alias{createSpace,ANALYZEHeader-method}
 \alias{createSpace}
 \title{creates a brainSpace instance}
