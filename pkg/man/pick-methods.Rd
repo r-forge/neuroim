@@ -2,6 +2,7 @@
 \docType{methods}
 \alias{pick-methods}
 \alias{pick,BrainVector,vector-method}
+\alias{pick}
 \title{ extracts data from an image using a mask proivded as an argument }
 \description{
  a generic function for "picking" or extracting data from an image based on a mask. 
