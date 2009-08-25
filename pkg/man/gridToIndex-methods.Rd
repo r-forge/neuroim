@@ -3,6 +3,7 @@
 \alias{gridToIndex-methods}
 \alias{gridToIndex,BrainSlice,matrix-method}
 \alias{gridToIndex,BrainVolume,matrix-method}
+\alias{gridToIndex}
 \title{ map grid coordinate to 1d index coordinate }
 \description{
  Methods for function \code{gridToIndex}  

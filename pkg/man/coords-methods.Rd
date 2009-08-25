@@ -5,7 +5,8 @@
 \alias{coords,IndexLookupVolume-method}
 \alias{coords,SparseBrainVector-method}
 \alias{coords,TiledBrainVector-method}
-\title{ ~~ Methods for Function coords  ~~}
+\alias{coords}
+\title{ Methods for Function coords }
 \description{
 extracts the coordinates of a a coordnate-based image data structure as a matrix
 }

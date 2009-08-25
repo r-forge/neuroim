@@ -5,6 +5,7 @@
 \alias{concat,BrainVector,BrainVolume-method}
 \alias{concat,BrainVolume,BrainVolume-method}
 \alias{concat,SparseBrainVector,SparseBrainVector-method}
+\alias{concat}
 \title{ concatenate two image objects }
 
 \description{
@@ -20,7 +21,7 @@
 
 \item{x = "BrainVolume", y = "BrainVolume"}{ concatenates two BrainVolumes, to form a BrainVector }
 
-\item{x = "SparseBrainVector", y = "SparseBrainVector"}{ concateaetes two SparseBrainVectors }
+\item{x = "SparseBrainVector", y = "SparseBrainVector"}{ concatenates two SparseBrainVectors }
 }}
 
 \keyword{methods}
