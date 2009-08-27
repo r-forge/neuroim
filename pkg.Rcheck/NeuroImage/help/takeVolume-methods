@@ -1,0 +1,16 @@
+takeVolume-methods        package:NeuroImage        R Documentation
+
+~~ _M_e_t_h_o_d_s _f_o_r _F_u_n_c_t_i_o_n _t_a_k_e_V_o_l_u_m_e  ~~
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     ~~ Methods for function 'takeVolume'  ~~
+
+_M_e_t_h_o_d_s:
+
+
+
+     _x = "_B_r_a_i_n_V_e_c_t_o_r", _i = "_n_u_m_e_r_i_c" ~~describe this method here 
+
+     _x = "_S_p_a_r_s_e_B_r_a_i_n_V_e_c_t_o_r", _i = "_n_u_m_e_r_i_c" ~~describe this method here 
+

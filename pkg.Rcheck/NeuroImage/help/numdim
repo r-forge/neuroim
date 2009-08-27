@@ -1,0 +1,21 @@
+numdim              package:NeuroImage              R Documentation
+
+_t_h_e _n_u_m_b_e_r _o_f _d_i_m_e_n_s_i_o_n_s _i_n _i_m_a_g_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     generic function to access the number of dimensions (e.g. axes) in
+     a brain iamge
+
+_U_s_a_g_e:
+
+     numdim(x)
+
+_A_r_g_u_m_e_n_t_s:
+
+       x: an object derived from "BrainSpace" or "BrainData" class 
+
+_V_a_l_u_e:
+
+     an integer value for the number of dimensions
+

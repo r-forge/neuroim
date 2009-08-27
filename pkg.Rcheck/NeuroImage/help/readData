@@ -1,0 +1,24 @@
+readData             package:NeuroImage             R Documentation
+
+_r_e_a_d_s _i_m_a_g_e _d_a_t_a _i_n_t_o _a_n _a_p_p_r_o_p_r_i_a_t_e "_B_r_a_i_n_D_a_t_a" _o_b_j_e_c_t
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     function to load image data into appropriate data structure, e.g.
+     an object derived from the "BrainData" class
+
+_U_s_a_g_e:
+
+     readData(x, indices)
+
+_A_r_g_u_m_e_n_t_s:
+
+       x: an object derived from the "BrainFile" class 
+
+ indices: the 1D indices of the image cells to load 
+
+_V_a_l_u_e:
+
+     a "BrainData" object appropriate for the type of data file being
+     read
+

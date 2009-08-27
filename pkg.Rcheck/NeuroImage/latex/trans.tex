@@ -1,0 +1,26 @@
+\HeaderA{trans}{function to access the forward transformation associated with a brain
+image}{trans}
+\aliasA{trans<\Rdash}{trans}{trans<.Rdash.}
+\keyword{manip}{trans}
+\begin{Description}\relax
+this function access the transformation matrix attached to a
+"BrainSpace" object
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+trans(x)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] an object derived from "BrainData" or "BrainSpace" classes 
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+transformation matrices are 4X4 affine matrices for 3D images and 3X3
+matrices for 2D images
+\end{Details}
+\begin{Value}
+the transformation matrix
+\end{Value}
+

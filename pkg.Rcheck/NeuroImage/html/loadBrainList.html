@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: a function to create a "BrainList" object from a simple data.frame descriptor</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for loadBrainList {NeuroImage}"><tr><td>loadBrainList {NeuroImage}</td><td align="right">R Documentation</td></tr></table>
+<h2>a function to create a "BrainList" object from a simple data.frame descriptor</h2>
+
+
+<h3>Description</h3>
+
+<p>
+a convenience function to create a "BrainList" object from a text file description
+</p>
+
+
+<h3>Usage</h3>
+
+<pre>
+loadBrainList(tableSpec, path = NULL)
+</pre>
+
+
+<h3>Arguments</h3>
+
+<table summary="R argblock">
+<tr valign="top"><td><code>tableSpec</code></td>
+<td>
+a two-column data.frame containing the labels and
+image file names </td></tr>
+<tr valign="top"><td><code>path</code></td>
+<td>
+optional path to image files </td></tr>
+</table>
+
+<h3>Details</h3>
+
+<p>
+the supplied data.frame must have two columns named "label" (for the
+image identifiers) and "file" for the image file names.  These are
+then used as key-value paris in the constructed <code>BrainList</code>
+object. It is assumed that each opf the imege files are
+three-dimensional and this can be loaded with the <code>loadVolume</code> function.
+</p>
+
+
+<h3>Value</h3>
+
+<p>
+an object of class <code>BrainList</code></p>
+
+
+<hr><div align="center">[Package <em>NeuroImage</em> version 0.5.6 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

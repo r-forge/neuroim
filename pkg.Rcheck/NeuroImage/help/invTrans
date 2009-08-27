@@ -1,0 +1,17 @@
+invTrans             package:NeuroImage             R Documentation
+
+_i_n_v_e_r_s_e _c_o_o_o_r_d_i_n_a_t_e _t_r_a_n_s_f_o_r_m
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     a matrix representing the inverse transform from real world
+     coordinate to image grid space
+
+_U_s_a_g_e:
+
+     invTrans(x)
+
+_A_r_g_u_m_e_n_t_s:
+
+       x: a object derived from class "BrainSpace" 
+

@@ -1,0 +1,23 @@
+\HeaderA{loadVector}{convenience function to create a "BrainVector" instance from a specified
+file}{loadVector}
+\keyword{manip}{loadVector}
+\begin{Description}\relax
+convenience function to create a "BrainVector" instance from a
+specified file
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+loadVector(filename, volRange = NULL, mask=NULL)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{filename}] name of the file to load 
+\item[\code{volRange}] the volume indices to load 
+\item[\code{mask}] a mask, which can be an \code{array} or \code{BrainData} instance with appropriate dimensions, indicating which voxels to load. If provided function returns a SparseBrainVector 
+\end{ldescription}
+\end{Arguments}
+\begin{Value}
+an of object of class \code{BrainVector}
+\end{Value}
+

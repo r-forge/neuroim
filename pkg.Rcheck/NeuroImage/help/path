@@ -1,0 +1,20 @@
+path               package:NeuroImage               R Documentation
+
+_r_e_t_u_r_n_s _t_h_e _f_u_l_l _p_a_t_h _o_f _a "_B_r_a_i_n_F_i_l_e" _s_o_u_r_c_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     returns the full path of a "BrainFile" source
+
+_U_s_a_g_e:
+
+     path(x)
+
+_A_r_g_u_m_e_n_t_s:
+
+       x: an object derived from the "BrainFile" class  
+
+_V_a_l_u_e:
+
+     character string representing the full path of the data file
+

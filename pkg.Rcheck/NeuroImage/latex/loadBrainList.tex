@@ -1,0 +1,28 @@
+\HeaderA{loadBrainList}{a function to create a "BrainList" object from a simple data.frame descriptor}{loadBrainList}
+\keyword{manip}{loadBrainList}
+\begin{Description}\relax
+a convenience function to create a "BrainList" object from a text file description
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+loadBrainList(tableSpec, path = NULL)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{tableSpec}] a two-column data.frame containing the labels and
+image file names 
+\item[\code{path}] optional path to image files 
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+the supplied data.frame must have two columns named "label" (for the
+image identifiers) and "file" for the image file names.  These are
+then used as key-value paris in the constructed \code{BrainList}
+object. It is assumed that each opf the imege files are
+three-dimensional and this can be loaded with the \code{loadVolume} function.
+\end{Details}
+\begin{Value}
+an object of class \code{BrainList}
+\end{Value}
+

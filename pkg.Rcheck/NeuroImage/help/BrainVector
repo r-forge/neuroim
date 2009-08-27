@@ -1,0 +1,22 @@
+BrainVector            package:NeuroImage            R Documentation
+
+_a _f_u_n_c_t_i_o_n _t_o _c_r_e_a_t_e _i_n_s_t_a_n_c_e _o_f _c_l_a_s_s "_B_r_a_i_n_V_e_c_t_o_r"
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     a function to create instance of class "BrainVector"
+
+_U_s_a_g_e:
+
+     BrainVector(data, space, indices = NULL)
+
+_A_r_g_u_m_e_n_t_s:
+
+    data: a numeric vector containing image data 
+
+   space: object of class 'BrainSpace' describing the geometry of the
+          data object 
+
+ indices: optional argument specifiying 1-d indices if data vector is
+          sparse 
+

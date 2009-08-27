@@ -1,0 +1,23 @@
+loadVolume            package:NeuroImage            R Documentation
+
+_l_o_a_d_s _a_n _i_m_a_g_e _v_o_l_u_m_e _f_r_o_m _f_i_l_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     loads an image volume from file and creates object of class
+     "BrainVolume"
+
+_U_s_a_g_e:
+
+     loadVolume(file, volNum = 1)
+
+_A_r_g_u_m_e_n_t_s:
+
+    file: the name of the image file to load 
+
+  volNum: the volume index if the file is 4 dimensional (starts at 1) 
+
+_V_a_l_u_e:
+
+     an object of class "BrainVolume"
+

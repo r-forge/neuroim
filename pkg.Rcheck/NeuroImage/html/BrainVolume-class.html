@@ -1,0 +1,57 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: Class "BrainVolume"</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for BrainVolume-class {NeuroImage}"><tr><td>BrainVolume-class {NeuroImage}</td><td align="right">R Documentation</td></tr></table>
+<h2>Class "BrainVolume"</h2>
+
+
+<h3>Description</h3>
+
+<p>
+a class for storing 3D volumetric image data
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>
+Objects can be created by calls of the form <code>new("BrainVolume", ...)</code>
+</p>
+
+
+<h3>Slots</h3>
+
+<dl>
+<dt><code>.Data</code>:</dt><dd>Object of class <code>"array"</code> : the image data
+array </dd>
+<dt><code>space</code>:</dt><dd>Object of class <code>"BrainSpace"</code> : the image
+geometry </dd>
+</dl>
+
+<h3>Extends</h3>
+
+<p>
+Class <code>"<a href="BrainSlice-class.html">BrainSlice</a>"</code>, directly.
+Class <code>"<a href="../../methods/html/StructureClasses.html">array</a>"</code>, by class "BrainSlice", distance 2.
+Class <code>"<a href="BrainData-class.html">BrainData</a>"</code>, by class "BrainSlice", distance 2.
+Class <code>"<a href="../../methods/html/StructureClasses.html">structure</a>"</code>, by class "BrainSlice", distance 3.
+Class <code>"<a href="../../methods/html/StructureClasses.html">matrix</a>"</code>, by class "BrainSlice", distance 3, with explicit test and coerce.
+Class <code>"<a href="../../methods/html/BasicClasses.html">vector</a>"</code>, by class "BrainSlice", distance 4, with explicit coerce.
+Class <code>"<a href="../../methods/html/BasicClasses.html">vector</a>"</code>, by class "BrainSlice", distance 5, with explicit test and coerce.
+Class <code>"<a href="../../methods/html/BasicClasses.html">vector</a>"</code>, by class "BrainSlice", distance 6, with explicit test and coerce.
+</p>
+
+
+<h3>Methods</h3>
+
+<dl>
+<dt>writeVolume</dt><dd><code>signature(x="BrainVolume",fileName="character")</code> : writes volume to disk using default NIFTI format </dd>
+</dl>
+
+
+<hr><div align="center">[Package <em>NeuroImage</em> version 0.5.6 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

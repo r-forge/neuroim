@@ -1,0 +1,21 @@
+headerFileExt           package:NeuroImage           R Documentation
+
+_g_e_t_s _t_h_e _h_e_a_d_e_r _f_i_l_e _e_x_t_e_n_s_i_o_n
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     generic function to access extension (e.g. "hdr", ".nii", ".HEAD")
+     appropriate for file type
+
+_U_s_a_g_e:
+
+     headerFileExt(x)
+
+_A_r_g_u_m_e_n_t_s:
+
+       x: object derived from class "BrainHeader" 
+
+_V_a_l_u_e:
+
+     character string representing file extension
+

@@ -1,0 +1,21 @@
+readHeader            package:NeuroImage            R Documentation
+
+_r_e_a_d_s _t_h_e _h_e_a_d_e_r _p_a_r_t _o_f _a_n _i_m_a_g_e _f_i_l_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     a function to read an image header without loading associated
+     image data
+
+_U_s_a_g_e:
+
+     readHeader(x)
+
+_A_r_g_u_m_e_n_t_s:
+
+       x: an object derived from class "BrainFile" 
+
+_V_a_l_u_e:
+
+     an object derived from class "BrainHeader"
+

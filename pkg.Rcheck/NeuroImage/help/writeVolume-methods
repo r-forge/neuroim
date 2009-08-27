@@ -1,0 +1,18 @@
+writeVolume-methods        package:NeuroImage        R Documentation
+
+_M_e_t_h_o_d_s _f_o_r _F_u_n_c_t_i_o_n _w_r_i_t_e_V_o_l_u_m_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     ~~ Methods for function 'writeVolume'  ~~
+
+_M_e_t_h_o_d_s:
+
+
+
+     _x = "_B_r_a_i_n_V_o_l_u_m_e", _f_i_l_e_N_a_m_e = "_c_h_a_r_a_c_t_e_r", _f_o_r_m_a_t = "_c_h_a_r_a_c_t_e_r" 
+          writes 'BrainVolume' to file with specified 'format' 
+
+     _x = "_B_r_a_i_n_V_o_l_u_m_e", _f_i_l_e_N_a_m_e = "_c_h_a_r_a_c_t_e_r", _f_o_r_m_a_t = "_m_i_s_s_i_n_g" 
+          writes 'BrainVolume' to file 
+

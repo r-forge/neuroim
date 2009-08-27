@@ -1,0 +1,33 @@
+\HeaderA{BrainVolume-class}{Class "BrainVolume"}{BrainVolume.Rdash.class}
+\aliasA{writeVolume,BrainVolume,character-method}{BrainVolume-class}{writeVolume,BrainVolume,character.Rdash.method}
+\keyword{classes}{BrainVolume-class}
+\begin{Description}\relax
+a class for storing 3D volumetric image data
+\end{Description}
+\begin{Section}{Objects from the Class}
+Objects can be created by calls of the form \code{new("BrainVolume", ...)}
+\end{Section}
+\begin{Section}{Slots}
+\describe{
+\item[\code{.Data}:] Object of class \code{"array"} : the image data
+array 
+\item[\code{space}:] Object of class \code{"BrainSpace"} : the image
+geometry 
+}
+\end{Section}
+\begin{Section}{Extends}
+Class \code{"\LinkA{BrainSlice}{BrainSlice.Rdash.class}"}, directly.
+Class \code{"\LinkA{array}{array.Rdash.class}"}, by class "BrainSlice", distance 2.
+Class \code{"\LinkA{BrainData}{BrainData.Rdash.class}"}, by class "BrainSlice", distance 2.
+Class \code{"\LinkA{structure}{structure.Rdash.class}"}, by class "BrainSlice", distance 3.
+Class \code{"\LinkA{matrix}{matrix.Rdash.class}"}, by class "BrainSlice", distance 3, with explicit test and coerce.
+Class \code{"\LinkA{vector}{vector.Rdash.class}"}, by class "BrainSlice", distance 4, with explicit coerce.
+Class \code{"\LinkA{vector}{vector.Rdash.class}"}, by class "BrainSlice", distance 5, with explicit test and coerce.
+Class \code{"\LinkA{vector}{vector.Rdash.class}"}, by class "BrainSlice", distance 6, with explicit test and coerce.
+\end{Section}
+\begin{Section}{Methods}
+\describe{
+\item[writeVolume] \code{signature(x="BrainVolume",fileName="character")} : writes volume to disk using default NIFTI format 
+}
+\end{Section}
+

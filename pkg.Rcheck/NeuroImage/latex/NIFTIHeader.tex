@@ -1,0 +1,28 @@
+\HeaderA{NIFTIHeader}{function to create a an instance of the "NIFTIHeader" class}{NIFTIHeader}
+\keyword{manip}{NIFTIHeader}
+\begin{Description}\relax
+function to creatte a n instance of the "NIFTIHeader" class
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+NIFTIHeader(headerFile, dataFile, extraInfo, fileType = "NIFTI", versionNum = "1", encoding = extraInfo$encoding, endian = .Platform$endian, dataOffset = 348, dataType = NULL)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{headerFile}] the path to the header file 
+\item[\code{dataFile}] the path to the data file (may be same as above) 
+\item[\code{extraInfo}] list containing auxiallary header information  
+\item[\code{fileType}] the file format 
+\item[\code{versionNum}] the version of the file format 
+\item[\code{encoding}] the encoding type ("binary", or "gz") 
+\item[\code{endian}] the endianess of the stored image data 
+\item[\code{dataOffset}] the byte offset in the image file where the first value
+may be found 
+\item[\code{dataType}] the stored dataType 
+\end{ldescription}
+\end{Arguments}
+\begin{Value}
+an instance of the "NIFTIHeader" class
+\end{Value}
+

@@ -1,0 +1,22 @@
+headerFile            package:NeuroImage            R Documentation
+
+_g_e_t_s _t_h_e _n_a_m_e _o_f _t_h_e _h_e_a_d_e_r _f_i_l_e _a_s_s_o_c_i_a_t_e_d _w_i_t_h _a
+"_B_r_a_i_n_H_e_a_d_e_r" _i_n_s_t_a_n_c_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     simple accessor fucntion that retrieves the name of the header
+     file assocaited a "BrainHeader" instance
+
+_U_s_a_g_e:
+
+     headerFile(x)
+
+_A_r_g_u_m_e_n_t_s:
+
+       x: object deriving from class "BrainHeader" 
+
+_V_a_l_u_e:
+
+     character string of the the full path of the header name
+

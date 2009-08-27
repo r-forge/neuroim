@@ -1,0 +1,24 @@
+\HeaderA{spacing}{returns cell dimensions for a voxel or pixel unit}{spacing}
+\keyword{manip}{spacing}
+\begin{Description}\relax
+generic function to access the voxel or pixel dimension for a brain image
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+spacing(x)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] object derived from "BrainSpace" or "BrainData" classes 
+\end{ldescription}
+\end{Arguments}
+\begin{Value}
+a numeric vector of the cell sizes for each image axis
+\end{Value}
+\begin{Note}\relax
+this function does not deal with non-spatial dimensions, such as
+time.  Thus, a 4-D fMRI image return a vector of length 3, one for
+each spatail dimension.
+\end{Note}
+

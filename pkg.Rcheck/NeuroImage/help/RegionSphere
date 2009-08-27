@@ -1,0 +1,21 @@
+RegionSphere           package:NeuroImage           R Documentation
+
+_c_r_e_a_t_i_o_n _f_u_n_c_t_i_o_n _f_o_r _S_p_h_e_r_i_c _B_r_a_i_n_R_e_g_i_o_n_3_D
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     creates a new BrainRegion3D instance with a spheric geometry.
+
+_U_s_a_g_e:
+
+             RegionSphere(bvol, centroid, radius)    
+
+_A_r_g_u_m_e_n_t_s:
+
+    bvol: the 'BrainVolume' that on which the geometry of the region is
+          based 
+
+centroid: the center coordinates (in grid space) of the region 
+
+  radius: the radius of the sphere of the constructed region 
+

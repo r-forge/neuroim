@@ -1,0 +1,22 @@
+origin              package:NeuroImage              R Documentation
+
+_r_e_t_r_i_e_v_e_s _t_h_e _i_m_a_g_e _o_r_i_g_i_n
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     the image is the real world coordinate location at the first grid
+     location of the data array (e.g. voxel [1,1,1] )
+
+_U_s_a_g_e:
+
+     origin(x)
+
+_A_r_g_u_m_e_n_t_s:
+
+       x: object deriving from class "BrainSpace" or "BrainData" 
+
+_V_a_l_u_e:
+
+     a numeric vector indicating the location in real world
+     coordinates.
+

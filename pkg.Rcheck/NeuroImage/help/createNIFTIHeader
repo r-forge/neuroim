@@ -1,0 +1,30 @@
+createNIFTIHeader         package:NeuroImage         R Documentation
+
+_a _f_u_n_c_t_i_o_n _t_o _c_r_e_a_t_e _a _N_I_F_T_I_H_e_a_d_e_r _o_b_j_e_c_t
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     this function may be used to create a 'NIFTIHeader' object given
+     an existing brain data object
+
+_U_s_a_g_e:
+
+     createNIFTIHeader(data, fileName, dataType = "FLOAT")
+
+_A_r_g_u_m_e_n_t_s:
+
+    data: an object deriving from the class 'BrainData' 
+
+fileName: the file name for the header (need not exist) 
+
+dataType: the storage type of the data, e.g. "SHORT" 
+
+_D_e_t_a_i_l_s:
+
+     This argument is useful if one wants to create a NIFTIHeader
+     object on the basis of an existing 'BrainData' object
+
+_V_a_l_u_e:
+
+     an object of class 'NIFTIHeader'
+

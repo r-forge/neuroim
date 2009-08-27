@@ -1,0 +1,18 @@
+index-class            package:NeuroImage            R Documentation
+
+_V_i_r_t_u_a_l _C_l_a_s_s "_i_n_d_e_x" - _S_i_m_p_l_e _C_l_a_s_s _f_o_r _i_m_a_g_e _i_n_d_i_c_e_s
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     The class '"index"' is a virtual class used for indices (in
+     signatures) for image data indexing and sub-assignment of brain
+     image data.
+
+_O_b_j_e_c_t_s _f_r_o_m _t_h_e _C_l_a_s_s:
+
+     A virtual Class: No objects may be created from it.
+
+_E_x_a_m_p_l_e_s:
+
+     showClass("index")
+

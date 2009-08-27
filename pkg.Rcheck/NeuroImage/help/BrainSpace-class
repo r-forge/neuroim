@@ -1,0 +1,93 @@
+BrainSpace-class         package:NeuroImage         R Documentation
+
+_C_l_a_s_s "_B_r_a_i_n_S_p_a_c_e"
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     BrainSpace represents the topology of a dataset
+
+_O_b_j_e_c_t_s _f_r_o_m _t_h_e _C_l_a_s_s:
+
+     Objects can be created by calls of the form 'BrainSpace(Dim,
+     dimension, spacing, origin) '.
+
+_S_l_o_t_s:
+
+
+     '_D_i_m': Object of class '"integer"' - an integer array specifiying
+          the spatial dimensions 
+
+     '_o_r_i_g_i_n': Object of class '"numeric"' - an array representing the
+          absolute location of the origin (coordinate at voxel [0, 0,
+          0]) 
+
+     '_s_p_a_c_i_n_g': Object of class '"numeric"' - an array representing the
+          grid spacing for each dimension       
+
+     '_o_r_i_e_n_t_a_t_i_o_n': Object of class '"character"' - character array
+          describing axes orientation, e.g., "L" for "left-right", "P"
+          for "posterior-anterior", "I" for "inferior-superior". This
+          slot is currently not used and may contain invalid
+          information.
+
+     '_t_r_a_n_s': Object of class '"matrix"' - This is a transformation
+          matrix used for computing the mapping from index coordinates
+          to real world oordiantes. Should be a 4X4 matrix for
+          volumetrix data.
+
+     '_i_n_v_T_r_a_n_s': Object of class '"matrix"' - This is the inverse
+          transformation (real world to index) and is computed
+          internally and therefore should not be changed externally 
+
+     '_r_e_p_t_i_m_e': Object of class '"numeric"' - The delay between volume
+          acquisitions in seconds 
+
+
+_M_e_t_h_o_d_s:
+
+
+     _b_o_u_n_d_s 'signature(x = "BrainSpace")': - returns the real world
+          bounds as a matrix of (min, max) pairs 
+
+     _i_n_v_T_r_a_n_s 'signature(x = "BrainSpace")': - returns the dimension of
+          the data axes for the space 
+
+     _n_u_m_d_i_m 'signature(x = "BrainSpace")': - returns the number of
+          dimensions in space 
+
+     _o_r_i_e_n_t_a_t_i_o_n 'signature(x = "BrainSpace")': - returns the
+          (currently unsupported) orientation code  
+
+     _o_r_i_g_i_n 'signature(x = "BrainSpace")': - returns the coordinate
+          origin 
+
+     _s_p_a_c_i_n_g 'signature(x = "BrainSpace")': - returns the voxel spacing 
+
+     _t_r_a_n_s<- 'signature(x = "BrainSpace", value = "matrix")': - returns
+          the index-to-word transformation matrix 
+
+     _t_r_a_n_s 'signature(x = "BrainSpace")': - returns the inverse
+          transformation matrix 
+
+     _r_e_p_t_i_m_e 'signature(x = "BrainSpace")': - returns the repetition
+          time 
+
+     _s_h_o_w 'signature(x = "BrainSpace")': - print information about
+          BrainSpace object 
+
+
+_A_u_t_h_o_r(_s):
+
+     Bradley Buchsbaum bbuchsbaum@berkeley.edu
+
+_R_e_f_e_r_e_n_c_e_s:
+
+     no references
+
+_E_x_a_m_p_l_e_s:
+
+     space <- BrainSpace(Dim=c(64,64,18))
+     show(space)
+     trans(space)
+     origin(space)
+

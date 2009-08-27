@@ -1,0 +1,54 @@
+\HeaderA{BrainData-class}{Virtual Class "BrainData"}{BrainData.Rdash.class}
+\aliasA{dim,BrainData-method}{BrainData-class}{dim,BrainData.Rdash.method}
+\aliasA{numdim,BrainData-method}{BrainData-class}{numdim,BrainData.Rdash.method}
+\aliasA{space,BrainData-method}{BrainData-class}{space,BrainData.Rdash.method}
+\aliasA{spacing,BrainData-method}{BrainData-class}{spacing,BrainData.Rdash.method}
+\keyword{classes}{BrainData-class}
+\begin{Description}\relax
+The \code{BrainData} class is a class contained by all actual
+classes in the \pkg{Neuroimage} package.  It is a \dQuote{virtual} class.
+\end{Description}
+\begin{Section}{Objects from the Class}
+A virtual Class: No objects may be created from it.
+\end{Section}
+\begin{Section}{Slots}
+Common to \emph{all} BrainData objects in the package:
+\describe{
+
+\item[\code{space}:] Object of class \code{"BrainSpace"} -- a
+description of the data "space", e.g. voxel resolution and iamge
+dimensions.
+
+}
+\end{Section}
+\begin{Section}{Methods}
+\describe{
+\item[dim] \code{signature(x = "BrainData")}: extract data dimensions
+\code{\LinkA{dim}{dim}}.
+\item[space] \code{signature(x = "BrainData")}: extract
+\dQuote{space} slot.
+\item[numdim] \code{signature(x = "BrainData")}: return number of
+dimensions in space 
+\item[spacing] \code{signature(x = "BrainData")}: returns cell
+spacing for image data  
+}
+\end{Section}
+\begin{Note}\relax
+No notes yet
+\end{Note}
+\begin{Author}\relax
+Bradley Buchsbaum \email{bbuchsbaum@berkeley.edu}
+\end{Author}
+\begin{Examples}
+\begin{ExampleCode}
+
+slotNames("BrainData")
+
+cl <- getClass("BrainData")
+names(cl@subclasses) 
+
+showClass("BrainData") # output with slots and all subclasses
+
+\end{ExampleCode}
+\end{Examples}
+

@@ -1,0 +1,14 @@
+dataOffset-methods        package:NeuroImage        R Documentation
+
+_M_e_t_h_o_d_s _f_o_r _t_h_e _d_a_t_a_O_f_f_s_e_t _g_e_n_e_r_i_c
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     the offset in bytes for the image values contained in a data file
+
+_M_e_t_h_o_d_s:
+
+
+     _x = "_B_r_a_i_n_H_e_a_d_e_r" Returns an integer value representing the byte
+          offset for the image file
+

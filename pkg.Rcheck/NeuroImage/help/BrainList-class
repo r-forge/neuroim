@@ -1,0 +1,37 @@
+BrainList-class          package:NeuroImage          R Documentation
+
+_C_l_a_s_s "_B_r_a_i_n_L_i_s_t"
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     a class for storing a named list of "BrainData" objects
+
+_O_b_j_e_c_t_s _f_r_o_m _t_h_e _C_l_a_s_s:
+
+     Objects can be created by calls of the form 'new("BrainList",
+     ...)'.
+
+_S_l_o_t_s:
+
+
+     '._D_a_t_a': Object of class '"list"' : a list of "BrainData" objects,
+          all of which having equivalent geometries 
+
+     '_n_a_m_e_s': the names of the data objects 
+
+     '_s_p_a_c_e': Object of class '"BrainSpace"' : the canonical
+          "BrainSpace" of the image list  
+
+_E_x_t_e_n_d_s:
+
+     Class '"list"', from data part. Class '"BrainData"', directly.
+     Class '"vector"', by class "list", distance 2.
+
+_M_e_t_h_o_d_s:
+
+     No methods defined with class "BrainList" in the signature.
+
+_R_e_f_e_r_e_n_c_e_s:
+
+     ~put references to the literature/web site here ~
+

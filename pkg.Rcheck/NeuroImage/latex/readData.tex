@@ -1,0 +1,21 @@
+\HeaderA{readData}{reads image data into an appropriate "BrainData" object}{readData}
+\keyword{manip}{readData}
+\begin{Description}\relax
+function to load image data into appropriate data structure, e.g. an
+object derived from the "BrainData" class
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+readData(x, indices)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] an object derived from the "BrainFile" class 
+\item[\code{indices}] the 1D indices of the image cells to load 
+\end{ldescription}
+\end{Arguments}
+\begin{Value}
+a "BrainData" object appropriate for the type of data file being read
+\end{Value}
+

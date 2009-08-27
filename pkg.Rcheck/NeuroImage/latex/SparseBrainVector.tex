@@ -1,0 +1,32 @@
+\HeaderA{SparseBrainVector}{a function to create a new SparseBrainVector instance}{SparseBrainVector}
+\begin{Description}\relax
+A convenience creation function for the SparseBrainVector class.  
+This function can construct a 4-dimensional sparse data structure from a matrix of values and a mask or 1d index vector.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+        SparseBrainVector(dat, space, mask = NULL, indices = NULL)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{dat}] a \code{matrix} of values where the number of rows or columns must equal the number of elements in the \code{mask} or \code{ndices} arguments.
+
+
+\item[\code{space}] a \code{BrainSpace} instance that encodes the 3d geometry of the to-be-created structure
+
+
+\item[\code{mask}] an mask which must have the same dimensions as the \code{space} argument.
+
+
+\item[\code{indices}] an alternative to \code{mask} (either one or the other must be supplied) which is simple a 1d vector of indices that map to the 3d coordinates.
+
+\end{ldescription}
+\end{Arguments}
+\begin{Value}
+an instance of the \code{SparseBrainVector} class
+\end{Value}
+\begin{Author}\relax
+bbuchsbaum@rotman-baycrest.on.ca
+\end{Author}
+

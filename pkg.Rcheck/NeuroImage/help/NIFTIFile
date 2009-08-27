@@ -1,0 +1,24 @@
+NIFTIFile             package:NeuroImage             R Documentation
+
+_f_u_n_c_t_i_o_n _t_o _c_r_e_a_t_e _a _n_e_w "_N_I_F_T_I_F_i_l_e" _i_n_s_t_a_n_c_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     function to create a new "NIFTIFile" instance
+
+_U_s_a_g_e:
+
+     NIFTIFile(path, open = "r", type = NULL)
+
+_A_r_g_u_m_e_n_t_s:
+
+    path: the file path of the image 
+
+    open: open for input "r" or output "w" 
+
+    type: the fileType, "nifti-single", "nifti-pair", or "nifti-gz"
+
+_V_a_l_u_e:
+
+     an instance of class "NIFTIFile"
+

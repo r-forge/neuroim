@@ -1,0 +1,20 @@
+readNIFTIHeader          package:NeuroImage          R Documentation
+
+_r_e_a_d_s _a _N_I_F_T_I _f_o_r_m_a_t _h_e_a_d_e_r
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     function to read a NIFTI formatted header file
+
+_U_s_a_g_e:
+
+     readNIFTIHeader(fname)
+
+_A_r_g_u_m_e_n_t_s:
+
+   fname: the file name of the header 
+
+_V_a_l_u_e:
+
+     an object of class "NIFTIHeader"
+

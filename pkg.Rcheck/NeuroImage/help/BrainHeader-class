@@ -1,0 +1,65 @@
+BrainHeader-class         package:NeuroImage         R Documentation
+
+_C_l_a_s_s "_B_r_a_i_n_H_e_a_d_e_r"
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     A virtual class representing basic information contained in brain
+     image headers
+
+_O_b_j_e_c_t_s _f_r_o_m _t_h_e _C_l_a_s_s:
+
+     A virtual Class: No objects may be created from it.
+
+_S_l_o_t_s:
+
+
+     '_h_e_a_d_e_r_F_i_l_e': Object of class '"character"' : the name of the
+          header file  
+
+     '_d_a_t_a_F_i_l_e': Object of class '"character"' : the name of the data
+          file  
+
+     '_f_i_l_e_T_y_p_e': Object of class '"character"' : the file format of
+          this header 
+
+     '_v_e_r_s_i_o_n_N_u_m': Object of class '"character"' : the version number
+          of the file format  
+
+     '_e_n_c_o_d_i_n_g': Object of class '"character"' : the encoding type,
+          which may be "binary" or "gz" 
+
+     '_e_n_d_i_a_n': Object of class '"character"' : the endianess of the
+          stored data  
+
+     '_d_a_t_a_O_f_f_s_e_t': Object of class '"numeric"' : the offset in the data
+          file where the first image value may be found  
+
+     '_d_a_t_a_T_y_p_e': Object of class '"character"' : the data type of the
+          stored image data 
+
+     '_e_x_t_r_a_I_n_f_o': Object of class '"list"' : auxilliary or
+          format-specific information 
+
+_M_e_t_h_o_d_s:
+
+
+     _d_a_t_a_F_i_l_e 'signature(x = "BrainHeader")': simple accessor method 
+
+     _d_a_t_a_O_f_f_s_e_t 'signature(x = "BrainHeader")': simple accessor method 
+
+     _d_a_t_a_T_y_p_e 'signature(x = "BrainHeader")': simple accessor method 
+
+     _e_n_c_o_d_i_n_g 'signature(x = "BrainHeader")': simple accessor method
+
+     _e_n_d_i_a_n 'signature(x = "BrainHeader")': simple accessor method  
+
+     _e_x_t_r_a_I_n_f_o 'signature(x = "BrainHeader")': simple accessor method
+
+     _f_i_l_e_T_y_p_e 'signature(x = "BrainHeader")': simple accessor method 
+
+     _h_e_a_d_e_r_F_i_l_e 'signature(x = "BrainHeader")': simple accessor method 
+
+     _v_e_r_s_i_o_n_N_u_m 'signature(x = "BrainHeader")': simple accessor method 
+
+

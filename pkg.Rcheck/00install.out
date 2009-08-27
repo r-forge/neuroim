@@ -1,0 +1,170 @@
+* Installing *source* package ‘NeuroImage’ ...
+** R
+** data
+** preparing package for lazy loading
+Creating a new generic function for "as.matrix" in "NeuroImage"
+Creating a new generic function for "as.vector" in "NeuroImage"
+In method for function "as.vector": expanding the signature to
+include omitted arguments in definition: mode = "missing"
+In method for function "writeVector": expanding the signature to
+include omitted arguments in definition: format = "missing"
+Warning in .resolveSuperclasses(ClassDef, ext, where) :
+  None of the orderings of the superclasses of class "BrainVector" is consistent with the superclass ordering of  its direct superclasses; using an ordering which conflicts with "BrainVolume"
+Creating a new generic function for "typeof" in "NeuroImage"
+In method for function "writeVector": expanding the signature to
+include omitted arguments in definition: format = "missing"
+** help
+*** installing help indices
+ >>> Building/Updating help pages for package 'NeuroImage'
+     Formats: text html latex example 
+Note: removing empty section \examples in file 'AFNIFile-class.Rd'
+  AFNIFile-class                    text    html    latex
+  ANALYZEFile-class                 text    html    latex
+Note: removing empty section \examples in file 'ANALYZEFile.Rd'
+  ANALYZEFile                       text    html    latex
+Note: removing empty section \references in file 'BrainData-class.Rd'
+Note: removing empty section \seealso in file 'BrainData-class.Rd'
+  BrainData-class                   text    html    latex   example
+Note: removing empty section \examples in file 'BrainFile-class.Rd'
+  BrainFile-class                   text    html    latex
+Note: removing empty section \examples in file 'BrainHeader-class.Rd'
+  BrainHeader-class                 text    html    latex
+Note: removing empty section \author in file 'BrainList-class.Rd'
+Note: removing empty section \examples in file 'BrainList-class.Rd'
+  BrainList-class                   text    html    latex
+Note: removing empty section \examples in file 'BrainList.Rd'
+  BrainList                         text    html    latex
+Note: removing empty section \note in file 'BrainSlice-class.Rd'
+Note: removing empty section \references in file 'BrainSlice-class.Rd'
+Note: removing empty section \seealso in file 'BrainSlice-class.Rd'
+  BrainSlice-class                  text    html    latex   example
+Note: removing empty section \examples in file 'BrainSlice.Rd'
+  BrainSlice                        text    html    latex
+Note: removing empty section \note in file 'BrainSpace-class.Rd'
+Note: removing empty section \seealso in file 'BrainSpace-class.Rd'
+  BrainSpace-class                  text    html    latex   example
+Note: ignoring empty \keyword entries in file 'BrainSpace.Rd'
+Note: removing empty section \examples in file 'BrainSpace.Rd'
+  BrainSpace                        text    html    latex
+Note: removing empty section \examples in file 'BrainVector-class.Rd'
+  BrainVector-class                 text    html    latex
+Note: removing empty section \author in file 'BrainVector.Rd'
+Note: removing empty section \examples in file 'BrainVector.Rd'
+  BrainVector                       text    html    latex
+Note: removing empty section \examples in file 'BrainVolume-class.Rd'
+  BrainVolume-class                 text    html    latex
+Note: removing empty section \examples in file 'BrainVolume.Rd'
+  BrainVolume                       text    html    latex
+  IndexLookupVolume-class           text    html    latex   example
+  IndexLookupVolume                 text    html    latex
+Note: removing empty section \examples in file 'NIFTIFile-class.Rd'
+  NIFTIFile-class                   text    html    latex
+Note: removing empty section \examples in file 'NIFTIFile.Rd'
+  NIFTIFile                         text    html    latex
+Note: removing empty section \examples in file 'NIFTIHeader-class.Rd'
+  NIFTIHeader-class                 text    html    latex
+Note: removing empty section \examples in file 'NIFTIHeader.Rd'
+  NIFTIHeader                       text    html    latex
+  RegionCube                        text    html    latex
+  RegionSphere                      text    html    latex
+  SparseBrainVector-class           text    html    latex
+Note: removing empty section \details in file 'SparseBrainVector.Rd'
+  SparseBrainVector                 text    html    latex
+Note: ignoring empty \keyword entries in file 'bounds.Rd'
+  bounds                            text    html    latex   example
+  concat-methods                    text    html    latex
+  coords-methods                    text    html    latex
+Note: removing empty section \author in file 'createNIFTIHeader.Rd'
+Note: removing empty section \examples in file 'createNIFTIHeader.Rd'
+  createNIFTIHeader                 text    html    latex
+  createSpace-methods               text    html    latex
+  dataDim-methods                   text    html    latex
+Note: removing empty section \examples in file 'dataFile.Rd'
+  dataFile                          text    html    latex
+  dataFileExt-methods               text    html    latex
+Note: removing empty section \examples in file 'dataFileExt.Rd'
+  dataFileExt                       text    html    latex
+  dataOffset-methods                text    html    latex
+Note: removing empty section \examples in file 'dataOffset.Rd'
+  dataOffset                        text    html    latex
+Note: removing empty section \examples in file 'dataType.Rd'
+  dataType                          text    html    latex
+  eachSeries-methods                text    html    latex
+Note: removing empty section \examples in file 'encoding.Rd'
+  encoding                          text    html    latex
+  endian-methods                    text    html    latex
+Note: removing empty section \examples in file 'endian.Rd'
+  endian                            text    html    latex
+Note: removing empty section \examples in file 'extraInfo.Rd'
+  extraInfo                         text    html    latex
+Note: removing empty section \examples in file 'fileName.Rd'
+  fileName                          text    html    latex
+Note: removing empty section \examples in file 'fileType.Rd'
+  fileType                          text    html    latex
+  gridToIndex-methods               text    html    latex
+  headerFile-methods                text    html    latex
+Note: removing empty section \examples in file 'headerFile.Rd'
+  headerFile                        text    html    latex
+  headerFileExt-methods             text    html    latex
+Note: removing empty section \examples in file 'headerFileExt.Rd'
+  headerFileExt                     text    html    latex
+  index-class                       text    html    latex   example
+  indexToGrid-methods               text    html    latex
+  indices-methods                   text    html    latex
+Note: removing empty section \value in file 'invTrans.Rd'
+Note: removing empty section \examples in file 'invTrans.Rd'
+  invTrans                          text    html    latex
+  loadBrainList                     text    html    latex
+Note: removing empty section \author in file 'loadVector.Rd'
+Note: removing empty section \examples in file 'loadVector.Rd'
+  loadVector                        text    html    latex
+Note: removing empty section \author in file 'loadVolume.Rd'
+Note: removing empty section \details in file 'loadVolume.Rd'
+Note: removing empty section \note in file 'loadVolume.Rd'
+Note: removing empty section \references in file 'loadVolume.Rd'
+Note: removing empty section \examples in file 'loadVolume.Rd'
+Note: removing empty section \seealso in file 'loadVolume.Rd'
+  loadVolume                        text    html    latex
+  lookup-methods                    text    html    latex
+Note: removing empty section \examples in file 'numdim.Rd'
+  numdim                            text    html    latex
+Note: removing empty section \examples in file 'openFor.Rd'
+  openFor                           text    html    latex
+Note: removing empty section \examples in file 'orientation.Rd'
+  orientation                       text    html    latex
+Note: removing empty section \examples in file 'origin.Rd'
+  origin                            text    html    latex
+Note: removing empty section \examples in file 'path.Rd'
+  path                              text    html    latex
+  pick-methods                      text    html    latex
+Note: removing empty section \details in file 'readData.Rd'
+Note: removing empty section \examples in file 'readData.Rd'
+  readData                          text    html    latex
+Note: removing empty section \examples in file 'readHeader.Rd'
+  readHeader                        text    html    latex
+Note: removing empty section \examples in file 'readNIFTIHeader.Rd'
+  readNIFTIHeader                   text    html    latex
+Warning: missing text for item 'x = "SparseBrainVector", i = "matrix"' in \describe in file 'series-methods.Rd'
+Warning: missing text for item 'x = "SparseBrainVector", i = "numeric"' in \describe in file 'series-methods.Rd'
+Warning: missing text for item 'x = "TiledBrainVector", i = "matrix"' in \describe in file 'series-methods.Rd'
+Warning: missing text for item 'x = "TiledBrainVector", i = "numeric"' in \describe in file 'series-methods.Rd'
+  series-methods                    text    html    latex
+  sliceMeans-methods                text    html    latex
+Note: removing empty section \examples in file 'space.Rd'
+  space                             text    html    latex
+Note: removing empty section \examples in file 'spacing.Rd'
+  spacing                           text    html    latex
+  takeVolume-methods                text    html    latex
+Note: removing empty section \examples in file 'trans.Rd'
+  trans                             text    html    latex
+Note: removing empty section \examples in file 'value.Rd'
+  value                             text    html    latex
+Note: removing empty section \examples in file 'versionNum.Rd'
+  versionNum                        text    html    latex
+  writeData                         text    html    latex
+Note: removing empty section \examples in file 'writeHeader.Rd'
+  writeHeader                       text    html    latex
+  writeVector-methods               text    html    latex
+  writeVolume-methods               text    html    latex
+** building package indices ...
+* DONE (NeuroImage)

@@ -1,0 +1,16 @@
+\HeaderA{RegionCube}{creates a BrainRegion3D instance that is a cube}{RegionCube}
+\begin{Description}\relax
+creation fucntion for a BrainRegion3D class that is a cube.
+\end{Description}
+\begin{Usage}
+\begin{verbatim} RegionCube(bvol, centroid, surround, mask) \end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{bvol}] the \code{BrainVolume} that on which the geometry of the region is based 
+\item[\code{centroid}] the center coordinates (in grid space) of the region 
+\item[\code{surround}] the number of surrounding voxels on each side of the center voxel 
+\item[\code{mask}] a mask supplied as a 3d array the same shape as \code{bvol} that will be used to exlucde voxels in the cube that fall outside the mask
+\end{ldescription}
+\end{Arguments}
+

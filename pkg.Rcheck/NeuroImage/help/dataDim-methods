@@ -1,0 +1,19 @@
+dataDim-methods          package:NeuroImage          R Documentation
+
+_m_e_t_h_o_d _t_o _a_c_c_e_s_s _t_h_e _d_a_t_a _d_i_m_e_n_s_i_o_n _f_r_o_m _a _h_e_a_d_e_r
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     Methods for function 'dataDim'
+
+_M_e_t_h_o_d_s:
+
+
+
+     _x = "_N_I_F_T_I_H_e_a_d_e_r" returns data dimension for image described by
+          'x' 
+
+     _x = "_A_N_A_L_Y_Z_E_H_e_a_d_e_r" returns data dimension for image described by
+          'x' 
+
+

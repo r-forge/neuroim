@@ -1,0 +1,38 @@
+SparseBrainVector         package:NeuroImage         R Documentation
+
+_a _f_u_n_c_t_i_o_n _t_o _c_r_e_a_t_e _a _n_e_w _S_p_a_r_s_e_B_r_a_i_n_V_e_c_t_o_r _i_n_s_t_a_n_c_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     A convenience creation function for the SparseBrainVector class.  
+     This function can construct a 4-dimensional sparse data structure
+     from a matrix of values and a mask or 1d index vector.
+
+_U_s_a_g_e:
+
+             SparseBrainVector(dat, space, mask = NULL, indices = NULL)
+
+_A_r_g_u_m_e_n_t_s:
+
+     dat: a 'matrix' of values where the number of rows or columns must
+          equal the number of elements in the 'mask' or 'ndices'
+          arguments.
+
+   space: a 'BrainSpace' instance that encodes the 3d geometry of the
+          to-be-created structure
+
+    mask: an mask which must have the same dimensions as the 'space'
+          argument.
+
+ indices: an alternative to 'mask' (either one or the other must be
+          supplied) which is simple a 1d vector of indices that map to
+          the 3d coordinates. 
+
+_V_a_l_u_e:
+
+     an instance of the 'SparseBrainVector' class
+
+_A_u_t_h_o_r(_s):
+
+     bbuchsbaum@rotman-baycrest.on.ca
+

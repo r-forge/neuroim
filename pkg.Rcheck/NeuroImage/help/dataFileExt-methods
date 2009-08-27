@@ -1,0 +1,15 @@
+dataFileExt-methods        package:NeuroImage        R Documentation
+
+_g_e_n_e_r_i_c _m_e_t_h_o_d _r_e_t_u_r_n_i_n_g _n_a_m_e _o_f _d_a_t_a _f_i_l_e _e_x_t_e_n_s_i_o_n
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     returns the extension of the file containing the image data.
+
+_M_e_t_h_o_d_s:
+
+
+     _x = "_B_r_a_i_n_F_i_l_e" returns the extension of the supplied BrainFile
+          object
+
+

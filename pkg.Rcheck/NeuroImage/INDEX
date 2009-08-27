@@ -1,0 +1,108 @@
+AFNIFile-class          Class "AFNIFile"
+ANALYZEFile             function to create a new "ANALYZEFile" instance
+ANALYZEFile-class       Class "ANALYZEFile"
+BrainData-class         Virtual Class "BrainData"
+BrainFile-class         "BrainFile" virtual class
+BrainHeader-class       Class "BrainHeader"
+BrainList               creates a new "BrainList" object
+BrainList-class         Class "BrainList"
+BrainSlice              creates a new "BrainSlice" object
+BrainSlice-class        Class "BrainSlice" for two-dimensional image
+                        data
+BrainSpace              creates a new "BrainSpace" object
+BrainSpace-class        Class "BrainSpace"
+BrainVector             a function to create instance of class
+                        "BrainVector"
+BrainVector-class       Class "BrainVector"
+BrainVolume             creates a new "BrainVolume" object
+BrainVolume-class       Class "BrainVolume"
+IndexLookupVolume       creation function for IndexLookupVolume class
+IndexLookupVolume-class
+                        A class used to map from 1d indices to lookup
+                        table indices
+NIFTIFile               function to create a new "NIFTIFile" instance
+NIFTIFile-class         Class "NIFTIFile"
+NIFTIHeader             function to create a an instance of the
+                        "NIFTIHeader" class
+NIFTIHeader-class       Class "NIFTIHeader"
+RegionCube              creates a BrainRegion3D instance that is a cube
+RegionSphere            creation function for Spheric BrainRegion3D
+SparseBrainVector       a function to create a new SparseBrainVector
+                        instance
+SparseBrainVector-class
+                        Class "SparseBrainVector" ~~~
+bounds                  get the real world bounds of an image's data
+                        space
+concat-methods          concatenate two image objects
+coords-methods          Methods for Function coords
+createNIFTIHeader       a function to create a NIFTIHeader object
+createSpace-methods     creates a brainSpace instance
+dataDim-methods         method to access the data dimension from a
+                        header
+dataFile                access the name of the data file associated
+                        with a "BrainHeader" object
+dataFileExt             gets the file extension for data file
+dataFileExt-methods     generic method returning name of data file
+                        extension
+dataOffset              gets the data offset in bytes for an image file
+dataOffset-methods      Methods for the dataOffset generic
+dataType                a string representing the data type of the
+                        image data stored on file
+eachSeries-methods      ~~ Methods for Function eachSeries ~~
+encoding                retrieves the encoding method used for image
+                        data
+endian                  the endianess of the stored image data
+endian-methods          get eendianess of data storage
+extraInfo               returns auxilliary header information
+fileName                gets the file name assocaited with a
+                        "BrainFile" object
+fileType                the image file type
+gridToIndex-methods     map grid coordinate to 1d index coordinate
+headerFile              gets the name of the header file associated
+                        with a "BrainHeader" instance
+headerFile-methods      Methods for the generic function headerFile
+headerFileExt           gets the header file extension
+headerFileExt-methods   retrieves the header file extension
+index-class             Virtual Class "index" - Simple Class for image
+                        indices
+indexToGrid-methods     converts a 1-dimensional index vector to a
+                        matrix of coordinates
+indices-methods         generic method to extract 1-dimensional indices
+                        from data structure
+invTrans                inverse cooordinate transform
+loadBrainList           a function to create a "BrainList" object from
+                        a simple data.frame descriptor
+loadVector              convenience function to create a "BrainVector"
+                        instance from a specified file
+loadVolume              loads an image volume from file
+lookup-methods          lookup indices
+numdim                  the number of dimensions in image
+openFor                 indicates whether the file is open for read or
+                        write
+orientation             function returns the orientation of a brain
+                        image
+origin                  retrieves the image origin
+path                    returns the full path of a "BrainFile" source
+pick-methods            extracts data from an image using a mask
+                        proivded as an argument
+readData                reads image data into an appropriate
+                        "BrainData" object
+readHeader              reads the header part of an image file
+readNIFTIHeader         reads a NIFTI format header
+series-methods          ~~ Methods for Function series ~~
+sliceMeans-methods      function that computes the mean over slices in
+                        the 4th (time) dimension
+space                   accessor for "BrainSpace" slot
+spacing                 returns cell dimensions for a voxel or pixel
+                        unit
+takeVolume-methods      ~~ Methods for Function takeVolume ~~
+trans                   function to access the forward transformation
+                        associated with a brain image
+value                   a function to access the value given a real
+                        world coordinate
+versionNum              retrieves the version number associated with an
+                        image file format
+writeData               write image data to disk
+writeHeader             writes image header to disk
+writeVector-methods     write a BrainVector instance to file
+writeVolume-methods     Methods for Function writeVolume

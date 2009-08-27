@@ -1,0 +1,34 @@
+value               package:NeuroImage               R Documentation
+
+_a _f_u_n_c_t_i_o_n _t_o _a_c_c_e_s_s _t_h_e _v_a_l_u_e _g_i_v_e_n _a _r_e_a_l _w_o_r_l_d _c_o_o_r_d_i_n_a_t_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     this function takes real world coordinate locations and returns an
+     interpolated image value.
+
+_U_s_a_g_e:
+
+     value(object, x, y, ...)
+
+_A_r_g_u_m_e_n_t_s:
+
+  object: an object derived from class "BrainData" 
+
+       x: the x real world coordinate 
+
+       y: the y real worold coordinate 
+
+     ...: world coordinates for additional dimensions 
+
+_D_e_t_a_i_l_s:
+
+     coordinates supplied to the function will first be multiplied by
+     the inverse transformation matrix associated with the "BrainSpace"
+     object, yileding a set of numeric grid positions. An image value
+     will be computed via linear interpolation.
+
+_V_a_l_u_e:
+
+     interploated value at real world coordinates.
+

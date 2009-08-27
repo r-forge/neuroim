@@ -1,0 +1,20 @@
+space               package:NeuroImage               R Documentation
+
+_a_c_c_e_s_s_o_r _f_o_r "_B_r_a_i_n_S_p_a_c_e" _s_l_o_t
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     generic function to access the spatial geometry of a brain image
+
+_U_s_a_g_e:
+
+     space(x)
+
+_A_r_g_u_m_e_n_t_s:
+
+       x: an object derived the "BrainData" class 
+
+_V_a_l_u_e:
+
+     an object of class 'BrainSpace'
+

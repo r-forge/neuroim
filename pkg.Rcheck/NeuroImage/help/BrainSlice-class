@@ -1,0 +1,54 @@
+BrainSlice-class         package:NeuroImage         R Documentation
+
+_C_l_a_s_s "_B_r_a_i_n_S_l_i_c_e" _f_o_r _t_w_o-_d_i_m_e_n_s_i_o_n_a_l _i_m_a_g_e _d_a_t_a
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     This class is used to store two-dimensional image data
+     representing a single cut or slice through a brain volume
+
+_O_b_j_e_c_t_s _f_r_o_m _t_h_e _C_l_a_s_s:
+
+     Objects can be created by calls of the form ' BrainSlice(data,
+     space)'
+
+_S_l_o_t_s:
+
+
+     '._D_a_t_a': Object of class '"array"' inherited data slot from
+          "array" class. In this class, however, array data is always
+          two-dimensional 
+
+     '_s_p_a_c_e': Object of class '"BrainSpace"' inherited slot from
+          virtual class "BrainData" 
+
+_E_x_t_e_n_d_s:
+
+     Class '"array"', from data part. Class '"BrainData"', directly.
+     Class '"structure"', by class "array", distance 2. Class
+     '"matrix"', by class "array", distance 2, with explicit test and
+     coerce. Class '"vector"', by class "array", distance 3, with
+     explicit coerce. Class '"vector"', by class "array", distance 4,
+     with explicit test and coerce. Class '"vector"', by class "array",
+     distance 5, with explicit test and coerce.
+
+_M_e_t_h_o_d_s:
+
+
+     _i_n_d_e_x_T_o_V_o_x_e_l 'signature(x = "BrainSlice", idx = "index")': - maps
+          from a one-dimensional index to a two-dimensional pixel/voxel
+          coordinate 
+
+     _v_o_x_e_l_T_o_I_n_d_e_x 'signature(x = "BrainSlice", i = "index", j =
+          "index")': - convert from a two-dimensional coordinate to
+          one-dimensional index 
+
+_A_u_t_h_o_r(_s):
+
+     Bradley Buchsbaum bbuchsbaum@berkeley.edu
+
+_E_x_a_m_p_l_e_s:
+
+     #space <- BrainSpace(c(50,50))
+     #slice <- BrainSlice(rnorm(50*50), space)
+

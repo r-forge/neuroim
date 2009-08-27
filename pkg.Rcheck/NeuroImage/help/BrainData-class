@@ -1,0 +1,52 @@
+BrainData-class          package:NeuroImage          R Documentation
+
+_V_i_r_t_u_a_l _C_l_a_s_s "_B_r_a_i_n_D_a_t_a"
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     The 'BrainData' class is a class contained by all actual classes
+     in the 'Neuroimage' package.  It is a "virtual" class.
+
+_O_b_j_e_c_t_s _f_r_o_m _t_h_e _C_l_a_s_s:
+
+     A virtual Class: No objects may be created from it.
+
+_S_l_o_t_s:
+
+     Common to _all_ BrainData objects in the package:
+
+
+     '_s_p_a_c_e': Object of class '"BrainSpace"' - a description of the
+          data "space", e.g. voxel resolution and iamge dimensions.
+
+
+_M_e_t_h_o_d_s:
+
+
+     _d_i_m 'signature(x = "BrainData")': extract data dimensions 'dim'.
+
+     _s_p_a_c_e 'signature(x = "BrainData")': extract "space" slot.
+
+     _n_u_m_d_i_m 'signature(x = "BrainData")': return number of dimensions
+          in space 
+
+     _s_p_a_c_i_n_g 'signature(x = "BrainData")': returns cell spacing for
+          image data  
+
+_N_o_t_e:
+
+     No notes yet
+
+_A_u_t_h_o_r(_s):
+
+     Bradley Buchsbaum bbuchsbaum@berkeley.edu
+
+_E_x_a_m_p_l_e_s:
+
+     slotNames("BrainData")
+
+     cl <- getClass("BrainData")
+     names(cl@subclasses) 
+
+     showClass("BrainData") # output with slots and all subclasses
+

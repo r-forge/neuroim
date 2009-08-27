@@ -1,0 +1,23 @@
+\HeaderA{concat-methods}{concatenate two image objects}{concat.Rdash.methods}
+\aliasA{concat}{concat-methods}{concat}
+\aliasA{concat,BrainVector,BrainVector-method}{concat-methods}{concat,BrainVector,BrainVector.Rdash.method}
+\aliasA{concat,BrainVector,BrainVolume-method}{concat-methods}{concat,BrainVector,BrainVolume.Rdash.method}
+\aliasA{concat,BrainVolume,BrainVolume-method}{concat-methods}{concat,BrainVolume,BrainVolume.Rdash.method}
+\aliasA{concat,SparseBrainVector,SparseBrainVector-method}{concat-methods}{concat,SparseBrainVector,SparseBrainVector.Rdash.method}
+\keyword{methods}{concat-methods}
+\begin{Description}\relax
+concatenate two image objects in the nth dimension (usualy time)
+\end{Description}
+\begin{Section}{Methods}
+\describe{
+
+\item[x = "BrainVector", y = "BrainVector"] concatenates two BrainVectors in the fourth dimension 
+
+\item[x = "BrainVector", y = "BrainVolume"] concatenates a BrainVector and a BrainVolume in the fourth dimension 
+
+\item[x = "BrainVolume", y = "BrainVolume"] concatenates two BrainVolumes, to form a BrainVector 
+
+\item[x = "SparseBrainVector", y = "SparseBrainVector"] concatenates two SparseBrainVectors 
+}
+\end{Section}
+

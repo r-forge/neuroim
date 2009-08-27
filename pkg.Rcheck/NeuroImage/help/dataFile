@@ -1,0 +1,20 @@
+dataFile             package:NeuroImage             R Documentation
+
+_a_c_c_e_s_s _t_h_e _n_a_m_e _o_f _t_h_e _d_a_t_a _f_i_l_e _a_s_s_o_c_i_a_t_e_d _w_i_t_h _a "_B_r_a_i_n_H_e_a_d_e_r" _o_b_j_e_c_t
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     acesses the name of the file stored in a "BrainHeader" instance.
+
+_U_s_a_g_e:
+
+     dataFile(x)
+
+_A_r_g_u_m_e_n_t_s:
+
+       x: object deriving from class "BrainHeader" 
+
+_V_a_l_u_e:
+
+     a character string returning the filename of the image data.
+

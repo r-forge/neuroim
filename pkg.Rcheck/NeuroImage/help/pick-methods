@@ -1,0 +1,16 @@
+pick-methods           package:NeuroImage           R Documentation
+
+_e_x_t_r_a_c_t_s _d_a_t_a _f_r_o_m _a_n _i_m_a_g_e _u_s_i_n_g _a _m_a_s_k _p_r_o_i_v_d_e_d _a_s _a_n _a_r_g_u_m_e_n_t
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     a generic function for "picking" or extracting data from an image
+     based on a mask.
+
+_M_e_t_h_o_d_s:
+
+
+
+     _x = "_B_r_a_i_n_V_e_c_t_o_r", _m_a_s_k = "_v_e_c_t_o_r" extracts a matrix from a
+          BrainVector instance using the supplied 'mask' 
+

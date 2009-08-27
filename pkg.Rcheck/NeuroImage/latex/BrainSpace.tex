@@ -1,0 +1,28 @@
+\HeaderA{BrainSpace}{creates a new "BrainSpace" object}{BrainSpace}
+\begin{Description}\relax
+function to create a new "BrainSpace" object from scratch
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+BrainSpace(Dim, origin = NULL, spacing = NULL, orientation = NULL, trans
+= NULL, reptime=1)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{Dim}] an integer vector supplying the dimensions of the image
+grid  
+\item[\code{origin}] a numeric vector with \code{length} equal to \code{Dim}
+represting image origin in mm 
+\item[\code{spacing}] the cell (pixel or voxel) size for each dimension in mm 
+\item[\code{orientation}] a character vector representing anatomical
+orientation of the grid axes  
+\item[\code{trans}] a transformation matrix used to convert grid positions
+to real world coordinates 
+\item[\code{reptime}] the delay in seconds between successive volume acquisitions 
+\end{ldescription}
+\end{Arguments}
+\begin{Value}
+an object of class "BrainSpace"
+\end{Value}
+

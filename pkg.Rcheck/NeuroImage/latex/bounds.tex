@@ -1,0 +1,24 @@
+\HeaderA{bounds}{get the real world bounds of an image's data space}{bounds}
+\begin{Description}\relax
+generic method for accessing the real world coordinates bounds of a
+\code{\LinkA{BrainSpace}{BrainSpace}} object.
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+bounds(x)
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{x}] an object from which to retrieve the bounds
+\end{ldescription}
+\end{Arguments}
+\begin{Examples}
+\begin{ExampleCode}
+
+space <- BrainSpace(c(256,256))
+b <- bounds(space)
+
+\end{ExampleCode}
+\end{Examples}
+

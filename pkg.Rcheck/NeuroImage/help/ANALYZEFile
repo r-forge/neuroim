@@ -1,0 +1,24 @@
+ANALYZEFile            package:NeuroImage            R Documentation
+
+_f_u_n_c_t_i_o_n _t_o _c_r_e_a_t_e _a _n_e_w "_A_N_A_L_Y_Z_E_F_i_l_e" _i_n_s_t_a_n_c_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     function to create a new "ANALYZEFile" instance
+
+_U_s_a_g_e:
+
+     ANALYZEFile(path, open = "r", type = NULL)
+
+_A_r_g_u_m_e_n_t_s:
+
+    path: the file path of the image 
+
+    open: open for input "r" or output "w" 
+
+    type: the fileType, "analyze-standard" or "analyze-gz" 
+
+_V_a_l_u_e:
+
+     an instance of class "ANALYZEFile"
+

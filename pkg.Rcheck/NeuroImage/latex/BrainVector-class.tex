@@ -1,0 +1,32 @@
+\HeaderA{BrainVector-class}{Class "BrainVector"}{BrainVector.Rdash.class}
+\keyword{classes}{BrainVector-class}
+\begin{Description}\relax
+a class for storing an array or sequence of image volumes,
+such as fMRI data
+\end{Description}
+\begin{Section}{Objects from the Class}
+Objects can be created by calls of the form \code{new("BrainVector", ...)}.
+\end{Section}
+\begin{Section}{Slots}
+\describe{
+\item[\code{.Data}:] Object of class \code{"array"} : the stored
+image data 
+\item[\code{space}:] Object of class \code{"BrainSpace"} : the
+geometry of the image volumes, which must be identical for images in the sequence 
+}
+\end{Section}
+\begin{Section}{Extends}
+Class \code{"\LinkA{BrainVolume}{BrainVolume.Rdash.class}"}, directly.
+Class \code{"\LinkA{BrainSlice}{BrainSlice.Rdash.class}"}, by class "BrainVolume", distance 2.
+Class \code{"\LinkA{array}{array.Rdash.class}"}, by class "BrainVolume", distance 3.
+Class \code{"\LinkA{BrainData}{BrainData.Rdash.class}"}, by class "BrainVolume", distance 3.
+Class \code{"\LinkA{structure}{structure.Rdash.class}"}, by class "BrainVolume", distance 4.
+Class \code{"\LinkA{matrix}{matrix.Rdash.class}"}, by class "BrainVolume", distance 4, with explicit test and coerce.
+Class \code{"\LinkA{vector}{vector.Rdash.class}"}, by class "BrainVolume", distance 5, with explicit coerce.
+Class \code{"\LinkA{vector}{vector.Rdash.class}"}, by class "BrainVolume", distance 6, with explicit test and coerce.
+Class \code{"\LinkA{vector}{vector.Rdash.class}"}, by class "BrainVolume", distance 7, with explicit test and coerce.
+\end{Section}
+\begin{Section}{Methods}
+No methods defined with class "BrainVector" in the signature.
+\end{Section}
+

@@ -1,0 +1,14 @@
+endian-methods          package:NeuroImage          R Documentation
+
+_g_e_t _e_e_n_d_i_a_n_e_s_s _o_f _d_a_t_a _s_t_o_r_a_g_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     get eendianess of data storage
+
+_M_e_t_h_o_d_s:
+
+
+
+     _x = "_B_r_a_i_n_H_e_a_d_e_r" object deriving from "BrainHeader" class  
+

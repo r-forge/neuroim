@@ -1,0 +1,104 @@
+\HeaderA{BrainSpace-class}{Class "BrainSpace"}{BrainSpace.Rdash.class}
+\aliasA{bounds,BrainSpace-method}{BrainSpace-class}{bounds,BrainSpace.Rdash.method}
+\aliasA{dim,BrainSpace-method}{BrainSpace-class}{dim,BrainSpace.Rdash.method}
+\aliasA{invTrans,BrainSpace-method}{BrainSpace-class}{invTrans,BrainSpace.Rdash.method}
+\aliasA{numdim,BrainSpace-method}{BrainSpace-class}{numdim,BrainSpace.Rdash.method}
+\aliasA{orientation,BrainSpace-method}{BrainSpace-class}{orientation,BrainSpace.Rdash.method}
+\aliasA{origin,BrainSpace-method}{BrainSpace-class}{origin,BrainSpace.Rdash.method}
+\aliasA{reptime,BrainSpace-method}{BrainSpace-class}{reptime,BrainSpace.Rdash.method}
+\aliasA{show,BrainSpace-method}{BrainSpace-class}{show,BrainSpace.Rdash.method}
+\aliasA{spacing,BrainSpace-method}{BrainSpace-class}{spacing,BrainSpace.Rdash.method}
+\aliasA{trans,BrainSpace-method}{BrainSpace-class}{trans,BrainSpace.Rdash.method}
+\aliasA{trans<-,BrainSpace,matrix-method}{BrainSpace-class}{trans<.Rdash.,BrainSpace,matrix.Rdash.method}
+\keyword{classes}{BrainSpace-class}
+\begin{Description}\relax
+BrainSpace represents the topology of a dataset
+\end{Description}
+\begin{Section}{Objects from the Class}
+Objects can be created by calls of the form \code{BrainSpace(Dim,
+  dimension, spacing, origin) }.
+\end{Section}
+\begin{Section}{Slots}
+\describe{
+\item[\code{Dim}:] Object of class \code{"integer"} --
+an integer array specifiying the spatial dimensions 
+
+\item[\code{origin}:] Object of class \code{"numeric"} --
+an array representing the absolute location of the origin
+(coordinate at voxel [0, 0, 0]) 
+
+\item[\code{spacing}:] Object of class \code{"numeric"} --
+an array representing the grid spacing for each dimension       
+
+\item[\code{orientation}:] Object of class \code{"character"} --
+character array describing axes orientation, e.g., "L" for
+"left-right", "P" for "posterior-anterior", "I" for
+"inferior-superior". This slot is currently not used and may
+contain invalid information.
+
+\item[\code{trans}:] Object of class \code{"matrix"} --
+This is a transformation matrix used for computing the mapping
+from index coordinates to real world oordiantes. Should be a 4X4
+matrix for volumetrix data.
+
+\item[\code{invTrans}:] Object of class \code{"matrix"} --
+This is the inverse transformation (real world to index) and is
+computed internally and therefore should not be changed externally 
+
+
+\item[\code{reptime}:] Object of class \code{"numeric"} --
+The delay between volume acquisitions in seconds 
+
+}
+\end{Section}
+\begin{Section}{Methods}
+\describe{
+\item[bounds] \code{signature(x = "BrainSpace")}: -- returns the real
+world bounds as a matrix of (min, max) pairs 
+
+\item[invTrans] \code{signature(x = "BrainSpace")}: -- returns the
+dimension of the data axes for the space 
+
+\item[numdim] \code{signature(x = "BrainSpace")}: -- returns the
+number of dimensions in space 
+
+\item[orientation] \code{signature(x = "BrainSpace")}: -- returns
+the (currently unsupported) orientation code  
+
+\item[origin] \code{signature(x = "BrainSpace")}: -- returns the
+coordinate origin 
+
+\item[spacing] \code{signature(x = "BrainSpace")}: -- returns the voxel
+spacing 
+
+\item[trans\textless{}-] \code{signature(x = "BrainSpace", value = "matrix")}:
+-- returns the index-to-word transformation matrix 
+
+\item[trans] \code{signature(x = "BrainSpace")}: -- returns the
+inverse transformation matrix 
+
+\item[reptime] \code{signature(x = "BrainSpace")}: -- returns the
+repetition time 
+
+\item[show] \code{signature(x = "BrainSpace")}: -- print information
+about BrainSpace object 
+
+}
+\end{Section}
+\begin{Author}\relax
+Bradley Buchsbaum \email{bbuchsbaum@berkeley.edu}
+\end{Author}
+\begin{References}\relax
+no references
+\end{References}
+\begin{Examples}
+\begin{ExampleCode}
+
+space <- BrainSpace(Dim=c(64,64,18))
+show(space)
+trans(space)
+origin(space)
+
+\end{ExampleCode}
+\end{Examples}
+

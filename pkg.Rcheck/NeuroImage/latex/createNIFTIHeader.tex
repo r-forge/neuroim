@@ -1,0 +1,26 @@
+\HeaderA{createNIFTIHeader}{a function to create a NIFTIHeader object}{createNIFTIHeader}
+\keyword{manip}{createNIFTIHeader}
+\begin{Description}\relax
+this function may be used to create a \code{NIFTIHeader} object given
+an existing brain data object
+\end{Description}
+\begin{Usage}
+\begin{verbatim}
+createNIFTIHeader(data, fileName, dataType = "FLOAT")
+\end{verbatim}
+\end{Usage}
+\begin{Arguments}
+\begin{ldescription}
+\item[\code{data}] an object deriving from the class \code{BrainData} 
+\item[\code{fileName}] the file name for the header (need not exist) 
+\item[\code{dataType}] the storage type of the data, e.g. "SHORT" 
+\end{ldescription}
+\end{Arguments}
+\begin{Details}\relax
+This argument is useful if one wants to create a NIFTIHeader object
+on the basis of an existing \code{BrainData} object
+\end{Details}
+\begin{Value}
+an object of class \code{NIFTIHeader}
+\end{Value}
+

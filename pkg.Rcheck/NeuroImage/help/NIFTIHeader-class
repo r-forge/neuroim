@@ -1,0 +1,62 @@
+NIFTIHeader-class         package:NeuroImage         R Documentation
+
+_C_l_a_s_s "_N_I_F_T_I_H_e_a_d_e_r"
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     class encapuslating a NIFTI formatted header
+
+_O_b_j_e_c_t_s _f_r_o_m _t_h_e _C_l_a_s_s:
+
+     Objects can be created by calls of the form 'new("NIFTIHeader",
+     ...)'.
+
+_S_l_o_t_s:
+
+
+     '_h_e_a_d_e_r_F_i_l_e': Object of class '"character"' : see
+          BrainHeader-class 
+
+     '_d_a_t_a_F_i_l_e': Object of class '"character"' :  see BrainHeader-class
+
+     '_f_i_l_e_T_y_p_e': Object of class '"character"' : see BrainHeader-class
+
+     '_v_e_r_s_i_o_n_N_u_m': Object of class '"character"' : see
+          BrainHeader-class
+
+     '_e_n_c_o_d_i_n_g': Object of class '"character"' : see BrainHeader-class
+
+     '_e_n_d_i_a_n': Object of class '"character"' : see BrainHeader-class
+
+     '_d_a_t_a_O_f_f_s_e_t': Object of class '"numeric"' : see BrainHeader-class
+
+     '_d_a_t_a_T_y_p_e': Object of class '"character"' : see BrainHeader-class
+
+     '_e_x_t_r_a_I_n_f_o': Object of class '"list"' : see BrainHeader-class
+
+
+_E_x_t_e_n_d_s:
+
+     Class '"BrainHeader"', directly.
+
+_M_e_t_h_o_d_s:
+
+
+     '_h_e_a_d_e_r_F_i_l_e': Object of class '"character"' : the name of the
+          header file  
+
+     '_d_a_t_a_D_i_m': Object of class '"character"' : the dimensions of the
+          associated data file  
+
+     '_s_h_o_w': Object of class '"character"' : prints a text
+          representation of the header  
+
+     '_s_p_a_c_i_n_g': Object of class '"character"' : returns the cell
+          dimensions for the image grid  
+
+     '_v_e_r_s_i_o_n_N_u_m': Object of class '"character"' : returns the version
+          number of the header format  
+
+     '_c_r_e_a_t_e_S_p_a_c_e': Object of class '"character"' : instantiates a
+          "BrainSpace" from this 'NIFTIHeader' object 
+

@@ -1,0 +1,18 @@
+IndexLookupVolume         package:NeuroImage         R Documentation
+
+_c_r_e_a_t_i_o_n _f_u_n_c_t_i_o_n _f_o_r _I_n_d_e_x_L_o_o_k_u_p_V_o_l_u_m_e _c_l_a_s_s
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     this function creates an instance of class 'IndexLookupVolume'
+
+_U_s_a_g_e:
+
+     IndexLookupVolume(space, indices)
+
+_A_r_g_u_m_e_n_t_s:
+
+   space: the 'BrainSpace' of the volume to be created 
+
+ indices: the 1-d indices that map to the lookup table 
+

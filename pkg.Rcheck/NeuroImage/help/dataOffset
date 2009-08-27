@@ -1,0 +1,21 @@
+dataOffset            package:NeuroImage            R Documentation
+
+_g_e_t_s _t_h_e _d_a_t_a _o_f_f_s_e_t _i_n _b_y_t_e_s _f_o_r _a_n _i_m_a_g_e _f_i_l_e
+
+_D_e_s_c_r_i_p_t_i_o_n:
+
+     function for accessing the offset in bytes marking the place at
+     which the image data is stored in the file.
+
+_U_s_a_g_e:
+
+     dataOffset(x)
+
+_A_r_g_u_m_e_n_t_s:
+
+       x: obect derving from class "BrainHeader" 
+
+_V_a_l_u_e:
+
+     an integer value for the byte offset
+

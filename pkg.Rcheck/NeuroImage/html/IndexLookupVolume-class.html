@@ -1,0 +1,54 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head><title>R: A class used to map from 1d indices to lookup table indices</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet" type="text/css" href="../../R.css">
+</head><body>
+
+<table width="100%" summary="page for IndexLookupVolume-class {NeuroImage}"><tr><td>IndexLookupVolume-class {NeuroImage}</td><td align="right">R Documentation</td></tr></table>
+<h2>A class used to map from 1d indices to lookup table indices</h2>
+
+
+<h3>Description</h3>
+
+<p>
+An IndexLookupVolume maps from 1-d volume indices to an ordered set of indices that map to indices ina lookup table.  
+This class is currently used in the implementation of <code>SparseBrainVector</code>
+</p>
+
+
+<h3>Objects from the Class</h3>
+
+<p>
+Objects can be created by calls of the form <code>new("IndexLookupVolume", space, indices)</code>.
+</p>
+
+
+<h3>Slots</h3>
+
+<dl>
+<dt><code>space</code>:</dt><dd>Object of class <code>"BrainSpace"</code> </dd>
+<dt><code>indices</code>:</dt><dd>Object of class <code>"integer"</code> </dd>
+<dt><code>map</code>:</dt><dd>Object of class <code>"integer"</code> </dd>
+</dl>
+
+<h3>Methods</h3>
+
+<dl>
+<dt>coords</dt><dd><code>signature(x = "IndexLookupVolume")</code>: ... </dd>
+<dt>indices</dt><dd><code>signature(x = "IndexLookupVolume")</code>: ... </dd>
+<dt>initialize</dt><dd><code>signature(.Object = "IndexLookupVolume")</code>: ... </dd>
+<dt>lookup</dt><dd><code>signature(x = "IndexLookupVolume", i = "numeric")</code>: ... </dd>
+<dt>space</dt><dd><code>signature(x = "IndexLookupVolume")</code>: ... </dd>
+</dl>
+
+<h3>Examples</h3>
+
+<pre>
+showClass("IndexLookupVolume")
+</pre>
+
+
+
+<hr><div align="center">[Package <em>NeuroImage</em> version 0.5.6 <a href="00Index.html">Index</a>]</div>
+
+</body></html>

@@ -1,0 +1,54 @@
+\HeaderA{BrainSlice-class}{Class "BrainSlice" for two-dimensional image data}{BrainSlice.Rdash.class}
+\aliasA{indexToVoxel,BrainSlice,index-method}{BrainSlice-class}{indexToVoxel,BrainSlice,index.Rdash.method}
+\aliasA{numdim,BrainSlice-method}{BrainSlice-class}{numdim,BrainSlice.Rdash.method}
+\aliasA{voxelToIndex,BrainSlice,index,index-method}{BrainSlice-class}{voxelToIndex,BrainSlice,index,index.Rdash.method}
+\keyword{classes}{BrainSlice-class}
+\begin{Description}\relax
+This class is used to store two-dimensional image data
+representing a single cut or slice through a brain volume
+\end{Description}
+\begin{Section}{Objects from the Class}
+Objects can be created by calls of the form \code{ BrainSlice(data, space)}
+\end{Section}
+\begin{Section}{Slots}
+\describe{
+\item[\code{.Data}:] Object of class \code{"array"} inherited data slot
+from "array" class. In this class, however, array data is always
+two-dimensional 
+
+\item[\code{space}:] Object of class \code{"BrainSpace"} inherited
+slot from virtual class "BrainData" 
+}
+\end{Section}
+\begin{Section}{Extends}
+Class \code{"\LinkA{array}{array.Rdash.class}"}, from data part.
+Class \code{"\LinkA{BrainData}{BrainData.Rdash.class}"}, directly.
+Class \code{"\LinkA{structure}{structure.Rdash.class}"}, by class "array", distance 2.
+Class \code{"\LinkA{matrix}{matrix.Rdash.class}"}, by class "array", distance 2, with explicit test and coerce.
+Class \code{"\LinkA{vector}{vector.Rdash.class}"}, by class "array", distance 3, with explicit coerce.
+Class \code{"\LinkA{vector}{vector.Rdash.class}"}, by class "array", distance 4, with explicit test and coerce.
+Class \code{"\LinkA{vector}{vector.Rdash.class}"}, by class "array", distance 5, with explicit test and coerce.
+\end{Section}
+\begin{Section}{Methods}
+\describe{
+\item[indexToVoxel] \code{signature(x = "BrainSlice", idx =
+        "index")}: -- maps from a one-dimensional index to a
+two-dimensional pixel/voxel coordinate 
+
+\item[voxelToIndex] \code{signature(x = "BrainSlice", i = "index", j
+        = "index")}: -- convert from a two-dimensional coordinate to
+one-dimensional index 
+}
+\end{Section}
+\begin{Author}\relax
+Bradley Buchsbaum \email{bbuchsbaum@berkeley.edu}
+\end{Author}
+\begin{Examples}
+\begin{ExampleCode}
+
+#space <- BrainSpace(c(50,50))
+#slice <- BrainSlice(rnorm(50*50), space)
+
+\end{ExampleCode}
+\end{Examples}
+
