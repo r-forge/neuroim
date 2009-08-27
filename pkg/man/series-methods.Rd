@@ -12,13 +12,13 @@
 \section{Methods}{
 \describe{
 
-\item{x = "SparseBrainVector", i = "matrix"}{ ~~describe this method here }
+\item{x = "SparseBrainVector", i = "matrix"}{ }
 
-\item{x = "SparseBrainVector", i = "numeric"}{ ~~describe this method here }
+\item{x = "SparseBrainVector", i = "numeric"}{ }
 
-\item{x = "TiledBrainVector", i = "matrix"}{ ~~describe this method here }
+\item{x = "TiledBrainVector", i = "matrix"}{  }
 
-\item{x = "TiledBrainVector", i = "numeric"}{ ~~describe this method here }
+\item{x = "TiledBrainVector", i = "numeric"}{  }
 }}
 \keyword{methods}
-\keyword{ ~~ other possible keyword(s)}
+

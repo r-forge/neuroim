@@ -105,17 +105,17 @@ setMethod("gridToIndex", signature(x="BrainVolume", coords="matrix"),
 write.nifti.volume <- function(vol, fileName) {
 	brainFile <- NIFTIFile(fileName, "w")
 
-    dataType <- if (typeof(x) == "double") {
+    dataType <- if (typeof(vol) == "double") {
       "FLOAT"
-    } else if (typeof(x) == "integer") {
+    } else if (typeof(vol) == "integer") {
       "SHORT"
     } else {
-      stop(paste("unrecognized storage stype : ", typeof(x)))
+      stop(paste("unrecognized storage stype : ", typeof(vol)))
     }
    
-    hdr <- createNIFTIHeader(x, fileName, dataType)
+    hdr <- createNIFTIHeader(vol, fileName, dataType)
     writeHeader(brainFile, hdr)
-    writeData(brainFile, hdr, as.vector(x))
+    writeData(brainFile, hdr, as.vector(vol))
 	
 }  
 
