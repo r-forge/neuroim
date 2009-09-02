@@ -5,6 +5,8 @@
 \alias{numdim,BrainData-method}
 \alias{space,BrainData-method}
 \alias{spacing,BrainData-method}
+\alias{as.matrix,BrainData-method}
+
 \title{Virtual Class "BrainData" }
 \description{
   The \code{BrainData} class is a class contained by all actual
@@ -38,6 +40,7 @@
       dimensions in space }
     \item{spacing}{\code{signature(x = "BrainData")}: returns cell
       spacing for image data  }
+    \item{as.matrix}{\code{signature(x = "BrainData")}: coerce to matrix }
   }
 }
   

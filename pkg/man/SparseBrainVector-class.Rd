@@ -3,7 +3,6 @@
 \docType{class}
 \alias{SparseBrainVector-class}
 \alias{[,SparseBrainVector,numeric,numeric-method}
-\alias{eachSeries,SparseBrainVector,function-method}
 \alias{typeof,SparseBrainVector-method}
 
 

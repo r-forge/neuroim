@@ -12,13 +12,14 @@
 \section{Methods}{
 \describe{
 
-\item{x = "SparseBrainVector", i = "matrix"}{ }
+\item{x = "SparseBrainVector", i = "matrix"}{ extract time series with matrix of coordinates }
 
-\item{x = "SparseBrainVector", i = "numeric"}{ }
+\item{x = "SparseBrainVector", i = "numeric"}{ extract time series with indices}
 
-\item{x = "TiledBrainVector", i = "matrix"}{  }
+\item{x = "TiledBrainVector", i = "matrix"}{ extract time series with matrix of coordinates }
 
-\item{x = "TiledBrainVector", i = "numeric"}{  }
+\item{x = "TiledBrainVector", i = "numeric"}{ extract time series with indices }
 }}
+
 \keyword{methods}
 
