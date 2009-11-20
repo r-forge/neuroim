@@ -4,19 +4,18 @@
 \alias{indices,IndexLookupVolume-method}
 \alias{indices,SparseBrainVector-method}
 \alias{indices,TiledBrainVector-method}
-\title{ generic method to extract 1-dimensional indices from data structure }
-
+\title{ extract the indices associated with an object }
 \description{
- function that retrieves the 1-dimensional indices of a sparse data structure
+ Methods for function \code{indices}  
 }
 \section{Methods}{
 \describe{
 
-\item{x = "IndexLookupVolume"}{ returns the 1-d indices for lookup table }
+\item{x = "IndexLookupVolume"}{ extract the indices of an \code{IndexLookupVolume} }
 
-\item{x = "SparseBrainVector"}{ returns the 1-d indices for the underlying lookup table (see above) }
+\item{x = "SparseBrainVector"}{ extract the indices of an \code{SparseBrainVector}  }
 
-\item{x = "TiledBrainVector"}{ not currently implemented }
+\item{x = "TiledBrainVector"}{ extract the indices of an \code{TiledBrainVector} }
 }}
 \keyword{methods}
 
