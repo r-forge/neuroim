@@ -1,0 +1,300 @@
+
+.isExtension <- function(fname, extension) {
+  last = substr(fname, nchar(fname)+1 - nchar(extension), nchar(fname))
+  return(last==extension)
+}
+
+ 
+## based on code from R.utils, extract.array
+.extract.array <- function(x, ..., drop=FALSE, indices=list(...)) {
+  nindices <- length(indices)
+  if (nindices == 0) {
+    stop("Argument 'indices' is empty.")
+  }
+  dims <- names(indices)
+  if (is.null(dims)) {
+    dims <- seq(length = nindices)
+  }
+  
+  ndim <- length(dim(x))
+  if (any(dims < 1 | dims > ndim)) {
+    stop("Argument 'dims' is out of bounds [1,", ndim, "]: ",
+         paste(dims, collapse = ", "))
+  }
+  if (is.null(ndim)) {
+    stop("Argument 'x' is not an array: ", class(x)[1])
+  }
+
+  args <- rep("", ndim)
+  for (kk in seq(length = length(indices))) {
+    dd <- dims[kk]
+    ii <- sprintf("indices[[%d]]", kk)
+    args[dd] <- ii
+  }
+
+  if (ndim > 1) {
+    args <- c(args, "drop=drop")
+  }
+
+  args <- paste(args, collapse = ",")
+  code <- paste("x[", args, "]", sep = "")
+  expr <- parse(text = code)
+  eval(expr)
+}
+
+#horrid
+.createWritableConnection <- function(conn, headerFile) {
+	if (is.null(conn)) {
+		if (file.exists(headerFile)) {
+			stop(paste("file ", headerFile, " already exists. aborting"))
+		} else {
+			conn <- file(headerFile, open="wb") # open file connection
+		}
+	}
+  	return(conn)
+}
+
+
+  
+.isNIFTI <- function(fname) {
+  if (.isExtension(fname, ".nii") || .isExtension(fname, ".nii.gz")) {
+    return(TRUE)
+  }
+
+  return(FALSE)
+}
+
+
+
+.getRStorage <- function(dataType) {
+  if (any(dataType == c("BINARY", "UBYTE", "SHORT", "INTEGER", "INT", "LONG"))) {
+    return("integer")
+  }
+
+  else if (any(dataType == c("FLOAT", "DOUBLE"))) {
+    return("double")
+  }
+
+  return("undefined")
+}
+
+.getDataStorage <- function(code) {
+  if (code == 0) {
+    return("UNKNOWN")
+  } else if (code == 1) {
+    return("BINARY")
+  } else if (code == 2) {
+    return("UBYTE")
+  } else if(code == 4) {
+    return("SHORT")
+  } else if(code == 8) {
+    return("INT")
+  } else if (code == 16) {
+    return("FLOAT")
+  } else if (code == 32) {
+    return("DOUBLE")
+  } else {
+    stop(paste("nifti(getDataStorage): unsupported data type: ", code))
+  }
+}
+
+
+.getDataCode <- function(dataType) {
+  if (dataType == "UNKNOWN") {
+    return(0)
+  }else if (dataType == "BINARY") {
+    return(1)
+  } else if (dataType == "UBYTE") {
+    return(2)
+  } else if(dataType == "SHORT") {
+    return(4)
+  } else if(dataType == "INT") {
+    return(8)
+  } else if (dataType == "FLOAT") {
+    return(16)
+  } else if (dataType == "DOUBLE") {
+    return(64)
+  } else {
+    stop(paste("getDataCode: unsupported data type: ", dataType))
+  }
+}
+
+.getDataSize <- function(dataType) {
+  if (dataType == "BINARY") {
+    return(1)
+  }
+  else if (dataType == "UBYTE") {
+    return(1)
+  }
+  else if (dataType == "SHORT") {
+    return(2)
+  }
+  else if (dataType == "INTEGER") {
+    return(4)
+  }
+  else if (dataType == "INT") {
+    return(4)
+  }
+  else if (dataType == "FLOAT") {
+    return(4)
+  }
+  else if (dataType == "DOUBLE") {
+    return(8)
+  }
+  else if (dataType == "LONG") {
+    return(8)
+  }
+
+  return(0)
+}
+
+.getEndian <- function(conn) {
+  #try little endian
+  endian <- "little"
+
+  hsize <- readBin(conn, integer(), 1, endian=endian)
+  if (hsize != 348) {
+    # might be bigendian
+    endian <<- "big"
+    seek(conn, 0)
+    hsize <- readBin(conn, integer(), 1, endian=endian)
+    if (hsize != "348") {
+      stop("nifti(getEndian): header size is not 348, invalid header.")
+    }
+  }
+
+  return(endian)
+}
+
+
+.niftiExt <- function(filetype) {
+
+  extensions <- list()
+
+  if (filetype == "nifti-single") {
+    extensions[["header"]]  <- "nii"
+    extensions[["data"]] <- "nii"
+  }
+  else if (filetype == "nifti-pair") {
+    extensions[["header"]]  <- "hdr"
+    extensions[["data"]] <- "img"
+  }
+  else if (filetype == "nifti-gz") {
+    extensions[["header"]]  <- "nii.gz"
+    extensions[["data"]] <- "nii.gz"
+  } else {
+    stop(paste("unsupported filetype: ", filetype))
+  }
+
+  return(extensions)
+}
+
+
+.matrixToQuatern <- function(mat) {
+  xd <- sqrt(drop(crossprod(mat[1:3,1])))
+  yd <- sqrt(drop(crossprod(mat[1:3,2])))
+  zd <- sqrt(drop(crossprod(mat[1:3,3])))
+
+  if (xd == 0) { mat[1,1] = 1; mat[2:3,1] = 0; xd = 1; }
+  if (yd == 0) { mat[2,2] = 1; mat[c(1,3),2] = 0; yd = 1; }
+  if (zd == 0) { mat[3,3] = 1; mat[1:2,3] = 0; zd = 1; }
+
+  rmat = mat[1:3, 1:3]
+  rmat[,1] = rmat[,1]/xd
+  rmat[,2] = rmat[,2]/yd
+  rmat[,3] = rmat[,3]/zd
+
+  ####### skipping orthogonalization of columns
+
+  #################################################
+
+  zd = det(rmat)
+  qfac = 1
+
+  if (zd > 0) {
+    qfac = 1
+  } else {
+    qfac = -1
+    rmat[1:3,3] = -rmat[1:3,3]
+  }
+
+  # compute quaternion parameters
+
+  a = rmat[1,1] + rmat[2,2] + rmat[3,3] + 1
+
+  if (a > .5) {
+    a = .5 * sqrt(a)
+    b = 0.25 * (rmat[3,2]-rmat[2,3]) / a
+    c = 0.25 * (rmat[1,3]-rmat[3,1]) / a
+    d = 0.25 * (rmat[2,1]-rmat[1,2]) / a
+   } else {
+     xd = 1.0 + rmat[1,1] - (rmat[2,2]+rmat[3,3])
+     yd = 1.0 + rmat[2,2] - (rmat[1,1]+rmat[3,3])
+     zd = 1.0 + rmat[3,3] - (rmat[1,1]+rmat[2,2])
+     if( xd > 1.0 ){
+       b = 0.5 * sqrt(xd)
+       c = 0.25* (rmat[1,2]+rmat[2,1]) / b
+       d = 0.25* (rmat[1,3]+rmat[3,1]) / b
+       a = 0.25* (rmat[3,2]-rmat[2,3]) / b
+     } else if( yd > 1.0 ){
+       c = 0.5 * sqrt(yd) ;
+       b = 0.25* (rmat[1,2]+rmat[2,1]) / c
+       d = 0.25* (rmat[2,3]+rmat[3,2]) / c
+       a = 0.25* (rmat[1,3]-rmat[3,1]) / c
+     } else {
+       d = 0.5 * sqrt(zd) ;
+       b = 0.25* (rmat[1,3]+rmat[3,1]) / d
+       c = 0.25* (rmat[2,3]+rmat[3,2]) / d
+       a = 0.25* (rmat[2,1]-rmat[1,2]) / d
+     }
+     if( a < 0.0 ){ b=-b ; c=-c ; d=-d; a=-a; }
+   }
+
+  return(list(quaternion=c(b,c,d), qfac=qfac))
+
+}
+
+
+.quaternToMatrix <- function(quat, origin, stepSize, qfac) {
+  mat <- matrix(0, 4,4)
+  mat[4,] <- c(0,0,0,1)
+
+  a <- 1 - sum(quat^2)
+  if (a < 1e-07) {
+    a <- 1 /(sqrt(sum(quat^2)))
+    quat <- quat*a
+    a <- 0
+  } else {
+    a <- sqrt(a)
+  }
+
+  stepSize <- ifelse(stepSize > 0, stepSize, 1)
+  xd <- stepSize[1]
+  yd <- stepSize[2]
+  zd <- stepSize[3]
+
+  if (qfac < 0) {
+    zd <- -zd
+  }
+
+  b <- quat[1]
+  c <- quat[2]
+  d <- quat[3]
+
+
+  mat[1,1] <- (a*a+b*b-c*c-d*d) * xd
+  mat[1,2] <- 2 * (b*c-a*d)     * yd
+  mat[1,3] <- 2 * (b*d+a*c)     * zd
+  mat[2,1] <- 2 * (b*c+a*d)     * xd
+  mat[2,2] <- (a*a+c*c-b*b-d*d) * yd
+  mat[2,3] <- 2 * (c*d-a*b)     * zd
+  mat[3,1] <- 2 * (b*d-a*c)     * xd
+  mat[3,2] <- 2 * (c*d+a*b)     * yd
+  mat[3,3] <- (a*a+d*d-c*c-b*b) * zd
+
+  mat[1:3,4] <- origin
+
+  return(mat)
+}
+
+    
