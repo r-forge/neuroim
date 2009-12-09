@@ -4,6 +4,7 @@
 \alias{dataFileExt,ANALYZEFile-method}
 
 \title{Class "ANALYZEFile" }
+
 \description{a class that handles input/output of ANALYZE formatted image
 data }
 \section{Objects from the Class}{

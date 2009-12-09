@@ -2,7 +2,7 @@
 \alias{dataFileExt}
 \title{ gets the file extension for data file }
 \description{
-  accessor for the file extension for data file \
+  accessor for the file extension for data file 
 }
 \usage{
 dataFileExt(x)

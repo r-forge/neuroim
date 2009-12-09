@@ -1,7 +1,6 @@
 \name{loadVector}
 \alias{loadVector}
-\title{ convenience function to create a "BrainVector" instance from a specified
-  file  }
+\title{ convenience function to create a "BrainVector" instance from a specified file  }
 \description{
  convenience function to create a "BrainVector" instance from a
  specified file

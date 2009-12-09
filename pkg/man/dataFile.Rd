@@ -1,8 +1,7 @@
 \name{dataFile}
 \alias{dataFile}
 
-\title{ access the name of the data file associated with a "BrainHeader" object
-}
+\title{ access the name of the data file associated with a "BrainHeader" object}
 
 \description{
   acesses the name of the file stored in a "BrainHeader" instance.

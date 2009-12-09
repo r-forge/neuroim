@@ -6,7 +6,7 @@
 
 \title{ Methods for Function writeVolume }
 \description{
- ~~ Methods for function \code{writeVolume}  ~~
+   Methods for function \code{writeVolume} 
 }
 \section{Methods}{
 \describe{

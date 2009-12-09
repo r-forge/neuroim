@@ -17,8 +17,7 @@ encoding(x)
   a character string representing the encoding type
 }
 
-\examples{
-}
+
 
 \keyword{ manip }
 

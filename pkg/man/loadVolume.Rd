@@ -13,18 +13,10 @@ loadVolume(file, volNum = 1)
   \item{file}{ the name of the image file to load }
   \item{volNum}{ the volume index if the file is 4 dimensional (starts at 1) }
 }
-\details{
-  
-}
+
 \value{
   an object of class "BrainVolume"
 }
 \references{ }
-\author{ }
-\note{ 
-}
-\seealso{ }
+\author{ Bradley Buchsbaum }
 
-\examples{}
-
-\keyword{ manip }

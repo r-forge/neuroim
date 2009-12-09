@@ -5,9 +5,9 @@
 \alias{series,SparseBrainVector,numeric-method}
 \alias{series,TiledBrainVector,matrix-method}
 \alias{series,TiledBrainVector,numeric-method}
-\title{ ~~ Methods for Function series  ~~}
+\title{ selects a series from a set of indices or grid locations }
 \description{
- ~~ Methods for function \code{series}  ~~
+	This function takes  a set of indices or grid locations retrieves a set of vector series from a 4-dimensional image
 }
 \section{Methods}{
 \describe{

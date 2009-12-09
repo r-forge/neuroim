@@ -3,7 +3,7 @@
 \alias{createSpace-methods}
 \alias{createSpace,ANALYZEHeader-method}
 \alias{createSpace}
-\title{creates a brainSpace instance}
+\title{creates a "BrainSpace" instance}
 \description{
  Methods for function \code{createSpace}
 }

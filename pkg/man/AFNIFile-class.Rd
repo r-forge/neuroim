@@ -6,8 +6,7 @@
 \description{ a class that handles input/output of NIFTI formatted image
 data }
 \section{Objects from the Class}{
-Objects can be created by calls of the form \code{new("AFNIFile", ...)}.
-
+Objects can be created by calls of the form \code{new("AFNIFile", ...)}
 }
 \section{Slots}{
 	 \describe{
@@ -15,7 +14,7 @@ Objects can be created by calls of the form \code{new("AFNIFile", ...)}.
     \item{\code{open}:}{Object of class \code{"character"} whether to
       open file for reading "r" or writing "w"  }
     \item{\code{fileType}:}{Object of class \code{"character"} : the
-      specific file type fopr this format }
+      specific file type for this format }
   }
 }
 
