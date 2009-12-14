@@ -101,6 +101,12 @@ setMethod("gridToIndex", signature(x="BrainVolume", coords="matrix"),
             array.dim <- dim(x)
             .gridToIndex(dim(x), coords)
           })
+
+setMethod("connComp", signature(x="BrainVolume"), 
+	function(x, threshold=0) {
+		mask <- (x > threshold)
+		connComp3D(mask@.Data)
+	})
     
 write.nifti.volume <- function(vol, fileName) {
 	brainFile <- NIFTIFile(fileName, "w")

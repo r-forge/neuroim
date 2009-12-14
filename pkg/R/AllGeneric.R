@@ -38,6 +38,7 @@ setGeneric("lookup", function(x, i, ...) standardGeneric("lookup"))
 setGeneric("series", function(x, i, ...) standardGeneric("series"))          
 setGeneric("concat", function(x,y, ...) standardGeneric("concat"))
 setGeneric("eachSeries", function(x, FUN, ...) standardGeneric("eachSeries"))
+setGeneric("connComp", function(x, ...) standardGeneric("connComp"))
 
 #### generics related to BrainHeader class
 setGeneric("headerFile",     function(x) standardGeneric("headerFile"))

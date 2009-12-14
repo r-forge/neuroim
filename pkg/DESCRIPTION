@@ -9,4 +9,4 @@ Description: BrainFlow is a collection of data structures that represent volumet
 Depends: R (>= 2.8.0), stats, methods
 Imports: graphics, grid, stats, abind
 License: none
-Collate: AllGeneric.R AllClass.R common.R BrainSpace.R BrainData.R BrainHeader.R NIFTIHeader.R BrainFile.R ANALYZEFile.R ANALYZEHeader.R NIFTIFile.R  BrainSlice.R BrainVolume.R BrainVector.R BrainList.R BrainRegion3D.R SparseBrainVector.R IndexLookupVolume.R Ops.R
+Collate: AllGeneric.R AllClass.R common.R BrainSpace.R BrainData.R BrainHeader.R NIFTIHeader.R BrainFile.R ANALYZEFile.R ANALYZEHeader.R NIFTIFile.R  BrainSlice.R BrainVolume.R BrainVector.R BrainList.R BrainRegion3D.R SparseBrainVector.R IndexLookupVolume.R Ops.R conncomp.R

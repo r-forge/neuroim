@@ -79,7 +79,9 @@ export(
        "concat",
        "takeVolume",
        "initialize",
-       "makeKernel")
+       "makeKernel",
+	   "connComp",
+	   "connComp3D")
 
 
 exportMethods("as.matrix")

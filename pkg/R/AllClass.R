@@ -64,7 +64,7 @@ setClass("BrainSlice",
          prototype=prototype(space=new("BrainSpace", Dim=as.integer(c(1,1)),
                                origin=c(0,0), spacing=c(1,1))))
          
-setClass("BrainVolume", contains="BrainSlice",
+setClass("BrainVolume", contains=c("BrainData", "array"),
          prototype=prototype(space=new("BrainSpace", Dim=as.integer(c(1,1,1)), origin=c(0,0,0),
                                spacing=c(1,1,1))))
 
