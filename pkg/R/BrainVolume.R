@@ -80,12 +80,8 @@ loadVolume  <- function(file, volNum=1) {
 
 setMethod("indexToGrid", signature(x="BrainSpace", idx="index"),
           function(x, idx) {
-            array.dim <- dim(x)
-            if (length(idx) == 1) {
-              .indexToGrid(idx, array.dim)
-            } else {
-              t(sapply(idx, .indexToGrid, array.dim))
-            }
+            array.dim <- dim(x)          
+            t(sapply(idx, .indexToGrid, array.dim))            
           })
 
 setMethod("indexToGrid", signature(x="BrainVector", idx="index"),
@@ -121,11 +117,11 @@ setMethod("gridToIndex", signature(x="BrainVolume", coords="matrix"),
 			ind <- ret[, 2]
 			ds <- sqrt(ret[, 4])
 			v <- vals[keepIndices] 
-			ovals <- v[ind]
+			ovals <- v[ind]		
+			pruneSet <- ifelse(ds < mindist & ovals > v,  TRUE, FALSE)
 			
-			pruneSet <- ifelse(ds < mindist & v > ovals,  TRUE, FALSE)
 			if (any(pruneSet)) {
-				Recall(keepIndices[pruneSet])
+				Recall(keepIndices[!pruneSet])
 			} else {
 				keepIndices
 			}
@@ -144,10 +140,12 @@ setMethod("gridToIndex", signature(x="BrainVolume", coords="matrix"),
 setMethod("connComp", signature(x="BrainVolume"), 
 	function(x, threshold=0, coords=TRUE, clusterTable=TRUE, localMaxima=TRUE, localMaximaDistance=15) {
 		mask <- (x > threshold)
+		stopifnot(any(mask))
+	
 		comps <- connComp3D(mask@.Data)
 		
 		
-		
+	
 		grid <- as.data.frame(indexToGrid(mask, which(mask>0)))
 		colnames(grid) <- c("x", "y", "z")
 		locations <- split(grid, comps$index[comps$index>0])
@@ -171,19 +169,24 @@ setMethod("connComp", signature(x="BrainVolume"),
 			ret$clusterTable <- data.frame(index=1:NROW(maxima), x=maxima[,1], y=maxima[,2], z=maxima[,3], N=N, Area=Area, value=maxvals)			
 		}
 		
-		if (localMaxima) {		
+		if (localMaxima) {	
+			if (all(sapply(locations, NROW) == 1)) {
+				
+			}	
 			coord.sets <- lapply(locations, function(loc) {
 				sweep(as.matrix(loc), 2, spacing(vol), "*")
 			})
-		
+			
+	
+		    
 			loc.max <- do.call(rbind, mapply(function(cset, i) {	
 				idx <- .pruneCoords(as.matrix(cset), x[as.matrix(locations[[i]])], mindist=localMaximaDistance)
 				maxvox <- as.matrix(locations[[i]])[idx,,drop=F]
 				cbind(i, maxvox)
-			}, coord.sets, 1:length(coord.sets)))
+			}, coord.sets, 1:length(coord.sets), SIMPLIFY=FALSE))
 			
 			
-			loc.max <- cbind(loc.max, x[loc.max[, 2:4]])
+			loc.max <- cbind(loc.max, x[loc.max[, 2:4, drop=F]])
 			
 			row.names(loc.max) <- 1:NROW(loc.max)
 			colnames(loc.max) <- c("index", "x", "y", "z", "value")
