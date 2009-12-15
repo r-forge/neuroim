@@ -88,7 +88,10 @@ setMethod("indexToGrid", signature(x="BrainSpace", idx="index"),
             }
           })
 
-
+setMethod("indexToGrid", signature(x="BrainVector", idx="index"),
+	function(x, idx) {
+		callGeneric(space(x), idx)
+	})
 
 setMethod("indexToGrid", signature(x="BrainVolume", idx="index"),
           function(x, idx) {
@@ -102,10 +105,94 @@ setMethod("gridToIndex", signature(x="BrainVolume", coords="matrix"),
             .gridToIndex(dim(x), coords)
           })
 
+
+
+.pruneCoords <- function(coord.set,  vals,  mindist=10) {
+
+	if (NROW(coord.set) == 1) {
+		1
+	}
+	
+	.prune <- function(keepIndices) {
+		if (length(keepIndices) == 1) {
+			keepIndices
+		} else {
+			ret <- ann(coord.set[keepIndices,], coord.set[keepIndices,], verbose=F,  k=2)$knn
+			ind <- ret[, 2]
+			ds <- sqrt(ret[, 4])
+			v <- vals[keepIndices] 
+			ovals <- v[ind]
+			
+			pruneSet <- ifelse(ds < mindist & v > ovals,  TRUE, FALSE)
+			if (any(pruneSet)) {
+				Recall(keepIndices[pruneSet])
+			} else {
+				keepIndices
+			}
+		}
+		
+		
+	}
+		
+	.prune(1:NROW(coord.set))
+	
+	
+	  
+}
+
+
 setMethod("connComp", signature(x="BrainVolume"), 
-	function(x, threshold=0) {
+	function(x, threshold=0, coords=TRUE, clusterTable=TRUE, localMaxima=TRUE, localMaximaDistance=15) {
 		mask <- (x > threshold)
-		connComp3D(mask@.Data)
+		comps <- connComp3D(mask@.Data)
+		
+		
+		
+		grid <- as.data.frame(indexToGrid(mask, which(mask>0)))
+		colnames(grid) <- c("x", "y", "z")
+		locations <- split(grid, comps$index[comps$index>0])
+		
+		ret <- list(size=BrainVolume(comps$size, space(x)), index=BrainVolume(comps$index, space(x)), voxels=locations)
+		
+				
+		
+		if (clusterTable) {
+			maxima <- do.call(rbind, lapply(locations, function(loc) {
+				if (nrow(loc) == 1) {
+					loc
+				} else {
+					vals <- x[as.matrix(loc)]
+					loc[which.max(vals),]
+				}			
+			}))
+			N <- comps$size[as.matrix(maxima)]
+			Area <- N * prod(spacing(x))
+			maxvals <- x[as.matrix(maxima)]
+			ret$clusterTable <- data.frame(index=1:NROW(maxima), x=maxima[,1], y=maxima[,2], z=maxima[,3], N=N, Area=Area, value=maxvals)			
+		}
+		
+		if (localMaxima) {		
+			coord.sets <- lapply(locations, function(loc) {
+				sweep(as.matrix(loc), 2, spacing(vol), "*")
+			})
+		
+			loc.max <- do.call(rbind, mapply(function(cset, i) {	
+				idx <- .pruneCoords(as.matrix(cset), x[as.matrix(locations[[i]])], mindist=localMaximaDistance)
+				maxvox <- as.matrix(locations[[i]])[idx,,drop=F]
+				cbind(i, maxvox)
+			}, coord.sets, 1:length(coord.sets)))
+			
+			browser()
+			loc.max <- cbind(loc.max, x[loc.max[, 2:4]])
+			
+			row.names(loc.max) <- 1:NROW(loc.max)
+			colnames(loc.max) <- c("index", "x", "y", "z", "value")
+			ret$localMaxima <- loc.max
+		}
+		
+		ret
+		
+		
 	})
     
 write.nifti.volume <- function(vol, fileName) {

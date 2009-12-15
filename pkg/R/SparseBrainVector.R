@@ -114,6 +114,30 @@ setMethod("eachSeries", signature(x="SparseBrainVector", FUN="function"),
 
             ret
           })
+setMethod("seriesIter", signature(x="SparseBrainVector"), 
+	function(x) {
+		len <- NCOL(x@data)
+		i <- 0
+		nextEl <- function() {
+			i <<- i+1
+			if (i <= len) {
+				x@data[,i]
+			} else {
+				stop("StopIteration") 
+			}		
+		}
+
+		hasNx <- function() {
+			i < len
+		}
+
+		obj <- list(nextElem = nextEl, hasNext=hasNx) 
+		class(obj) <- c("seriesIter", "abstractiter", "iter") 
+		obj
+
+
+	})
+
 
             
 setMethod("series", signature(x="TiledBrainVector", i="numeric"),

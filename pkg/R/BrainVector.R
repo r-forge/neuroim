@@ -382,6 +382,34 @@ setMethod("eachSeries", signature(x="BrainVector", FUN="function"),
            
           })
 
+setMethod("seriesIter", signature(x="BrainVector"), 
+	function(x) {
+		len <- prod(dim(x)[1:3])
+		vdim <- dim(x)[1:3]
+		i <- 1
+		nextEl <- function() {
+			if (i <= len) {
+				vox <- .indexToGrid(i, vdim)
+				i <<- i + 1
+				x[vox[1], vox[2], vox[3],]
+				
+			} else {
+				stop("StopIteration") 
+			}		
+		}
+		
+		hasNx <- function() {
+			i <= len
+		}
+		
+		obj <- list(nextElem = nextEl, hasNext=hasNx) 
+		class(obj) <- c("seriesIter", "abstractiter", "iter") 
+		obj
+		
+		
+	})
+	
+
 
 setMethod("pick", signature(x="BrainVector", mask="vector"),
           function(x, mask, reduce=F, FUN=mean) {
