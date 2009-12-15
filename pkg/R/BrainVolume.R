@@ -117,7 +117,7 @@ setMethod("gridToIndex", signature(x="BrainVolume", coords="matrix"),
 		if (length(keepIndices) == 1) {
 			keepIndices
 		} else {
-			ret <- ann(coord.set[keepIndices,], coord.set[keepIndices,], verbose=F,  k=2)$knn
+			ret <- yaImpute::ann(coord.set[keepIndices,], coord.set[keepIndices,], verbose=F,  k=2)$knn
 			ind <- ret[, 2]
 			ds <- sqrt(ret[, 4])
 			v <- vals[keepIndices] 
@@ -182,7 +182,7 @@ setMethod("connComp", signature(x="BrainVolume"),
 				cbind(i, maxvox)
 			}, coord.sets, 1:length(coord.sets)))
 			
-			browser()
+			
 			loc.max <- cbind(loc.max, x[loc.max[, 2:4]])
 			
 			row.names(loc.max) <- 1:NROW(loc.max)
