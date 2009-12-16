@@ -155,7 +155,7 @@
   hsize <- readBin(conn, integer(), 1, endian=endian)
   if (hsize != 348) {
     # might be bigendian
-    endian <<- "big"
+    endian <- "big"
     seek(conn, 0)
     hsize <- readBin(conn, integer(), 1, endian=endian)
     if (hsize != "348") {
