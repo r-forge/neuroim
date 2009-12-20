@@ -21,4 +21,6 @@ setMethod("Arith", signature(e1="BrainVector", e2="BrainVector"),
             bv <- BrainVector(ret, space(e1))
      
           })
+
+#setMethod("sum", signature()
           

@@ -142,7 +142,7 @@ setMethod("connComp", signature(x="BrainVolume"),
 		mask <- (x > threshold)
 		stopifnot(any(mask))
 	
-		comps <- connComp3D(mask@.Data)
+		comps <- connComp3D(mask)
 		
 		
 	
@@ -174,7 +174,7 @@ setMethod("connComp", signature(x="BrainVolume"),
 				
 			}	
 			coord.sets <- lapply(locations, function(loc) {
-				sweep(as.matrix(loc), 2, spacing(vol), "*")
+				sweep(as.matrix(loc), 2, spacing(x), "*")
 			})
 			
 	
