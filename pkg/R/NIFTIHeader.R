@@ -41,7 +41,9 @@ setMethod("dataDim",signature(x="NIFTIHeader"),
             return(dimarray[2:lastidx])
           })
         
-          
+ 
+### test change via svn 
+  
 setMethod("createSpace",signature(x="NIFTIHeader"),
           function(x) {
             origin <- extraInfo(x)$qoffset
