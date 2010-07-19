@@ -1,98 +1,142 @@
+#' @include AllClass.R
+roxygen()
+#' @include BrainVector.R
+roxygen()
+#' @include common.R
+roxygen()
 
 
-BrainVolume <- function(data, space, indices=NULL) {
-  if (numdim(space) != 3) {
-    stop("supplied data argument has incorrect dimensions for BrainVolume: ")
-  }
 
-  if (is.null(indices)) {
-    if (length(dim(data)) != 3) {
-      data <- array(data, c(dim(space)[1], dim(space)[2], dim(space)[3]))
-    }
-    return(new("BrainVolume", .Data=data, space=space))
-  } else {
-    mdat <- array(0, dim(space))
-    mdat[indices] <- data
-    new("BrainVolume", .Data=mdat, space=space)
-  }
+
+#' Construct a \code{\linkS4class{BrainVolume}} instance, using default (dense) implementation
+#' @param a three-dimensional \code{array}
+#' @space an instance of class \code{\linkS4class{BrainSpace}}
+#' @param source an instance of class \code{\linkS4class{BrainSource}}
+BrainVolume <- function(data, space, source=NULL) {
+	DenseBrainVolume(data,space,source)	
 }
 
-loadVolume  <- function(file, volNum=1) {
-
-  if (!.isNIFTI(file)) {
-    stop("only support NIFTI files at present")
-  }
-
-  
-  nfile <- NIFTIFile(file)
-  header <- readHeader(nfile)
-  ddim <- dataDim(header)
-
-  if (length(ddim) < 3) {
-    stop("Error: file has less than 3 dimensions, not a volumetric data set")
-  }
-
-  if (volNum > 1) {
-	stop("offset volume reading is not supported yet.")
+#' Construct a \code{\linkS4class{DenseBrainVolume}} instance
+#' @param a three-dimensional \code{array}
+#' @space an instance of class \code{\linkS4class{BrainSpace}}
+#' @param source an instance of class \code{\linkS4class{BrainSource}}
+DenseBrainVolume <- function(data, space, source=NULL) {
+	if (length(dim(data)) != 3) {
+		stop("DenseBrainVolume: data argument must be have three dimensions")
+	} 
 	
-    if (length(ddim) < 4) {
-      stop(paste("Error: file has less than 4 dimensions, cannot read a volume number ", volNum))
-    }
+	if (ndim(space) != 3) {
+		stop("DenseBrainVolume: space argument must be have three dimensions")
+	} 
+	
+	if (is.null(source)) {
+		source <- new("BaseSource", metaInfo=new("NullMetaInfo"))	
+	}
+		
+	new("DenseBrainVolume", source=source, .Data=data, space=space)
 
-    
-  }
+}
 
-  
- 
-  data <- readData(nfile)
-  data <- array(data, ddim[1:3])
-  space <- createSpace(header)
-  new("BrainVolume", .Data=data, space=space)
- 
+setAs("DenseBrainVolume", "array", function(from) from@.Data)
+setAs("BrainVolume", "array", function(from) from[,,])
+
+setMethod("show",
+		signature(object="BrainVolume"),
+			function(object) {
+				cat("an instance of class",  class(object), "\n\n")
+				cat("   dimensions: ",       dim(object), "\n")
+				cat("   voxel spacing: ",    spacing(object))
+				cat("\n\n")
+			
+		})
+
+#' load BrainVolume
+setMethod(f="loadData", signature=c("BrainVolumeSource"), 
+		def=function(x) {
+			
+			meta <- x@metaInfo
+			nels <- prod(meta@Dim[1:3]) 
+			offset <- prod(nels * (x@index-1)) * meta@bytesPerElement
+			
+			reader <- dataReader(meta, offset)
+			dat <- readElements(reader, nels)
+			close(reader)
+			arr <- array(dat, meta@Dim[1:3])
+			
+			bspace <- BrainSpace(meta@Dim[1:3], meta@origin, meta@spacing, meta@spatialAxes)
+			DenseBrainVolume(arr, bspace)
+					
+		})
+
+#' Constructor for BrainVolumeSource
+BrainVolumeSource <- function(input, index=1) {
+	stopifnot(index >= 1)
+	stopifnot(is.character(input))
+	stopifnot(file.exists(input))
+	
+	
+	metaInfo <- readHeader(input)
+	
+	if ( length(metaInfo@Dim) < 4 && index > 1) {
+		stop("index cannot be greater than 1 for a image with dimensions < 4")
+	}
+	
+	new("BrainVolumeSource", metaInfo=metaInfo, index=as.integer(index))								
+	
+}
+
+#' load an image volume from a file
+#' @param fileName the name of the file to load
+#' @param index the index of the volume (e.g. if the file is 4-dimensional)
+#' @export loadVolume
+loadVolume  <- function(fileName, index=1) {
+	src <- BrainVolumeSource(fileName, index)
+	loadData(src)
 }
 
 
-.gridToIndex <- function(dimensions, vmat) {
-  slicedim = dimensions[1]*dimensions[2]
-  idx <- apply(vmat, 1, function(vox) {
-    (slicedim*(vox[3]-1)) + (vox[2]-1)*dimensions[1] + vox[1]   
-  })
+#' concatenate two BrainVolumes
+#' @param x the first volume
+#' @param y the second volume
+#' @param ... extra arguments of class BrainVolume or other concatenable objects
+#' @note dimensions of x and y must be equal
+#' @export concat
+setMethod("concat", signature(x="DenseBrainVolume", y="DenseBrainVolume"),
+		def=function(x,y,...) {
+			.concat4D(x,y,...)			
+		})
 
-  return(idx)
-}
 
-.indexToGrid <- function(idx, array.dim) {
-  rank = length(array.dim)
-  wh1 = idx-1
-  wh = 1 + wh1 %% array.dim[1]
-  wh = rep(wh, rank)
-  if (rank >=2) {
-    denom = 1
-    for (i in 2:rank) {
-      denom = denom * array.dim[i-1]
-      nextd1 = wh1%/%denom
-      wh[i] = 1 + nextd1%%array.dim[i]
-    }
-  }
-  wh
-  
-}
+
+
+setMethod("eachSlice", signature(x="BrainVolume", FUN="function", withIndex="missing"),
+		def=function(x, FUN) {
+			lapply(1:(dim(x)[3]), function(z) FUN(x[,,z]))				
+		})
+
+setMethod("eachSlice", signature(x="BrainVolume", FUN="function", withIndex="logical"),
+		def=function(x, FUN, withIndex) {
+			lapply(1:(dim(x)[3]), function(z) {					
+				slice <- x[,,z]
+				if (withIndex) FUN(slice,z) else FUN(slice)
+			})
+		})
 
 setMethod("indexToGrid", signature(x="BrainSpace", idx="index"),
-          function(x, idx) {
+          def=function(x, idx) {
             array.dim <- dim(x)          
             t(sapply(idx, .indexToGrid, array.dim))            
           })
 
-setMethod("indexToGrid", signature(x="BrainVector", idx="index"),
-	function(x, idx) {
-		callGeneric(space(x), idx)
-	})
-
-setMethod("indexToGrid", signature(x="BrainVolume", idx="index"),
-          function(x, idx) {
-            callGeneric(space(x), idx)
-          })
+  setMethod("indexToGrid", signature(x="BrainVector", idx="index"),
+		  function(x, idx) {
+			  callGeneric(space(x), idx)
+		  })
+  
+  setMethod("indexToGrid", signature(x="BrainVolume", idx="index"),
+		  function(x, idx) {
+			  callGeneric(space(x), idx)
+		  })
 
 
 setMethod("gridToIndex", signature(x="BrainVolume", coords="matrix"),
@@ -100,7 +144,6 @@ setMethod("gridToIndex", signature(x="BrainVolume", coords="matrix"),
             array.dim <- dim(x)
             .gridToIndex(dim(x), coords)
           })
-
 
 
 .pruneCoords <- function(coord.set,  vals,  mindist=10) {

@@ -1,3 +1,5 @@
+#' @include AllClass.R
+roxygen()
 
 BrainSlice <- function(data, space, indices=NULL) {
   if (numdim(space) != 2) {

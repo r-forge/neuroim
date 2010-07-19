@@ -1,4 +1,7 @@
-
+#' @include AllClass.R
+roxygen()
+#' @include common.R
+roxygen()
 
 
 .BrainVectorFromIndices <- function(data, space, indices) {
@@ -107,85 +110,236 @@ BrainVector <- function(data, space, indices=NULL) {
   bvec
 }
 
-loadSeries <- function(filename, indices, volidx=NULL, reduce=T, demean=F, verbose=F, bulk.thresh=100 ) {
-  if (!.isNIFTI(filename)) {
-    stop("only support NIFTI files at present")
-  }
 
-  nfile <- NIFTIFile(filename)
-  header <- readHeader(nfile)
-  ddim <- dataDim(header)
-
-  if (any(volidx > ddim[4])) {
-    stop("invalid volidx : index exceeds data dimenion")
-  }
-
-  # check for invalid volidx (i.e. < 0 or duplicates)
-
-  if (length(ddim) < 4) {
-    stop("loadSeries requires a four dimensional input file")
-  }
-  
-  conn <- .openRead(nfile)
-  rstorage <- .getRStorage(dataType(header))
-  dsize <- .getDataSize(dataType(header))
-
-  offset <- dataOffset(header)
-  
-  seek(conn, where=offset, origin="start")
-
-  indices <- sort(indices)
-
-  NT <- ddim[4]
-
-  if (is.null(volidx)) {
-    volidx <- 1:NT
-  }
-  
-  VOLSIZE <- prod(ddim[1:3])
-  ENDIAN <- endian(header)
-  retmat <- matrix(0, length(volidx), length(indices))
-
-  for (i in 1:length(volidx)) {
-    vol <- volidx[i]
-    VOLSTART <- VOLSIZE*(vol-1)*dsize + offset
-    if (verbose) {
-      print(paste("reading data from volume : ", vol))
-    }
-
-    if (length(indices) < bulk.thresh) {
-      retmat[i,] <- sapply(indices, function(idx) {
-        seek(conn, VOLSTART + ((idx-1)*dsize), origin="start")
-        readBin(conn, what=rstorage, n=1,size=dsize, endian=ENDIAN)
-      })
-    } else {
-      seek(conn, VOLSTART, origin="start")
-      vals <- readBin(conn, what=rstorage, n=VOLSIZE,size=dsize, endian=ENDIAN)
-      retmat[i,] <- vals[indices]
-    }
-     
-  }
-
-  if (demean) {
-    cmeans <- colMeans(retmat)
-    retmat <- sweep(retmat, 2, cmeans)
-  }
-
-  if (reduce) {
-    retmat <- rowMeans(retmat)
-  }
-   
-  
-
-  
-  if (is.matrix(retmat) && NCOL(retmat) == 1) {
-    retmat <- retmat[,1]
-  }
-
-  close(conn)
-
-  retmat
+DenseBrainVector <- function(data, space, source=NULL) {
+	if (ndim(space) != 4) {
+		stop("DenseBrainVector: data array must be 3-dimensional")
+	} 
+	
+	if (is.null(source)) {
+		source <- new("BaseSource", metaInfo=new("NullMetaInfo"))	
+	}
+	
+	new("DenseBrainVector", source=source, .Data=data, space=space)
+	
 }
+
+
+#' Load data from a \code{\linkS4class{BrainVectorSource}}
+#' @return an instance of class \code{\linkS4class{BrainVector}} 
+setMethod(f="loadData", signature=c("BrainVectorSource"), 
+		def=function(x) {		
+			meta <- x@metaInfo
+			stopifnot(length(meta@Dim) == 4)
+			
+			meta <- x@metaInfo
+			nels <- prod(meta@Dim[1:3]) 
+			
+			datlist <- list()
+			ind <- x@indices
+			
+			for (i in 1:length(ind)) {
+				offset <- prod(nels * (ind[i]-1)) * meta@bytesPerElement
+				reader <- dataReader(meta, offset)		
+				datlist[[i]] <- array(readElements(reader, nels), meta@Dim[1:3])
+				close(reader)				
+			}
+			
+			arr <- abind(datlist, along=4)			
+			bspace <- BrainSpace(meta@Dim, meta@origin, meta@spacing, meta@spatialAxes)
+			DenseBrainVector(arr, bspace, x)
+			
+		})
+
+
+#' Construct a \code{\linkS4class{BrainVectorSource}} object
+#' @param indices the subset of volume indices to load -- if \code{NULL} then all volumes will be loaded
+#' @export BrainVectorSource
+BrainVectorSource <- function(input, indices=NULL) {
+	stopifnot(is.character(input))
+	stopifnot(file.exists(input))
+	
+	
+	metaInfo <- readHeader(input)
+	
+	if ( length(metaInfo@Dim) != 4) {
+		stop(paste("file must be four-dimensional, and it's not: ", paste(metaInfo@Dim, collapse= ",")))
+	}
+	
+	if (is.null(indices)) {
+		indices=seq(1, metaInfo@Dim[4])
+	}
+	
+	new("BrainVectorSource", metaInfo=metaInfo, indices=indices)		
+	
+}
+
+setAs("DenseBrainVector", "array", function(from) from@.Data)
+setAs("BrainVector", "array", function(from) from[,,,])
+
+
+setMethod("show",
+		signature(object="BrainVectorSource"),
+		function(object) {
+			cat("an instance of class",  class(object), "\n\n")
+			cat("   indices: ", object@indices, "\n\n")
+			cat("   metaInfo: \n")
+			show(object@metaInfo)
+			cat("\n\n")
+			
+		})
+
+setMethod("show",
+		signature(object="BrainVector"),
+		function(object) {
+			cat("an instance of class",  class(object), "\n\n")
+			cat("   dimensions: ", dim(object), "\n")
+			cat("   voxel spacing: ", spacing(object))
+			cat("\n\n")
+			
+		})
+
+
+#' apply function to each volume in a BrainVector object
+setMethod(f="eachVolume", signature=c(x="BrainVector", FUN="function", withIndex="missing"),
+		def=function(x, FUN, ...) {
+			lapply(1:(dim(x)[4]), function(tt) FUN(x[,,,tt]))				
+		})
+
+#' apply function to each volume in a BrainVector object
+setMethod("eachVolume", signature(x="BrainVector", FUN="function", withIndex="logical"),
+		def=function(x, FUN, withIndex, ...) {
+			lapply(1:(dim(x)[4]), function(tt) {					
+						vol <- x[,,,tt]
+						if (withIndex) FUN(vol,tt) else FUN(vol)
+					})
+		})
+
+#' extract one or more volumes from a  BrainVector object
+setMethod(f="takeVolume", signature=c(x="BrainVector", i="numeric"),
+		def=function(x, i, merge=FALSE) {
+			makevol <- function(i) {
+				xs <- space(x)
+				bspace <- BrainSpace(dim(x)[1:3], origin=origin(xs), spacing=spacing(xs), axes(xs), trans(xs))
+				bv <- BrainVolume(x@.Data[,,,i], bspace)
+			}
+			
+			res <- lapply(i, makevol)
+			
+			if (length(res) > 1 && merge) {
+				res <- do.call("concat", res)				
+			}
+			
+			if (length(res) == 1) {
+				res[[1]]
+			} else {
+				res
+			}											
+		})
+
+
+setMethod("eachSeries", signature(x="BrainVector", FUN="function", withIndex="missing"),
+		function(x, FUN, withIndex=FALSE, ...) {
+			
+			NX <- dim(x)[1]
+			NY <- dim(x)[2]
+			NZ <- dim(x)[3]
+			ret <- vector("list", prod(NX, NY, NZ))
+			
+			for (i in 1:NZ) {
+				for (j in 1:NY) {
+					for (k in 1:NX) {
+						ret[[index]] <- FUN(x[k,j,i,])
+						index <- index+1
+					}
+				}
+			}
+						
+			ret
+			
+		})
+
+loadSeries <- function(filenames, indices, volidx=NULL, reduce=T, demean=F, verbose=F, bulk.thresh=100 ) {
+  stopifnot(all(sapply(filenames, .isNIFTI)))
+  
+
+  ret <- lapply(filenames, function(filename) {
+
+  	nfile <- NIFTIFile(filename)
+  	header <- readHeader(nfile)
+  	ddim <- dataDim(header)
+	NT <- ddim[4]
+  	if (is.null(volidx)) {
+    	volidx <- 1:NT
+  	}
+
+  	if (any(volidx > ddim[4])) {
+    	stop("invalid volidx : index exceeds data dimenion")
+  	}
+
+  	# check for invalid volidx (i.e. < 0 or duplicates)
+  	if (length(ddim) < 4) {
+    	stop("loadSeries requires a four dimensional input file")
+  	}
+  
+  	conn <- .openRead(nfile)
+  	rstorage <- .getRStorage(dataType(header))
+  	dsize <- .getDataSize(dataType(header))
+  	offset <- dataOffset(header)  
+  	seek(conn, where=offset, origin="start")
+  	indices <- sort(indices)
+  	
+  
+  	VOLSIZE <- prod(ddim[1:3])
+  	ENDIAN <- endian(header)
+  	retmat <- matrix(0, length(volidx), length(indices))
+
+  	for (i in 1:length(volidx)) {
+    	vol <- volidx[i]
+    	VOLSTART <- VOLSIZE*(vol-1)*dsize + offset
+    	if (verbose) {
+      		print(paste("reading data from volume : ", vol))
+    	}
+
+
+    	if (length(indices) < bulk.thresh) {
+      		retmat[i,] <- sapply(indices, function(idx) {
+        		seek(conn, VOLSTART + ((idx-1)*dsize), origin="start")
+        		readBin(conn, what=rstorage, n=1,size=dsize, endian=ENDIAN)
+      			})
+    	} else {
+      		seek(conn, VOLSTART, origin="start")
+      		vals <- readBin(conn, what=rstorage, n=VOLSIZE,size=dsize, endian=ENDIAN)
+      		retmat[i,] <- vals[indices]
+    	}
+	}
+
+  	if (demean) {
+    	cmeans <- colMeans(retmat)
+    	retmat <- sweep(retmat, 2, cmeans)
+  	}
+
+  	if (reduce) {
+	    retmat <- rowMeans(retmat)
+  	}
+   
+  	if (is.matrix(retmat) && NCOL(retmat) == 1) {
+    	retmat <- retmat[,1]
+  	}
+
+  	close(conn)
+
+  	retmat
+  })
+
+
+  if (length(ret) == 1) {
+	ret[[1]]
+  } else {
+	ret
+  }
+}
+
                          
 
 .loadSparseVector <- function(filename, mask) {
@@ -251,136 +405,37 @@ loadVector  <- function(filename, volRange=NULL, mask=NULL) {
   
 }
 
-setMethod("sliceMeans", signature(x="BrainVector"),
-          function(x) {
-             t(colMeans(x, dims=2))
-           })
 
-setMethod("takeVolume", signature(x="BrainVector", i="numeric"),
-  function(x,i) {
-    
-    xs <- space(x)
-    makevol <- function(i) {
-      xs <- space(x)
-      bspace <- BrainSpace(dim(x)[1:3], origin=origin(xs), spacing=spacing(xs), orientation(xs), trans(xs))
-      bv <- BrainVolume(x@.Data[,,,i], bspace)
-    }
 
-    if (length(i) > 1) {
-      lapply(i, makevol)
-    } else {
-      makevol(i)
-    }
-  })
+#setMethod("sliceMeans", signature(x="BrainVector"),
+#          function(x) {
+#             t(colMeans(x, dims=2))
+#           })
+
+
 
 setMethod("concat", signature(x="BrainVector", y="BrainVolume"),
-          function(x,y) {
-            if (!all(dim(x)[1:3] == dim(y)[1:3])) {
-              stop("cannot concatenate arguments with different spatial dimensions")
-            }
-            
-            ndat <- abind(x@.Data, y@.Data, along=4)
-            d1 <- dim(x)
-            d2 <- dim(y)
-            ndim <- c(d1[1:3], dim(x)[4] + 1)
-            nspace <- BrainSpace(ndim, origin(x@space), spacing(x@space),
-                                 orientation(x@space), trans(x@space), reptime=1)
-            BrainVector(ndat, nspace)
-          })
-            
-setMethod("concat", signature(x="BrainVolume", y="BrainVolume"),
-          function(x,y,...) {
-            if (!all(dim(x)[1:3] == dim(y)[1:3])) {
-              stop("cannot concatenate arguments with different spatial dimensions")
-            }
+		function(x,y, ...) {
+			.concat4D(x,y,...)			
+		})
 
-            
-
-            ndat <- abind(x@.Data, y@.Data, along=4)
-            d1 <- dim(x)
-            d2 <- dim(y)
-
-            ndim <- c(d1[1:3], 2)
-            nspace <- BrainSpace(ndim, origin(x@space), spacing(x@space),
-                                 orientation(x@space), trans(x@space), reptime=1)
-            ret <- BrainVector(ndat, nspace)
-            rest <- list(...)
-
-            if (length(rest) >= 1) {
-              for (i in 1:length(rest)) {
-                ret <- concat(ret, rest[[i]])
-              }
-            }
-
-            ret
-            
-          })
-
- ### lot of code duplication ..           
+      
  setMethod("concat", signature(x="BrainVector", y="BrainVector"),
           function(x,y,...) {
-
-            if (!all(dim(x)[1:3] == dim(y)[1:3])) {
-              stop("cannot concatenate arguments with different spatial dimensions")
-            }
-
-            ndat <- abind(x@.Data, y@.Data)
-            d1 <- dim(x)
-            d2 <- dim(y)
-
-            ndim <- c(d1[1:3], d1[4] + d2[4])
-            nspace <- BrainSpace(ndim, origin(x@space), spacing(x@space),
-                                 orientation(x@space), trans(x@space), reptime=1)
-
-
-            ret <- BrainVector(ndat, nspace)
-            rest <- list(...)
-            
-            if (length(rest) >= 1) {
-              for (i in 1:length(rest)) {
-                ret <- concat(ret, rest[[i]])
-              }
-            }
-            
-
-            ret
-
+			.concat4D(x,y,...)
           })
 
 
 
-setMethod("eachSeries", signature(x="BrainVector", FUN="function"),
-          function(x, FUN, withIndex=FALSE) {
-            
-            NX <- dim(x)[1]
-            NY <- dim(x)[2]
-            NZ <- dim(x)[3]
-            ret <- vector("list", prod(NX, NY, NZ))
-            #browser()
-            if (withIndex) {
-              index = 1
-              for (i in 1:NZ) {
-                for (j in 1:NY) {
-                  for (k in 1:NX) {
-                    ret[[index]] <- FUN(x[k,j,i,], index)
-                    index <- index+1
-                  }
-                }
-              }
-            } else {
-              for (i in 1:NZ) {
-                for (j in 1:NY) {
-                  for (k in 1:NX) {
-                    ret[[index]] <- FUN(x[k,j,i,])
-                    index <- index+1
-                  }
-                }
-              }
-            }
 
-            ret
-           
-          })
+
+#setMethod("series", signature(x="SparseBrainVector", i="numeric"),
+#	function(x,i, j, k) {
+#		if (missing(j) && missing(k)) {
+#			if (length(i) == 3) {
+#				return(callGeneric(x, i[1], i[2], i[3]))
+#		    }
+		
 
 setMethod("seriesIter", signature(x="BrainVector"), 
 	function(x) {
@@ -411,34 +466,31 @@ setMethod("seriesIter", signature(x="BrainVector"),
 	
 
 
-setMethod("pick", signature(x="BrainVector", mask="vector"),
-          function(x, mask, reduce=F, FUN=mean) {
-            if ( (length(dim(mask)) == 3) & (length(mask) == prod(dim(x)[1:3])) ) {
-              ## 3d mask
-              #mask <- as.logical(mask)
-              NVOL <- dim(x)[4]
+setMethod("takeSeries", signature(x="BrainVector", indices="numeric"),
+		function(x, indices) {
+			
+			D <- dim(x)[1:3]
+			if (all.equals(dim(indices), D)) {
+				indices <- which(indices>0)
+			}
+			
+			vox <- t(sapply(indices, .indexToGrid, D)) 
+			
+			apply(vox, 1, function(v) {
+				x[v[1], v[2], v[3],]
+			})
+			
+		})
               
-              args <- lapply(1:NVOL, function(i) mask) 
-              imask <- do.call("abind", c(args, along=4))
-              
-              mat <- x[imask]
-              dim(mat) <- c(sum(mask), NVOL)
-
-              #mat <- matrix(0, c(sum(mask), NVOL))
-              #for (i in 1:NVOL) {
-              #  vol <- x[,,,i]
-              #  mat[i,] <- vol[mask]
-              #}
-
-              if (reduce) {
-                apply(mat, 2, FUN)
-              } else {
-                mat
-              }
-            }
-          })
-              
-              
+setMethod("takeSeries", signature(x="BrainVector", indices="BrainVolume"),
+		function(x, indices) {				
+			D <- dim(x)[1:3]
+			stopifnot(all.equal(dim(indices), D))
+			
+			idx <- which(indices > 0)
+			callGeneric(x, idx)			
+			
+		})              
             
 
 setMethod("writeVector",signature(x="BrainVector", fileName="character"),

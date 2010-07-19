@@ -1,30 +1,27 @@
 
 
-#setClass("TiledBrainVector", contains="BrainData", representation(cache="list", mask="BrainVolume", ntiles="integer", capacity="numeric"))
 
-TiledBrainVector <- function(fname, mask, ntiles=5, capacity=.5) {
-  stopifnot(capacity <= 1 && capacity > 0)
+#TiledBrainVector <- function(fname, mask, ntiles=5, capacity=.5) {
+#  stopifnot(capacity <= 1 && capacity > 0)
+#  
+#  indices <- which(mask > 0)
   
-  indices <- which(mask > 0)
-  
-  indexList <- split(indices, cut(1:length(indices),ntiles))
-  names(indexList) <- seq(1,length(indexList))
-  new("TiledBrainVector", filename=fname, indexList=indexList, mask=mask, capacity=capacity) 
+#  indexList <- split(indices, cut(1:length(indices),ntiles))
+#  names(indexList) <- seq(1,length(indexList))
+#  new("TiledBrainVector", filename=fname, indexList=indexList, mask=mask, capacity=capacity) 
 
-}
+#}
 
-setMethod("initialize", "TiledBrainVector", function(.Object, filename, mask, indexList, capacity) {
-  .Object@filename <- filename
-  .Object@cache <- vector("list", length(indexList))
-  .Object@indexList <- indexList
-  .Object@mask <- mask
-  .Object@capacity <- capacity
-  .Object
-})
+#setMethod("initialize", "TiledBrainVector", function(.Object, filename, mask, indexList, capacity) {
+#  .Object@filename <- filename
+#  .Object@cache <- vector("list", length(indexList))
+#  .Object@indexList <- indexList
+#  .Object@mask <- mask
+#  .Object@capacity <- capacity
+#  .Object
+#})
   
   
-
-
 
 
 SparseBrainVector <- function(dat, space, mask=NULL, indices=NULL) {
@@ -59,12 +56,8 @@ SparseBrainVector <- function(dat, space, mask=NULL, indices=NULL) {
   
 }
 
-setMethod("typeof", signature(x="SparseBrainVector"),
-          function(x) {
-            typeof(x@data)
-          })
-          
 
+          
 setMethod("indices", signature(x="SparseBrainVector"),
           function(x) {
             indices(x@map)
@@ -89,9 +82,7 @@ setMethod("coords", signature(x="TiledBrainVector"),
             
             
 setMethod("coords", signature(x="SparseBrainVector"),
-          function(x,i) {
-
-            
+          function(x,i) {           
             if (missing(i)) {
               return(coords(x@map, indices(x@map)))
             }
@@ -114,6 +105,8 @@ setMethod("eachSeries", signature(x="SparseBrainVector", FUN="function"),
 
             ret
           })
+
+
 setMethod("seriesIter", signature(x="SparseBrainVector"), 
 	function(x) {
 		len <- NCOL(x@data)
@@ -141,9 +134,9 @@ setMethod("seriesIter", signature(x="SparseBrainVector"),
 
             
 setMethod("series", signature(x="TiledBrainVector", i="numeric"),
-         function(x,i, j, k) {
-           
-         })
+	function(x,i, j, k) {
+		stop()         
+       })
               
             
 setMethod("series", signature(x="TiledBrainVector", i="matrix"),
@@ -169,6 +162,7 @@ setMethod("series", signature(x="SparseBrainVector", i="numeric"),
              
              idx <- lookup(x, as.integer(i))
              idx <- idx[idx!=0]
+
              if (length(idx) == 0) {
                rep(0, dim(x)[4])
              } else {
@@ -274,7 +268,17 @@ setMethod("writeVector",signature(x="SparseBrainVector", fileName="character"),
               
           })
 
-            
+#		setAs(from="BrainVector", to="matrix",
+#		      function(from) {
+#		        data <- from@.Data
+#		        dm <- dim(data)
+#		        d123 <- prod(dm[1:3])
+#		        d4 <- dm[4]
+#
+#		        dim(data) <- c(d123,d4)
+#		        data
+#
+#		      })
             
 
           

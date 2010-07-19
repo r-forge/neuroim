@@ -1,89 +1,14 @@
-import(methods)
-importFrom(graphics, plot)
-
-
-exportClasses(
-              "index",
-              "BrainHeader", 
-              "NIFTIHeader", 
-	          "BrainFile", 
-              "ANALYZEFile", 
-	          "NIFTIFile",
-              "BrainSpace",
-              "BrainData",
-              "BrainSlice",
-              "BrainVolume",
-	          "BrainVector",
-              "BrainList",
-              "BrainRegion3D",
-              "SparseBrainVector",
-              "IndexLookupVolume")
-
-export(
-       "numdim",
-       "spacing",
-       "bounds",
-       "orientation",
-       "origin",
-       "trans",
-       "invTrans",
-       "reptime",
-       "trans<-",
-       "writeVolume",
-       "writeVector",
-       "value",
-       "space",
-       "indexToGrid",
-       "gridToIndex",
-       "BrainSpace",
-       "NIFTIFile",
-       "BrainVolume",
-       "BrainVector",
-       "SparseBrainVector",
-       "IndexLookupVolume",
-       "sliceMeans",
-       "pick",
-       "BrainList",
-       "RegionSphere",
-       "RegionCube",
-       "coords",
-       "loadVolume",
-       "loadVector",
-       "loadSeries",
-       "loadBrainList",
-       "createNIFTIHeader",
-       "headerFile",
-       "dataFile",
-       "fileType",
-       "versionNum",
-       "encoding",
-       "endian",
-       "dataOffset",
-       "extraInfo",
-       "dataType",
-       "dataDim",
-       "createSpace",
-       "readData",
-       "readHeader",
-       "writeData",
-       "writeHeader",
-       "fileName",
-       "path",
-       "openFor",
-       "headerFileExt",
-       "dataFileExt",
-       "lookup",
-       "indices",
-       "series",
-       "eachSeries",
-       "concat",
-       "takeVolume",
-       "initialize",
-       "makeKernel",
-	   "connComp",
-	   "connComp3D")
-
-
-exportMethods("as.matrix")
-
-               		
+exportClasses(BrainFileDescriptor)
+exportClasses(BrainMetaInfo)
+exportClasses(NIfTIMetaInfo)
+exportClasses(BrainSpace)
+exportClasses(BrainData)
+exportClasses(BrainList)
+exportClasses(BrainVolume, BrainSpace, <-, function(Dim,, origin=NULL,, spacing=NULL,, orientation=NULL,, trans=NULL,, reptime=1))
+export(fileMatches)
+export(headerFileMatches)
+export(dataFileMatches)
+export(headerFile)
+export(dataFile)
+export(stripExtension)
+export(readMetaInfo)

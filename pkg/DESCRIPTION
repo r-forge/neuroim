@@ -1,12 +1,19 @@
-Package: NeuroImage
+Package: neuroim
 Type: Package
-Title: NeuroImage: R software for reading, writing and representing brain imaging data
-Version: 0.5.7
-Date: 2009-12-09
+Title: neuroim: R software for reading, writing and representing brain
+    imaging data
+Version: 0.5.8
+Date: 2010-7-09
 Author: Bradley Buchsbaum
 Maintainer: Bradley Buchsbaum <bbuchsbaum@rotman-baycrest.on.ca>
-Description: BrainFlow is a collection of data structures that represent volumetric brain imaging data. In addition, there are function to read and write ANALYZE7.5 and NIFTI files.
-Depends: R (>= 2.8.0), stats, methods, yaImpute
-Imports: graphics, grid, stats, abind
-License: none
-Collate: AllGeneric.R AllClass.R common.R BrainSpace.R BrainData.R BrainHeader.R NIFTIHeader.R BrainFile.R ANALYZEFile.R ANALYZEHeader.R NIFTIFile.R  BrainSlice.R BrainVolume.R BrainVector.R BrainList.R BrainRegion3D.R SparseBrainVector.R IndexLookupVolume.R Ops.R conncomp.R
+Description: neuroim is a collection of data structures that represent
+    volumetric brain imaging data. In addition, there are function to
+    read and write ANALYZE7.5 and NIFTI files.
+Depends: R (>= 2.8.0), stats, methods, yaImpute, stringr, abind
+Imports: graphics, grid, stats
+Collate: 'AllClass.R' 'AllGeneric.R' 'ANALYZEFile.R' 'ANALYZEHeader.R'
+    'BrainData.R' 'BrainFile.R' 'BrainFileDescriptor.R' 'BrainHeader.R'
+    'BrainList.R' 'BrainMetaInfo.R' 'BrainRegion3D.R' 'BrainSlice.R'
+    'BrainSpace.R' 'BrainVector.R' 'BrainVolume.R' 'common.R'
+    'conncomp.R' 'IndexLookupVolume.R' 'neuroim-package.R'
+    'NIFTIFile.R' 'NIFTIHeader.R' 'Ops.R' 'SparseBrainVector.R'

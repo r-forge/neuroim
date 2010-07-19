@@ -109,16 +109,13 @@ makeKernel <- function(kerndim, pdim, FUN=dnorm) {
   }
   
   kern <- array(0, kerndim)
- svec <- sapply(kerndim, function(d) ceiling(d/2 -1))
+  svec <- sapply(kerndim, function(d) ceiling(d/2 -1))
   dlist <- lapply(svec, function(sv) seq(-sv, sv))
 
   indmat <- do.call("expand.grid", dlist)
   cmat <- t(apply(indmat, 1, function(vals) sign(vals)* ifelse(vals == 0, 0, abs(vals)-.5)))
-
   cmat2 <- t(apply(cmat, 1, function(v) (v * pdim)))
   
-
-
   dvals <- apply(cmat2, 1, .distance, c(0,0,0))
   wts <- FUN(dvals)
   wts <- wts/sum(wts)

@@ -1,4 +1,6 @@
-setMethod("numdim", signature(x = "BrainData"),
+
+
+setMethod("ndim", signature(x = "BrainData"),
           function(x) numdim(x@space))
 
 setMethod("dim", signature(x = "BrainData"),
@@ -14,4 +16,5 @@ setMethod("spacing", signature(x = "BrainData"),
           })
           
 setMethod("as.matrix", signature(x = "BrainData"), function(x) as(x, "matrix"))
+setMethod("as.array", signature(x = "BrainData"), function(x) as(x, "array"))
 setMethod("as.vector", signature(x = "BrainData"), function(x) as(x, "vector"))

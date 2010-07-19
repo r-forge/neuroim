@@ -201,11 +201,7 @@ setMethod("readHeader", signature(x="NIFTIFile"),
         )
 
 
-.checkDimensions <- function(dimvec) {
-  if (any(dimvec < 0)) {
-    stop(paste("nifti(checkDimensons): illegal dimension vector in header: ", dimvec))
-  }
-}
+
 
 
 

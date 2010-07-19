@@ -1,7 +1,40 @@
 
 .isExtension <- function(fname, extension) {
-  last = substr(fname, nchar(fname)+1 - nchar(extension), nchar(fname))
+  last <- substr(fname, nchar(fname)+1 - nchar(extension), nchar(fname))
   return(last==extension)
+}
+
+.concat4D <- function(x,y, ...) {
+	rest <- list(...)
+	
+	D <- dim(x)[1:3]
+	
+	lapply(rest, function(z) {
+			stopifnot(length(dim(z)) >= 3)
+			stopifnot(identical(D, dim(z)[1:3]))
+	})
+
+	D4 <- function(vol) { if (length(dim(vol)) == 3) 1 else dim(vol)[4] }
+		
+	NVOLS <- D4(x) + D4(y)
+	
+
+	ndat <- abind(as.array(x), as.array(y), along=4)
+	
+	new.dim <- c(D, NVOLS)
+	nspace <- BrainSpace(new.dim, origin(x@space), spacing(x@space),
+			axes(x@space), trans(x@space))
+	
+	ret <- DenseBrainVector(ndat, nspace)
+	
+	if (length(rest) > 0) {
+		for (i in seq_along(rest)) {
+			ret <- concat(ret, rest[[i]])
+		}
+	}
+	
+	ret
+	
 }
 
  
@@ -42,32 +75,39 @@
   eval(expr)
 }
 
-#horrid
-.createWritableConnection <- function(conn, headerFile) {
-	if (is.null(conn)) {
-		if (file.exists(headerFile)) {
-			stop(paste("file ", headerFile, " already exists. aborting"))
-		} else {
-			conn <- file(headerFile, open="wb") # open file connection
-		}
-	}
-  	return(conn)
-}
-
 
   
-.isNIFTI <- function(fname) {
-  if (.isExtension(fname, ".nii") || .isExtension(fname, ".nii.gz")) {
-    return(TRUE)
-  }
+.gridToIndex <- function(dimensions, vmat) {
+	slicedim = dimensions[1]*dimensions[2]
+	idx <- apply(vmat, 1, function(vox) {
+				(slicedim*(vox[3]-1)) + (vox[2]-1)*dimensions[1] + vox[1]   
+			})
+	
+	return(idx)
+}
 
-  return(FALSE)
+.indexToGrid <- function(idx, array.dim) {
+	stopifnot(all(idx > 0 & idx <= prod(array.dim)))
+	rank = length(array.dim)
+	wh1 = idx-1
+	wh = 1 + wh1 %% array.dim[1]
+	wh = rep(wh, rank)
+	if (rank >=2) {
+		denom = 1
+		for (i in 2:rank) {
+			denom = denom * array.dim[i-1]
+			nextd1 = wh1%/%denom
+			wh[i] = 1 + nextd1%%array.dim[i]
+		}
+	}
+	wh
+	
 }
 
 
 
 .getRStorage <- function(dataType) {
-  if (any(dataType == c("BINARY", "UBYTE", "SHORT", "INTEGER", "INT", "LONG"))) {
+  if (any(dataType == c("BINARY", "BYTE", "UBYTE", "SHORT", "INTEGER", "INT", "LONG"))) {
     return("integer")
   }
 
