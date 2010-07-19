@@ -3,6 +3,7 @@
 library(methods)
 
 
+
 library(roxygen)
 roxygenize("pkg",
  roxygen.dir="pkg",

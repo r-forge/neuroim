@@ -54,12 +54,12 @@ setMethod(f="show", signature=signature("AxisSet2D"),
 			cat("Axis 2:", print(object@j), "\n")
 		})
 
-setMethod(f="print", signature="AxisSet3D", 
+setMethod(f="print", signature=signature("AxisSet3D"), 
 		def=function(x, ...) {
 			paste(print(x@i), "-", print(x@j), "-", print(x@k))
 		})
 
-setMethod(f="show", signature="AxisSet3D", 
+setMethod(f="show", signature=signature("AxisSet3D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
 			cat("Axis 1:", print(object@i), "\n")

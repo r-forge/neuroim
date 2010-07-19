@@ -9,16 +9,16 @@ roxygen()
 
 
 #' Construct a \code{\linkS4class{BrainVolume}} instance, using default (dense) implementation
-#' @param a three-dimensional \code{array}
-#' @space an instance of class \code{\linkS4class{BrainSpace}}
+#' @param data a three-dimensional \code{array}
+#' @param space an instance of class \code{\linkS4class{BrainSpace}}
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
 BrainVolume <- function(data, space, source=NULL) {
 	DenseBrainVolume(data,space,source)	
 }
 
 #' Construct a \code{\linkS4class{DenseBrainVolume}} instance
-#' @param a three-dimensional \code{array}
-#' @space an instance of class \code{\linkS4class{BrainSpace}}
+#' @param data a three-dimensional \code{array}
+#' @param space an instance of class \code{\linkS4class{BrainSpace}}
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
 DenseBrainVolume <- function(data, space, source=NULL) {
 	if (length(dim(data)) != 3) {
@@ -40,9 +40,9 @@ DenseBrainVolume <- function(data, space, source=NULL) {
 setAs("DenseBrainVolume", "array", function(from) from@.Data)
 setAs("BrainVolume", "array", function(from) from[,,])
 
-setMethod("show",
-		signature(object="BrainVolume"),
-			function(object) {
+setMethod(f="show",
+		signature=signature(object="BrainVolume"),
+			def=function(object) {
 				cat("an instance of class",  class(object), "\n\n")
 				cat("   dimensions: ",       dim(object), "\n")
 				cat("   voxel spacing: ",    spacing(object))
@@ -101,7 +101,7 @@ loadVolume  <- function(fileName, index=1) {
 #' @param ... extra arguments of class BrainVolume or other concatenable objects
 #' @note dimensions of x and y must be equal
 #' @export concat
-setMethod("concat", signature(x="DenseBrainVolume", y="DenseBrainVolume"),
+setMethod(f="concat", signature=signature(x="DenseBrainVolume", y="DenseBrainVolume"),
 		def=function(x,y,...) {
 			.concat4D(x,y,...)			
 		})
@@ -109,12 +109,12 @@ setMethod("concat", signature(x="DenseBrainVolume", y="DenseBrainVolume"),
 
 
 
-setMethod("eachSlice", signature(x="BrainVolume", FUN="function", withIndex="missing"),
+setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", withIndex="missing"),
 		def=function(x, FUN) {
 			lapply(1:(dim(x)[3]), function(z) FUN(x[,,z]))				
 		})
 
-setMethod("eachSlice", signature(x="BrainVolume", FUN="function", withIndex="logical"),
+setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", withIndex="logical"),
 		def=function(x, FUN, withIndex) {
 			lapply(1:(dim(x)[3]), function(z) {					
 				slice <- x[,,z]
@@ -122,25 +122,25 @@ setMethod("eachSlice", signature(x="BrainVolume", FUN="function", withIndex="log
 			})
 		})
 
-setMethod("indexToGrid", signature(x="BrainSpace", idx="index"),
+setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
           def=function(x, idx) {
             array.dim <- dim(x)          
             t(sapply(idx, .indexToGrid, array.dim))            
           })
 
-  setMethod("indexToGrid", signature(x="BrainVector", idx="index"),
-		  function(x, idx) {
+  setMethod(f="indexToGrid", signature=signature(x="BrainVector", idx="index"),
+		  def=function(x, idx) {
 			  callGeneric(space(x), idx)
 		  })
   
-  setMethod("indexToGrid", signature(x="BrainVolume", idx="index"),
-		  function(x, idx) {
+  setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="index"),
+		  def=function(x, idx) {
 			  callGeneric(space(x), idx)
 		  })
 
 
-setMethod("gridToIndex", signature(x="BrainVolume", coords="matrix"),
-          function(x, coords) {
+setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix"),
+          def=function(x, coords) {
             array.dim <- dim(x)
             .gridToIndex(dim(x), coords)
           })
@@ -180,8 +180,8 @@ setMethod("gridToIndex", signature(x="BrainVolume", coords="matrix"),
 }
 
 
-setMethod("connComp", signature(x="BrainVolume"), 
-	function(x, threshold=0, coords=TRUE, clusterTable=TRUE, localMaxima=TRUE, localMaximaDistance=15) {
+setMethod(f="connComp", signature=signature(x="BrainVolume"), 
+	def=function(x, threshold=0, coords=TRUE, clusterTable=TRUE, localMaxima=TRUE, localMaximaDistance=15) {
 		mask <- (x > threshold)
 		stopifnot(any(mask))
 	
@@ -259,25 +259,12 @@ write.nifti.volume <- function(vol, fileName) {
 }  
 
 
-setMethod("writeVolume",signature(x="BrainVolume", fileName="character", format="missing"),
-	function(x, fileName) {
+setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="missing"),
+	def=function(x, fileName) {
 		write.nifti.volume(x, fileName)           
     })
 
-setMethod("writeVolume",signature(x="BrainVolume", fileName="character", format="character"),
-	function(x, fileName, format) {
-		type <- pmatch(toupper(format), c(toupper("analyze7.5"), toupper("nifti1")))
-		if (is.na(type)) {
-			stop(paste("unrecognized output format", format))
-		}        
-		if (type == 1) {
-			stop(paste("unsupported format: ", type))
-		} else if (type == 2) {
-			write.nifti.volume(x, fileName)
-		} else {
-			stop(paste("unsupported format: ", type))
-		}
-	})
+
 
 
 

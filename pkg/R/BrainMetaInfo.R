@@ -16,7 +16,7 @@ roxygen()
 setGeneric("dataReader", function(x, offset) standardGeneric("dataReader"))
 
 
-setMethod(f="dataReader", signature="NIfTIMetaInfo", 
+setMethod(f="dataReader", signature=signature("NIfTIMetaInfo"), 
 		def=function(x, offset=0) {
 			BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
 		})
@@ -60,7 +60,7 @@ NIfTIMetaInfo <- function(descriptor, nifti_header) {
 
 
 
-setMethod(f="show", signature="BrainMetaInfo", 
+setMethod(f="show", signature=signature("BrainMetaInfo"), 
 		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")
 			cat("headerFile:", "\t", object@headerFile, "\n")

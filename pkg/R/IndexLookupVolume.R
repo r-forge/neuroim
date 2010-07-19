@@ -1,13 +1,11 @@
 
 
-IndexLookupVolume <- function(space, indices) {
-  
+IndexLookupVolume <- function(space, indices) { 
   new("IndexLookupVolume", space=space, indices=indices)
-
 }
 
-setMethod("initialize", "IndexLookupVolume",
-          function(.Object, space, indices) {
+setMethod(f="initialize", signature=signature("IndexLookupVolume"),
+          def=function(.Object, space, indices) {
             
             #print("initializing IndexLookupVolume")
             .Object@space <- space
@@ -20,25 +18,24 @@ setMethod("initialize", "IndexLookupVolume",
           })
 
 
-setMethod("indices", signature(x="IndexLookupVolume"),
-          function(x) {
+setMethod(f="indices", signature=signature(x="IndexLookupVolume"),
+          def=function(x) {
             x@indices
           })
 
-setMethod("lookup", signature(x="IndexLookupVolume", i="numeric"),
-          function(x,i) {
+setMethod(f="lookup", signature=signature(x="IndexLookupVolume", i="numeric"),
+          def=function(x,i) {
             x@map[i]
           })
 
-setMethod("space", signature(x="IndexLookupVolume"),
-          function(x) {
+setMethod(f="space", signature=signature(x="IndexLookupVolume"),
+          def=function(x) {
             x@space
           })
         
           
-setMethod("coords", signature(x="IndexLookupVolume"),
+setMethod(f="coords", signature(x="IndexLookupVolume"),
           function(x,i) {
-            #browser()
             idx <- lookup(x,i)
             idx <- idx[idx!=0]
             if (length(idx) == 0) {

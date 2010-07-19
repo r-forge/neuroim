@@ -58,21 +58,21 @@ SparseBrainVector <- function(dat, space, mask=NULL, indices=NULL) {
 
 
           
-setMethod("indices", signature(x="SparseBrainVector"),
-          function(x) {
+setMethod(f="indices", signature=signature(x="SparseBrainVector"),
+          def=function(x) {
             indices(x@map)
           })
           
-setMethod("indices", signature(x="TiledBrainVector"),
-          function(x) {
+setMethod(f="indices", signature=signature(x="TiledBrainVector"),
+          def=function(x) {
             ret <- unlist(x@indexList)
             names(ret) <- NULL
             ret
           })
   
 
-setMethod("coords", signature(x="TiledBrainVector"),
-          function(x,i) {
+setMethod(f="coords", signature=signature(x="TiledBrainVector"),
+          def=function(x,i) {
             if (missing(i)) {
               return(indexToGrid(space(mask), indices(x)))
             }
@@ -81,16 +81,16 @@ setMethod("coords", signature(x="TiledBrainVector"),
             
             
             
-setMethod("coords", signature(x="SparseBrainVector"),
-          function(x,i) {           
+setMethod(f="coords", signature=signature(x="SparseBrainVector"),
+          def=function(x,i) {           
             if (missing(i)) {
               return(coords(x@map, indices(x@map)))
             }
             coords(x@map, i)            
           })            
 
-setMethod("eachSeries", signature(x="SparseBrainVector", FUN="function"),
-          function(x, FUN, withIndex=FALSE) {
+setMethod(f="eachSeries", signature=signature(x="SparseBrainVector", FUN="function"),
+          def=function(x, FUN, withIndex=FALSE) {
             ret <- list()
             if (withIndex) {
               idx <- indices(x)
@@ -107,8 +107,8 @@ setMethod("eachSeries", signature(x="SparseBrainVector", FUN="function"),
           })
 
 
-setMethod("seriesIter", signature(x="SparseBrainVector"), 
-	function(x) {
+setMethod(f="seriesIter", signature=signature(x="SparseBrainVector"), 
+	def=function(x) {
 		len <- NCOL(x@data)
 		i <- 0
 		nextEl <- function() {
@@ -133,28 +133,28 @@ setMethod("seriesIter", signature(x="SparseBrainVector"),
 
 
             
-setMethod("series", signature(x="TiledBrainVector", i="numeric"),
-	function(x,i, j, k) {
+setMethod(f="series", signature=signature(x="TiledBrainVector", i="numeric"),
+	def=function(x,i, j, k) {
 		stop()         
        })
               
             
-setMethod("series", signature(x="TiledBrainVector", i="matrix"),
-         function(x,i) {
+setMethod(f="series", signature=signature(x="TiledBrainVector", i="matrix"),
+         def=function(x,i) {
            idx <- gridToIndex(x@mask, i)
            callGeneric(x,idx)
          })
   
 
-setMethod("series", signature(x="SparseBrainVector", i="matrix"),
-         function(x,i) {
+setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
+         def=function(x,i) {
            idx <- gridToIndex(x@mask, i)
            callGeneric(x,idx)
          })
            
 
-setMethod("series", signature(x="SparseBrainVector", i="numeric"),
-         function(x,i, j, k) {
+setMethod(f="series", signature=signature(x="SparseBrainVector", i="numeric"),
+         def=function(x,i, j, k) {
            if (missing(j) && missing(k)) {
              if (length(i) == 3) {
                return(callGeneric(x, i[1], i[2], i[3]))
@@ -181,8 +181,8 @@ setMethod("series", signature(x="SparseBrainVector", i="numeric"),
          })
 
 
-setMethod("concat", signature(x="SparseBrainVector", y="SparseBrainVector"),
-          function(x,y,...) {
+setMethod(f="concat", signature=signature(x="SparseBrainVector", y="SparseBrainVector"),
+          def=function(x,y,...) {
             if (!all(indices(x) == indices(y))) {
               stop("cannot concatenate arguments with different index maps")
             }
@@ -208,14 +208,14 @@ setMethod("concat", signature(x="SparseBrainVector", y="SparseBrainVector"),
           
           
           
-setMethod("lookup", signature(x="SparseBrainVector", i="numeric"),
-         function(x,i) {
+setMethod(f="lookup", signature=signature(x="SparseBrainVector", i="numeric"),
+         def=function(x,i) {
             lookup(x@map, i)
           })
                       
 
-setMethod("[", signature(x = "SparseBrainVector", i = "numeric", j = "numeric"),
-          function (x, i, j, k, m, ..., drop) {
+setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j = "numeric"),
+          def=function (x, i, j, k, m, ..., drop) {
             if (missing(k)) k = 1:dim(x)[3]
             if (missing(m)) m = 1:dim(x)[4]
 
@@ -225,8 +225,8 @@ setMethod("[", signature(x = "SparseBrainVector", i = "numeric", j = "numeric"),
             ## cache grid coordinates?
           })
 
-setMethod("takeVolume", signature(x="SparseBrainVector", i="numeric"),
-          function(x,i) {
+setMethod(f="takeVolume", signature=signature(x="SparseBrainVector", i="numeric"),
+          def=function(x,i) {
             
             if (length(i) > 1) {
               stop("can only take one volume at a time (for now).")
@@ -242,8 +242,8 @@ setMethod("takeVolume", signature(x="SparseBrainVector", i="numeric"),
 
 
 
-setMethod("writeVector",signature(x="SparseBrainVector", fileName="character"),
-          function(x, fileName) {
+setMethod(f="writeVector",signature=signature(x="SparseBrainVector", fileName="character"),
+          def=function(x, fileName) {
             if (typeof(x) == "double") {
               dataType = "FLOAT"
             } else if (typeof(x) == "integer") {

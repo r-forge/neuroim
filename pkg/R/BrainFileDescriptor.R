@@ -73,18 +73,18 @@ setMethod(f="fileMatches", signature=signature(x= "BrainFileDescriptor", fileNam
 
 
 setMethod(f="headerFileMatches", signature=signature(x= "BrainFileDescriptor", fileName="character"),
-		function(x, fileName) {
+		def=function(x, fileName) {
 			regexpr(paste(".*", x@headerExtension, "$", sep=""), fileName) > 0
 					
 		})
  
 setMethod(f="dataFileMatches", signature=signature(x= "BrainFileDescriptor", fileName="character"),
-		function(x, fileName) {
+		def=function(x, fileName) {
 			regexpr(paste(".*", x@dataExtension, "$", sep=""), fileName) > 0
 		})
 
-setMethod("headerFile",signature=signature(x= "BrainFileDescriptor", fileName="character"),
-		function(x, fileName) {
+setMethod(f="headerFile",signature=signature(x= "BrainFileDescriptor", fileName="character"),
+		def=function(x, fileName) {
 			if (headerFileMatches(x, fileName)) {
 				fileName
 			} else if (dataFileMatches(x, fileName)) {
@@ -94,8 +94,8 @@ setMethod("headerFile",signature=signature(x= "BrainFileDescriptor", fileName="c
 			}		
 		})
 
-setMethod("dataFile",signature=signature(x= "BrainFileDescriptor", fileName="character"),
-		function(x, fileName) {
+setMethod(f="dataFile",signature=signature(x= "BrainFileDescriptor", fileName="character"),
+		def=function(x, fileName) {
 			if (dataFileMatches(x, fileName)) {
 				fileName
 			} else if (headerFileMatches(x, fileName)) {
@@ -105,8 +105,8 @@ setMethod("dataFile",signature=signature(x= "BrainFileDescriptor", fileName="cha
 			}				
 		})
 
-setMethod("stripExtension",signature=signature(x= "BrainFileDescriptor", fileName="character"),
-		function(x, fileName) {
+setMethod(f="stripExtension",signature=signature(x= "BrainFileDescriptor", fileName="character"),
+		def=function(x, fileName) {
 			if (headerFileMatches(x, fileName)) {
 				strsplit(fileName, paste(x@headerExtension, "$", sep=""))[[1]][1]				
 			} else if (dataFileMatches(x, fileName)) {
@@ -117,14 +117,14 @@ setMethod("stripExtension",signature=signature(x= "BrainFileDescriptor", fileNam
 		})
 
 
-setMethod("readMetaInfo",signature=signature(x= "NIfTIFileDescriptor"),
-		function(x, fileName) {
+setMethod(f="readMetaInfo",signature=signature(x= "NIfTIFileDescriptor"),
+		def=function(x, fileName) {
 			header <- readNIfTIHeader(fileName)			
 			NIfTIMetaInfo(x, header)
 		})
 
-setMethod("readMetaInfo",signature=signature(x= "AFNIFileDescriptor"),
-		function(x, fileName) {
+setMethod(f="readMetaInfo",signature=signature(x= "AFNIFileDescriptor"),
+		def=function(x, fileName) {
 			header <- readAFNIHeader(fileName)	
 			header$fileName <- fileName
 			AFNIMetaInfo(x, header)

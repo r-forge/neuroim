@@ -94,13 +94,13 @@ setClass("BaseMetaInfo")
 setClass("NullMetaInfo", contains=c("BaseMetaInfo"))
 
 
-setMethod("show",
+setMethod(f="show",
 		signature=signature(object="BaseMetaInfo"),
 		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")
 		})
 
-setMethod("show",
+setMethod(f="show",
 		signature=signature(object="NullMetaInfo"),
 			def=function(object) {
 				cat("an instance of class",  class(object), "\n\n")
