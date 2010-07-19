@@ -23,31 +23,31 @@ AxisSet3D <- function(i, j, k) {
 
 #' get the number of dimensions for this AxisSet
 #' @param x the AxisSet to query
-setMethod("ndim",signature=signature(x= "AxisSet"), function(x) { x@ndim })
+setMethod(f="ndim",signature=signature(x= "AxisSet"), def=function(x) { x@ndim })
 
 
-setMethod(f="show", signature="NamedAxis", 
+setMethod(f="show", signature=signature("NamedAxis"), 
 		def=function(object) {
 			cat(object@axis)
 		})
 
-setMethod(f="print", signature="NamedAxis", 
+setMethod(f="print", signature=signature("NamedAxis"), 
 		def=function(x, ...) {
 			x@axis
 		})
 
-setMethod(f="show", signature="AxisSet1D", 
+setMethod(f="show", signature=signature("AxisSet1D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
 			cat("Axis 1:", print(object@i), "\n")
 		})
 
-setMethod(f="print", signature="AxisSet2D", 
+setMethod(f="print", signature=signature("AxisSet2D"), 
 		def=function(x, ...) {
 			paste(print(x@i), "-", print(x@j))
 		})
 
-setMethod(f="show", signature="AxisSet2D", 
+setMethod(f="show", signature=signature("AxisSet2D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
 			cat("Axis 1:", print(object@i), "\n")
@@ -66,7 +66,7 @@ setMethod(f="show", signature="AxisSet3D",
 			cat("Axis 2:", print(object@j), "\n")
 			cat("Axis 3:", print(object@k), "\n")
 		})
-setMethod(f="show", signature="AxisSet4D", 
+setMethod(f="show", signature=signature("AxisSet4D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
 			cat("Axis 1:", print(object@i), "\n")

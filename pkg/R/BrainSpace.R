@@ -33,8 +33,8 @@ BrainSpace <- function(Dim, origin=NULL, spacing=NULL, axes=NULL, trans=NULL) {
 }
       
                                                                                               
-setMethod("show", "BrainSpace",
-    function(object) {
+setMethod(f="show", signature=signature("BrainSpace"),
+    def=function(object) {
         cat("BrainSpace\n")
         cat("  Type           :", class(object), "\n")
         cat("  Dimension      :", object@Dim, "\n")
@@ -51,36 +51,36 @@ setMethod("show", "BrainSpace",
 
 
 
-setMethod("dim", signature(x = "BrainSpace"),
-	  function(x) x@Dim, valueClass = "integer")
+setMethod(f="dim", signature=signature(x = "BrainSpace"),
+	  def=function(x) x@Dim, valueClass = "integer")
 
 
-setMethod("ndim", signature(x = "BrainSpace"),
-    function(x) length(x@Dim))
+setMethod(f="ndim", signature=signature(x = "BrainSpace"),
+    def=function(x) length(x@Dim))
  
 
-setMethod("spacing", signature(x = "BrainSpace"),
-    function(x) x@spacing)
+setMethod(f="spacing", signature=signature=signature(x = "BrainSpace"),
+    def=function(x) x@spacing)
 
 
-setMethod("bounds", signature(x = "BrainSpace"),
-    function(x) {
+setMethod(f="bounds", signature=signature(x = "BrainSpace"),
+    def=function(x) {
         mat <- cbind(origin(x), origin(x)+(spacing(x)*dim(x)))
         return(mat)
     }
 )
 
-setMethod("origin", signature(x = "BrainSpace"),
-    function(x) x@origin)
+setMethod(f="origin", signature=signature(x = "BrainSpace"),
+    def=function(x) x@origin)
 
-setMethod("axes", signature(x = "BrainSpace"),
-    function(x) x@axes)
+setMethod(f="axes", signature=signature(x = "BrainSpace"),
+    def=function(x) x@axes)
 
-setMethod("trans", signature(x = "BrainSpace"),
-    function(x) x@trans)
+setMethod(f="trans", signature=signature(x = "BrainSpace"),
+    def=function(x) x@trans)
 
-setMethod("inverseTrans", signature(x = "BrainSpace"),
-  function(x) x@inverseTrans)
+setMethod(f="inverseTrans", signature=signature(x = "BrainSpace"),
+   def=function(x) x@inverseTrans)
 
 
 

@@ -28,7 +28,7 @@ BinaryReader <- function(input, byteOffset, dataType, bytesPerElement, endian=.P
 #' @export readElements
 setGeneric("readElements", function(x, numElements) standardGeneric("readElements"))
 
-setMethod("initialize", "BinaryReader", function(.Object, input, byteOffset, dataType, bytesPerElement, endian) {
+setMethod(f="initialize", signature=signature("BinaryReader"), def=function(.Object, input, byteOffset, dataType, bytesPerElement, endian) {
 			.Object@input <- input
 			.Object@byteOffset <- byteOffset
 			.Object@dataType <- dataType
