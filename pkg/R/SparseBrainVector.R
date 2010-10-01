@@ -22,39 +22,92 @@
 #})
   
   
+SparseBrainVectorSource <- function(metaInfo, indices, mask) {
+	stopifnot(length(dim(metaInfo)) == 4)
+	stopifnot(all(indices >= 1 & indices <= dim(metaInfo)[4]))
+	
+	
+	D <- dim(metaInfo)[1:3]
+	if (all.equals(dim(mask), D)) {
+		mask <- as.array(mask)
+	} else if (is.vector(mask) && length(mask) == prod(D)) {
+		mask <- array(mask, D)
+	} else {
+		stop("mask must have same number of elements as input file: ", D)
+	}
+	
+	new("SparseBrainVectorSource", metaInfo=metaInfo, indices=indices, mask=mask)				
+}
 
-
-SparseBrainVector <- function(dat, space, mask=NULL, indices=NULL) {
+	
+SparseBrainVector <- function(data, space, mask, source=NullSource()) {
+	stopifnot(inherits(space), "BrainSpace")
+	
+	if (is.logical(mask) && !inherits(mask, "LogicalBrainVolume")) {
+		mspace <- BrainSpace(dim(space)[1:3], origin(space), axes(space), trans(space))
+		mask <- LogicalBrainVolume(mask, mspace)
+	}
+	
+	stopifnot(inherits(mask, "LogicalBrainVolume"))
+	
+	D4 <- 0
+	if (is.matrix(data)) {
+		Nind <- sum(mask == TRUE)
+		if (nrow(data) == Nind) {
+			D4 <- ncol(data)	
+		} else if (ncol(data) == Nind) {
+			D4 <- nrow(data)
+		} else {
+			stop(paste("matrix with dim:", dim(data), " does not match mask cardinality: ", Nind))
+		}
+	} else if (length(dim(data)) == 4) {
+		D4 <- dim(data)[4]
+		mat <- apply(x, 4, function(vals) vals)
+		data <- mat[mask==TRUE,]
+	}
+	
+	if (ndim(space) == 3) {
+		space <- addDim(space, nrow(data))
+	}
+		
+	if (ndim(space) == 3) {
+		space <- addDim(space, )
+	}
+	
+  	stopifnot(ndim(space) == 4)
+	
+	
   
-  if (!is.null(mask) && !is.null(indices)) {
-    stop("can provide either mask or indices but not both")
-  }
-
-  if (is.null(mask) && is.null(indices)) {
-    stop("must provide either mask or indices")
-  }
-
-    
-  if (is.null(mask)) {
-    mspace <- BrainSpace(dim(space)[1:3], origin(space), spacing(space)[1:3], orientation(space), trans(space))
-    mask <- BrainVolume(rep(1, length(indices)), mspace, indices=indices)
-  }
-
-  if (is.null(indices)) {
-    indices <- which(mask > 0)
-  }
-
-  if (length(indices) == NROW(dat)) {
-    dat <- t(dat)  
-  } 
-  
-  NVOLS <- NROW(dat)
-  sdim <- c(dim(space)[1:3], NVOLS)
-  vspace <- BrainSpace(sdim, origin(space), spacing(space),  orientation(space), trans(space), reptime=1)
-  
-  new("SparseBrainVector", space=vspace, mask=mask, data=dat, map=IndexLookupVolume(space(mask), as.integer(indices)))
+  	new("SparseBrainVector", source=source, space=space, mask=mask, data=data, map=IndexLookupVolume(space(mask), as.integer(which(mask))))
   
 }
+
+#' Load data from a \code{\linkS4class{SparseBrainVectorSource}}
+#' @param x an instance of class \code{\linkS4class{SparseBrainVectorSource}} 
+#' @return an instance of class \code{\linkS4class{SparseBrainVector}} 
+setMethod(f="loadData", signature=c("SparseBrainVectorSource"), 
+		def=function(x) {		
+			meta <- x@metaInfo
+			stopifnot(length(meta@Dim) == 4)
+			
+			meta <- x@metaInfo
+			nels <- prod(meta@Dim[1:3]) 
+			
+			datlist <- list()
+			ind <- x@indices
+			
+			for (i in 1:length(ind)) {
+				offset <- prod(nels * (ind[i]-1)) * meta@bytesPerElement
+				reader <- dataReader(meta, offset)		
+				datlist[[i]] <- readElements(reader, nels)[mask]
+				close(reader)				
+			}
+			
+			arr <- do.call(rbind, datlist)		
+			bspace <- BrainSpace(meta@Dim, meta@origin, meta@spacing, meta@spatialAxes)
+			SparseBrainVector(arr, bspace, x)
+			
+		})
 
 
           

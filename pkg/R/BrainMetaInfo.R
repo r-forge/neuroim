@@ -8,6 +8,8 @@ roxygen()
 roxygen()
 #' @include Axis.R
 roxygen()
+#' @include NIFTI_IO.R
+roxygen()
 
 #' Generic function to create data reader
 #' @param x an object specifying the infromation required to produce the reader
@@ -16,20 +18,49 @@ roxygen()
 setGeneric("dataReader", function(x, offset) standardGeneric("dataReader"))
 
 
+setMethod(f="dim", signature=signature("FileMetaInfo"), 
+		def=function(x) {
+			x@Dim
+		})
+
 setMethod(f="dataReader", signature=signature("NIfTIMetaInfo"), 
 		def=function(x, offset=0) {
 			BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
 		})
 			
-			
+setMethod(f="dataReader", signature=signature("AFNIMetaInfo"), 
+		def=function(x, offset=0) {
+			#### won't work for sub-bricks with different data types
+			BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
+			#### won't work for sub-bricks with different data types
+		})			
 
 niftiDim <- function(nifti_header) {
 	dimarray <- nifti_header$dimensions
 	lastidx <- min(which(dimarray == 1)) - 1
 	dimarray[2:lastidx]
 }
-
-	 						
+#' This class contains meta information from an image
+#'
+#' @param Dim image dimensions
+#' @param spacing voxel dimensions
+#' @param origin coordinate origin
+#' @param label name(s) of images 
+#' @param spatialAxes image axes for spatial dimensions (x,y,z)
+#' @param additionalAxes axes for dimensions > 3 (e.g. time, color band, direction)
+#' @return an instance of class \code{\linkS4class{BrainMetaInfo}}
+#' @export BrainMetaInfo
+BrainMetaInfo <- function(Dim, spacing, origin=rep(0, length(spacing)), dataType="FLOAT", label="", spatialAxes=OrientationList3D$AXIAL_LPI, additionalAxes=NullAxis) {
+	new("BrainMetaInfo",
+			Dim=Dim,
+			spacing=spacing,
+			origin=origin,
+			dataType=dataType,
+			label=label,
+			spatialAxes=spatialAxes,
+			additionalAxes=additionalAxes)
+	
+}						
 
 #' Constructor for \code{\linkS4class{NIfTIMetaInfo}} class
 #' @param descriptor an instance of class \code{\linkS4class{NIfTIFileDescriptor}}
@@ -60,7 +91,7 @@ NIfTIMetaInfo <- function(descriptor, nifti_header) {
 
 
 
-setMethod(f="show", signature=signature("BrainMetaInfo"), 
+setMethod(f="show", signature=signature("FileMetaInfo"), 
 		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")
 			cat("headerFile:", "\t", object@headerFile, "\n")
@@ -100,8 +131,8 @@ AFNIMetaInfo <- function(descriptor, afni_header) {
 			dataType=switch(afni_header$BRICK_TYPES$content[1], "0"="BYTE", "1"="SHORT", "3"="FLOAT"),
 			bytesPerElement=as.integer(switch(afni_header$BRICK_TYPES$content[1], "0"=1, "1"=2, "3"=4)),
 			Dim=.Dim,
-			spatialAxes=OrientationList3D$LPI,   # incorrect
-			additionalAxes=EmptyAxis,            # incorrect
+			spatialAxes=OrientationList3D$AXIAL_LPI,   # incorrect
+			additionalAxes=NullAxis,            # incorrect
 			spacing=abs(afni_header$DELTA$content),
 			origin=afni_header$ORIGIN$content,
 			label=afni_header$BRICK_LABS$content,
@@ -115,7 +146,7 @@ AFNIMetaInfo <- function(descriptor, afni_header) {
 #'
 #'
 #' @param fileName the name of the file to read
-#' @return an instance of class \code{\linkS4class{BrainMetaInfo}} 
+#' @return an instance of class \code{\linkS4class{FileMetaInfo}} 
 readHeader <- function(fileName) {
 	desc <- findDescriptor(fileName) 
 	if (is.null(desc)) {
@@ -124,6 +155,17 @@ readHeader <- function(fileName) {
 	
 	readMetaInfo(desc, fileName)			
 }
+
+setAs("BrainMetaInfo", "NIfTIMetaInfo", function(from) {
+			if (inherits(from, "NIfTIMetaInfo")) {
+				from
+			} else {
+				hdr <- as.nifti.header(from)
+				desc <- findDescriptor(hdr$fileName)
+				NIfTIMetaInfo(desc, hdr)
+			}
+						
+		})
 
 
 

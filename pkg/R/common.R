@@ -22,6 +22,7 @@
 	ndat <- abind(as.array(x), as.array(y), along=4)
 	
 	new.dim <- c(D, NVOLS)
+	
 	nspace <- BrainSpace(new.dim, origin(x@space), spacing(x@space),
 			axes(x@space), trans(x@space))
 	
@@ -107,15 +108,13 @@
 
 
 .getRStorage <- function(dataType) {
-  if (any(dataType == c("BINARY", "BYTE", "UBYTE", "SHORT", "INTEGER", "INT", "LONG"))) {
-    return("integer")
+  if (any(toupper(dataType) == c("BINARY", "BYTE", "UBYTE", "SHORT", "INTEGER", "INT", "LONG"))) {
+    "integer"
+  } else if (any(dataType == c("FLOAT", "DOUBLE"))) {
+    "double"
+  } else {
+	  stop(paste("unrecognized data type", dataType))
   }
-
-  else if (any(dataType == c("FLOAT", "DOUBLE"))) {
-    return("double")
-  }
-
-  return("undefined")
 }
 
 .getDataStorage <- function(code) {
@@ -153,7 +152,7 @@
   } else if (dataType == "FLOAT") {
     return(16)
   } else if (dataType == "DOUBLE") {
-    return(64)
+    return(32)
   } else {
     stop(paste("getDataCode: unsupported data type: ", dataType))
   }
@@ -162,8 +161,9 @@
 .getDataSize <- function(dataType) {
   if (dataType == "BINARY") {
     return(1)
-  }
-  else if (dataType == "UBYTE") {
+  } else if (dataType == "UBYTE") {
+	  return(1)
+  } else if (dataType == "UBYTE") {
     return(1)
   }
   else if (dataType == "SHORT") {
@@ -185,7 +185,7 @@
     return(8)
   }
 
-  return(0)
+  stop(paste("unrecognized data type: ", dataType))
 }
 
 .getEndian <- function(conn) {

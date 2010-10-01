@@ -4,7 +4,10 @@ roxygen()
 roxygen()
 #' @include common.R
 roxygen()
-
+#' @include BrainMetaInfo.R
+roxygen()
+#' @include NIFTI_IO.R
+roxygen()
 
 
 
@@ -20,7 +23,7 @@ BrainVolume <- function(data, space, source=NULL) {
 #' @param data a three-dimensional \code{array}
 #' @param space an instance of class \code{\linkS4class{BrainSpace}}
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
-DenseBrainVolume <- function(data, space, source=NULL) {
+DenseBrainVolume <- function(data, space, source=NULL, label="") {
 	if (length(dim(data)) != 3) {
 		stop("DenseBrainVolume: data argument must be have three dimensions")
 	} 
@@ -30,14 +33,51 @@ DenseBrainVolume <- function(data, space, source=NULL) {
 	} 
 	
 	if (is.null(source)) {
-		source <- new("BaseSource", metaInfo=new("NullMetaInfo"))	
+		meta <- BrainMetaInfo(dim(data), spacing(space), origin(space), "FLOAT", label)
+		source <- new("BrainSource", metaInfo=meta)
 	}
-		
+			
 	new("DenseBrainVolume", source=source, .Data=data, space=space)
 
 }
 
+LogicalBrainVolume <- function(data, space, source=NULL, label="") {
+	if (is.NULL(dim(mask)) && length(mask) == prod(dim(space)))
+	if (length(dim(data)) != 3) {
+		stop("LogicalBrainVolume: data argument must be have three dimensions")
+	} 
+	
+	if (ndim(space) != 3) {
+		stop("LogicalVolume: space argument must be have three dimensions")
+	} 
+	
+	
+	if (!is.logical(data)) {
+		D <- dim(data)
+		data <- as.logical(data)
+		dim(data) <- D
+	}
+	
+	if (is.null(source)) {
+		meta <- BrainMetaInfo(dim(data), spacing(space), origin(space), "BINARY", label)
+		source <- new("BrainSource", metaInfo=meta)
+	}
+	
+	new("LogicalBrainVolume", source=source, .Data=data, space=space)
+	
+}
+
 setAs("DenseBrainVolume", "array", function(from) from@.Data)
+
+setAs("BrainVolume", "LogicalBrainVolume", function(from) {
+	LogicalBrainVolume(as.array(from), space(from), from@source)
+})
+
+setAs("DenseBrainVolume", "LogicalBrainVolume", function(from) {
+	LogicalBrainVolume(as.array(from), space(from), from@source)
+})
+
+
 setAs("BrainVolume", "array", function(from) from[,,])
 
 setMethod(f="show",
@@ -45,7 +85,10 @@ setMethod(f="show",
 			def=function(object) {
 				cat("an instance of class",  class(object), "\n\n")
 				cat("   dimensions: ",       dim(object), "\n")
-				cat("   voxel spacing: ",    spacing(object))
+				cat("   voxel spacing: ",    spacing(object), "\n")
+				if (!is.null(attr(object, "label"))) {
+					cat("   label: ", attr(object, "label"))
+				}
 				cat("\n\n")
 			
 		})
@@ -64,7 +107,7 @@ setMethod(f="loadData", signature=c("BrainVolumeSource"),
 			arr <- array(dat, meta@Dim[1:3])
 			
 			bspace <- BrainSpace(meta@Dim[1:3], meta@origin, meta@spacing, meta@spatialAxes)
-			DenseBrainVolume(arr, bspace)
+			DenseBrainVolume(arr, bspace, x)
 					
 		})
 
@@ -73,8 +116,7 @@ BrainVolumeSource <- function(input, index=1) {
 	stopifnot(index >= 1)
 	stopifnot(is.character(input))
 	stopifnot(file.exists(input))
-	
-	
+		
 	metaInfo <- readHeader(input)
 	
 	if ( length(metaInfo@Dim) < 4 && index > 1) {
@@ -106,9 +148,6 @@ setMethod(f="concat", signature=signature(x="DenseBrainVolume", y="DenseBrainVol
 			.concat4D(x,y,...)			
 		})
 
-
-
-
 setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", withIndex="missing"),
 		def=function(x, FUN) {
 			lapply(1:(dim(x)[3]), function(z) FUN(x[,,z]))				
@@ -128,12 +167,12 @@ setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
             t(sapply(idx, .indexToGrid, array.dim))            
           })
 
-  setMethod(f="indexToGrid", signature=signature(x="BrainVector", idx="index"),
+setMethod(f="indexToGrid", signature=signature(x="BrainVector", idx="index"),
 		  def=function(x, idx) {
 			  callGeneric(space(x), idx)
 		  })
   
-  setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="index"),
+setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="index"),
 		  def=function(x, idx) {
 			  callGeneric(space(x), idx)
 		  })
@@ -240,29 +279,32 @@ setMethod(f="connComp", signature=signature(x="BrainVolume"),
 		
 		
 	})
-    
-write.nifti.volume <- function(vol, fileName) {
-	brainFile <- NIFTIFile(fileName, "w")
-
-    dataType <- if (typeof(vol) == "double") {
-      "FLOAT"
-    } else if (typeof(vol) == "integer") {
-      "SHORT"
-    } else {
-      stop(paste("unrecognized storage stype : ", typeof(vol)))
-    }
-   
-    hdr <- createNIFTIHeader(vol, fileName, dataType)
-    writeHeader(brainFile, hdr)
-    writeData(brainFile, hdr, as.vector(vol))
 	
-}  
+	
+	
+    
 
 
-setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="missing"),
-	def=function(x, fileName) {
-		write.nifti.volume(x, fileName)           
-    })
+
+setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="missing", dataType="missing"),
+		def=function(x, fileName) {
+			write.nifti.volume(x, fileName)           
+		})
+
+setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="character", dataType="missing"),
+		def=function(x, fileName, format) {
+			if (toupper(format) == "NIFTI" || toupper(format) == "NIFTI1" || toupper(format) == "NIFTI-1") {
+				callGeneric(x, fileName)
+			} else {
+				stop(paste("sorry, cannot write format: ", format))
+			}      
+		})
+
+setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="missing", dataType="character"),
+		def=function(x, fileName, dataType) {
+			write.nifti.volume(x, fileName, dataType)   
+			
+		})
 
 
 

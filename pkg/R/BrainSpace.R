@@ -49,10 +49,21 @@ setMethod(f="show", signature=signature("BrainSpace"),
 		}
 )
 
+setMethod(f="addDim", signature=signature(x = "BrainSpace", n="numeric"),
+		def=function(x, n) {
+			BrainSpace(c(dim(x), n), origin(x), spacing(x), axes(x), trans(x))
+		})
 
+setMethod(f="dropDim", signature=signature(x = "BrainSpace"),
+		def=function(x) {			
+			D <- dim(x)		
+			stopifnot(length(D) > 2)
+			Dind <- 1:(length(D)-1)			
+			BrainSpace(D[Dind], origin(x)[Dind], spacing(x)[Dind], axes(x)[Dind], trans(x)[Dind,])
+		})
 
 setMethod(f="dim", signature=signature(x = "BrainSpace"),
-		def=function(x) x@Dim, valueClass = "integer")
+		def=function(x) x@Dim)
 
 
 setMethod(f="ndim", signature=signature(x = "BrainSpace"),
@@ -70,6 +81,7 @@ setMethod(f="bounds", signature=signature(x = "BrainSpace"),
 		}
 )
 
+
 setMethod(f="origin", signature=signature(x = "BrainSpace"),
 		def=function(x) x@origin)
 
@@ -81,6 +93,33 @@ setMethod(f="trans", signature=signature(x = "BrainSpace"),
 
 setMethod(f="inverseTrans", signature=signature(x = "BrainSpace"),
 		def=function(x) x@inverseTrans)
+
+
+## delegate methods
+
+
+setMethod(f="bounds", signature=signature(x = "BrainData"),
+		def=function(x) {
+			bounds(space(x))
+		})
+
+setMethod(f="axes", signature=signature(x = "BrainData"),
+		def=function(x) {
+			axes(space(x))
+		})
+
+setMethod(f="origin", signature=signature(x = "BrainData"),
+		def=function(x) {
+			origin(space(x))
+		})
+
+
+setMethod(f="trans", signature=signature(x = "BrainData"),
+		def=function(x) trans(space(x)))
+
+setMethod(f="inverseTrans", signature=signature(x = "BrainData"),
+		def=function(x) inverseTrans(space(x)))
+
 
 
 

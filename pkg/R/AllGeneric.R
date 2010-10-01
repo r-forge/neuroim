@@ -12,6 +12,17 @@ setGeneric("loadData", function(x, ...) standardGeneric("loadData"))
 #' @export ndim
 setGeneric("ndim", function(x, ...) standardGeneric("ndim"))
 
+#' Generic function to add a dimension to an object
+#' @param x a dimensioned object
+#' @param n the size of the dimension to add
+#' @export addDim
+setGeneric("addDim", function(x, n) standardGeneric("addDim"))
+
+#' Generic function to drop a dimension from an object
+#' @param x a dimensioned object
+#' @export dropDim
+setGeneric("dropDim", function(x) standardGeneric("dropDim"))
+
 #' Generic function to extract the \code{space} member variable
 #' @param x the object to query
 #' @return an object representing the geometric space of the image
@@ -44,10 +55,24 @@ setGeneric("trans",  function(x) standardGeneric("trans"))
 #' Generic getter to extract inverse image coordinate transformation
 setGeneric("inverseTrans", function(x) standardGeneric("inverseTrans"))
 
+#' Generic function to read a sequence of elements from an input source
+#' @param x the input channel
+#' @param numElements the number of elements to read
+#' @return the elements as a vector
+#' @export readElements
+setGeneric("readElements", function(x, numElements) standardGeneric("readElements"))
+
+
+#' Generic function to write a sequence of elements from an input source
+#' @param x the output channel
+#' @param els the elements to write
+#' @export writeElements
+setGeneric("writeElements", function(x, els) standardGeneric("writeElements"))
+
 
 #### generics related to BrainVolume class
-setGeneric("writeVolume",       function(x, fileName, format) standardGeneric("writeVolume"))
-setGeneric("writeVector",       function(x, fileName, format) standardGeneric("writeVector"))
+setGeneric("writeVolume",       function(x, fileName, format, dataType) standardGeneric("writeVolume"))
+setGeneric("writeVector",       function(x, fileName, format, dataType) standardGeneric("writeVector"))
 setGeneric("value",       function(object, x,y, ...) standardGeneric("value"))
 
 #' Generic function to convert a 1D index to N-dimensional grid coordinate
@@ -99,6 +124,7 @@ setGeneric("eachSeries", function(x, FUN, withIndex, ...) standardGeneric("eachS
 #' @param i the indices of the series' to extract
 #' @export takeSeries
 setGeneric("takeSeries", function(x, indices, ...) standardGeneric("takeSeries"))
+
 
 
 setGeneric("pick", function(x, mask, ...) standardGeneric("pick"))

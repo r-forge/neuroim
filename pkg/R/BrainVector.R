@@ -35,10 +35,10 @@ roxygen()
 	
 	if ( (dim(data)[1] == nvols) && (dim(data)[2] == nelements) ) {
 		#fourth dimension is rows
-		new("BrainVector", .Data=t(data), space=space)        
+		DenseBrainVector(t(data), space)        
 	} else if ((dim(data)[2] == nvols) && (dim(data)[1] == nelements )) {
 		#fourth dimension is columns
-		new("BrainVector", .Data=data, space=space)
+		DenseBrainVector(data, space=space)
 	} else {
 		stop(paste("illegal matrix dimension ", dim(data)))
 	}
@@ -46,18 +46,15 @@ roxygen()
 
 
 .createVectorSpaceFromData <- function(data, space, indices=NULL) {
-	
-	
+	if (numdim(space) == 4) {
+		return(space)
+	}
 	
 	if (numdim(space) < 3) {
 		stop(paste("incorrect dimensions : ", dim(space)))
 	}
 	
-	if (numdim(space) == 4) {
-		return(space)
-	}
-	
-	
+		
 	if (numdim(space) == 3 && is.matrix(data)) {
 		if (is.null(indices)) {
 			nels <- prod(dim(space)[1:3])
@@ -88,7 +85,7 @@ roxygen()
 
 
 
-BrainVector <- function(data, space, indices=NULL) {
+BrainVector <- function(data, space, indices=NULL, mask=NULL) {
 	
 	space <- .createVectorSpaceFromData(data, space, indices)
 	
@@ -110,14 +107,15 @@ BrainVector <- function(data, space, indices=NULL) {
 	bvec
 }
 
-
-DenseBrainVector <- function(data, space, source=NULL) {
+#' constructor function for class \code{\linkS4class{DenseBrainVector}}
+DenseBrainVector <- function(data, space, source=NULL, label="") {
 	if (ndim(space) != 4) {
-		stop("DenseBrainVector: data array must be 3-dimensional")
+		stop("DenseBrainVector: data array must be 4-dimensional")
 	} 
 	
 	if (is.null(source)) {
-		source <- new("BaseSource", metaInfo=new("NullMetaInfo"))	
+		meta <- BrainMetaInfo(dim(data), spacing(space), origin(space), "FLOAT", label)
+		source <- new("BrainSource", metaInfo=meta)	
 	}
 	
 	new("DenseBrainVector", source=source, .Data=data, space=space)
@@ -126,6 +124,7 @@ DenseBrainVector <- function(data, space, source=NULL) {
 
 
 #' Load data from a \code{\linkS4class{BrainVectorSource}}
+#' @param x an instance of class \code{\linkS4class{BrainVectorSource}}
 #' @return an instance of class \code{\linkS4class{BrainVector}} 
 setMethod(f="loadData", signature=c("BrainVectorSource"), 
 		def=function(x) {		
@@ -152,27 +151,144 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 		})
 
 
+
+
 #' Construct a \code{\linkS4class{BrainVectorSource}} object
+#' @param fileName name of the 4-dimensional image file
 #' @param indices the subset of volume indices to load -- if \code{NULL} then all volumes will be loaded
+#' @param mask the subset of voxels that will be loaded
 #' @export BrainVectorSource
-BrainVectorSource <- function(input, indices=NULL) {
-	stopifnot(is.character(input))
-	stopifnot(file.exists(input))
+BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
+	stopifnot(is.character(fileName))
+	stopifnot(file.exists(fileName))
 	
 	
-	metaInfo <- readHeader(input)
+	metaInfo <- readHeader(fileName)
 	
 	if ( length(metaInfo@Dim) != 4) {
-		stop(paste("file must be four-dimensional, and it's not: ", paste(metaInfo@Dim, collapse= ",")))
+		stop(paste("file must be 4-dimensional, and it's not: ", paste(metaInfo@Dim, collapse= ",")))
 	}
 	
 	if (is.null(indices)) {
 		indices=seq(1, metaInfo@Dim[4])
 	}
 	
-	new("BrainVectorSource", metaInfo=metaInfo, indices=indices)		
+	if (is.null(mask)) {
+		new("BrainVectorSource", metaInfo=metaInfo, indices=indices)		
+	} else {
+		SparseBrainVectorSoure(metaInfo, indices, mask)		
+	}
 	
 }
+
+
+setMethod("names", signature=c("BrainBucketSource"),
+		def=function(x) {
+			x@metaInfo@label[x@indices]
+		})
+
+setMethod("names", signature=c("BrainBucket"),
+		def=function(x) {
+			x@labels
+		})
+
+setMethod("length", signature=c("BrainVector"),
+		def=function(x) {
+			dim(x)[4]
+		})
+
+#' Load data from a \code{\linkS4class{BrainBucketSource}}
+#' @param x an instance of class \code{\linkS4class{BrainBucketSource}}
+#' @return an instance of class \code{\linkS4class{BrainVolume}} 
+setMethod(f="loadData", signature=c("BrainBucketSource"), 
+		def=function(x, key) {
+
+			if (is.numeric(key)) {
+				labs <- names(x)
+				if (any(key < 1) || any(key > length(labs))) {
+					stop(paste("illegal index: ", key))
+				}
+				
+				key <- labs[key]							
+			}
+			
+			ret <- lapply(key, function(k) {				
+				haskey <- exists(k, envir=x@cache, inherits=FALSE)
+				if (!haskey) {
+					idx <- which(names(x) == k) 
+					vol <- loadData(x@sourceList[[idx]])
+					assign(k, vol, envir=x@cache)
+				} else {
+					print(paste("found cached volume for label ", k))
+					vol <- get(k, envir=x@cache, inherits=FALSE)
+				}		
+				attr(vol, "label") <- k
+				vol
+			})
+	
+			if (length(ret) == 1) {
+				ret[[1]]
+			} else {
+				ret
+			}
+			
+		})
+
+BrainBucketSource <- function(fileName, pattern=NULL, indices=NULL) {
+	stopifnot(is.character(fileName))
+	stopifnot(file.exists(fileName))
+	
+	
+	metaInfo <- readHeader(fileName)
+	
+	labels <- metaInfo@label
+	nvols <- length(labels)	
+	
+	if (is.null(indices)) {
+		indices <- seq_along(labels)
+	} else {
+		stopifnot(all(indices >0 & indices < nvols))
+	}
+	
+	if (!is.null(pattern)) {
+		idx <- grep(pattern, labels)
+		
+		if (length(idx) < 1) {
+			stop(paste("pattern: ", pattern, "does not match any volume labels"))
+		}
+		
+		indices <- intersect(idx, indices)
+	}
+			
+	
+	sourceList <- lapply(indices, function(i) { new("BrainVolumeSource", metaInfo=metaInfo, index=as.integer(i)) })	
+	new("BrainBucketSource", metaInfo=metaInfo, indices=indices, sourceList=sourceList, cache=new.env(hash=TRUE))	
+}
+
+
+loadBucket <- function(fileName, pattern=NULL, indices=NULL) {
+	bsource <- BrainBucketSource(fileName, pattern, indices)
+	
+	meta <- bsource@metaInfo	
+	labels <- meta@label
+	idx <- bsource@indices
+	
+	D <- c(meta@Dim[1:3], length(idx))
+	bspace <- BrainSpace(D, meta@origin, meta@spacing, meta@spatialAxes)
+	buck <- new("BrainBucket", source=bsource, space=bspace, labels=labels[idx])
+}
+
+setMethod("[[", signature(x="BrainBucket", i = "character", j = "missing"),
+		function(x, i) {
+			loadData(x@source, i)
+		})
+
+setMethod("[[", signature(x="BrainBucket", i = "numeric", j = "missing"),
+		function(x, i) {
+			loadData(x@source, i)
+		})
+
+
 
 setAs("DenseBrainVector", "array", function(from) from@.Data)
 setAs("BrainVector", "array", function(from) from[,,,])
@@ -204,6 +320,20 @@ setMethod("show",
 setMethod(f="eachVolume", signature=c(x="BrainVector", FUN="function", withIndex="missing"),
 		def=function(x, FUN, ...) {
 			lapply(1:(dim(x)[4]), function(tt) FUN(x[,,,tt]))				
+		})
+
+#' apply function to each volume in a BrainBucket object
+setMethod(f="eachVolume", signature=c(x="BrainBucket", FUN="function", withIndex="missing"),
+		def=function(x, FUN, ...) {
+			lapply(1:(dim(x)[4]), function(tt) FUN(x[[tt]]))				
+		})
+#' apply function to each volume in a BrainVector object
+setMethod("eachVolume", signature(x="BrainBucket", FUN="function", withIndex="logical"),
+		def=function(x, FUN, withIndex, ...) {
+			lapply(1:(dim(x)[4]), function(tt) {					
+						vol <- x[[tt]]
+						if (withIndex) FUN(vol,tt) else FUN(vol)
+					})
 		})
 
 #' apply function to each volume in a BrainVector object
@@ -371,7 +501,14 @@ loadSeries <- function(filenames, indices, volidx=NULL, reduce=T, demean=F, verb
 }
 
 
-
+#' load an image volume from a file
+#' @param fileName the name of the file to load
+#' @param index the index of the volume (e.g. if the file is 4-dimensional)
+#' @export loadVolume
+#' loadVolume  <- function(fileName, indices=NULL, mask=NULL) {
+#' 	src <- BrainVolumeSource(fileName, index)
+#' 	loadData(src)
+#' }
 
 
 loadVector  <- function(filename, volRange=NULL, mask=NULL) {

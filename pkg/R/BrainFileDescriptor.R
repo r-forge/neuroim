@@ -88,7 +88,7 @@ setMethod(f="headerFile",signature=signature(x= "BrainFileDescriptor", fileName=
 			if (headerFileMatches(x, fileName)) {
 				fileName
 			} else if (dataFileMatches(x, fileName)) {
-				paste(stripExtension(x, fileName), x@headerExtension)				
+				paste(stripExtension(x, fileName), x@headerExtension, sep=".")				
 			} else {
 				stop(paste("could not derive header file name from: ", fileName))
 			}		
@@ -99,7 +99,7 @@ setMethod(f="dataFile",signature=signature(x= "BrainFileDescriptor", fileName="c
 			if (dataFileMatches(x, fileName)) {
 				fileName
 			} else if (headerFileMatches(x, fileName)) {
-				paste(stripExtension(x, fileName), x@dataExtension)
+				paste(stripExtension(x, fileName), x@dataExtension, sep=".")
 			} else {
 				stop(paste("could not derive data file name from: ", fileName))
 			}				
@@ -108,9 +108,11 @@ setMethod(f="dataFile",signature=signature(x= "BrainFileDescriptor", fileName="c
 setMethod(f="stripExtension",signature=signature(x= "BrainFileDescriptor", fileName="character"),
 		def=function(x, fileName) {
 			if (headerFileMatches(x, fileName)) {
-				strsplit(fileName, paste(x@headerExtension, "$", sep=""))[[1]][1]				
+				ret <- strsplit(fileName, paste(x@headerExtension, "$", sep=""))[[1]][1]	
+				substr(ret, 1, nchar(ret)-1)
 			} else if (dataFileMatches(x, fileName)) {
-				strsplit(fileName, paste(x@dataExtension, "$", sep=""))[[1]][1]					
+				ret <- strsplit(fileName, paste(x@dataExtension, "$", sep=""))[[1]][1]		
+				substr(ret, 1, nchar(ret)-1)
 			} else {
 				stop("file does not match descriptor: " + x)
 			}		

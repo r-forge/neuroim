@@ -9,9 +9,15 @@ parseFloatAttribute <- function(line){
 	as.numeric(str_split(str_trim(paste(line, collapse=" ")), "\\s+")[[1]])
 }
 	
-parseStringAttribute <- function(line) { 
+parseStringAttribute <- function(line) {
+	
 	res <- str_split(line, "~")[[1]]
-	str_sub(res[1:(length(res)-1)], 2)	
+	if (length(res) > 1) {
+		res[1] <- str_sub(res[1], 2)
+		res[1:(length(res)-1)]
+	} else {
+		str_sub(res[1:(length(res)-1)], 2)	
+	}
 }
 	
 
@@ -35,7 +41,7 @@ parseElement <- function(inputLines) {
 }
 
 readAFNIHeader <- function(fileName) {
-	inputLines <- readLines(fileName)
+	inputLines <- scan(fileName, what=character(), sep="\n", blank.lines.skip=FALSE)
 	idx <- which(unlist(lapply(inputLines, function(lin) lin == ""))) + 1
 	lastIdx <- length(inputLines)
 	attlen <- diff(c(idx, lastIdx+1))
