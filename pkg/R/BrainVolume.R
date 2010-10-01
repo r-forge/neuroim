@@ -42,7 +42,10 @@ DenseBrainVolume <- function(data, space, source=NULL, label="") {
 }
 
 LogicalBrainVolume <- function(data, space, source=NULL, label="") {
-	if (is.NULL(dim(mask)) && length(mask) == prod(dim(space)))
+	if (is.null(dim(mask)) && length(mask) == prod(dim(space))) {
+		data <- array(data, dim(space))
+	}
+	
 	if (length(dim(data)) != 3) {
 		stop("LogicalBrainVolume: data argument must be have three dimensions")
 	} 
