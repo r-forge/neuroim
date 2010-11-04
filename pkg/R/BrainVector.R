@@ -2,6 +2,8 @@
 roxygen()
 #' @include common.R
 roxygen()
+#' @include SparseBrainVector.R
+roxygen()
 
 
 .BrainVectorFromIndices <- function(data, space, indices) {
@@ -84,7 +86,7 @@ roxygen()
 
 
 
-
+#' constructor function for class \code{\linkS4class{BrainVector}}
 BrainVector <- function(data, space, indices=NULL, mask=NULL) {
 	
 	space <- .createVectorSpaceFromData(data, space, indices)
@@ -181,17 +183,19 @@ BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
 	
 }
 
-
+#' get bucket names
 setMethod("names", signature=c("BrainBucketSource"),
 		def=function(x) {
 			x@metaInfo@label[x@indices]
 		})
 
+#' get bucket names
 setMethod("names", signature=c("BrainBucket"),
 		def=function(x) {
 			x@labels
 		})
 
+#' length of 4th dimension
 setMethod("length", signature=c("BrainVector"),
 		def=function(x) {
 			dim(x)[4]
@@ -219,7 +223,7 @@ setMethod(f="loadData", signature=c("BrainBucketSource"),
 					vol <- loadData(x@sourceList[[idx]])
 					assign(k, vol, envir=x@cache)
 				} else {
-					print(paste("found cached volume for label ", k))
+					#print(paste("found cached volume for label ", k))
 					vol <- get(k, envir=x@cache, inherits=FALSE)
 				}		
 				attr(vol, "label") <- k
@@ -234,6 +238,7 @@ setMethod(f="loadData", signature=c("BrainBucketSource"),
 			
 		})
 
+#' Constructor function for BrainBucketSource
 BrainBucketSource <- function(fileName, pattern=NULL, indices=NULL) {
 	stopifnot(is.character(fileName))
 	stopifnot(file.exists(fileName))
@@ -265,7 +270,7 @@ BrainBucketSource <- function(fileName, pattern=NULL, indices=NULL) {
 	new("BrainBucketSource", metaInfo=metaInfo, indices=indices, sourceList=sourceList, cache=new.env(hash=TRUE))	
 }
 
-
+#' load brain bucket from file
 loadBucket <- function(fileName, pattern=NULL, indices=NULL) {
 	bsource <- BrainBucketSource(fileName, pattern, indices)
 	
@@ -501,15 +506,6 @@ loadSeries <- function(filenames, indices, volidx=NULL, reduce=T, demean=F, verb
 }
 
 
-#' load an image volume from a file
-#' @param fileName the name of the file to load
-#' @param index the index of the volume (e.g. if the file is 4-dimensional)
-#' @export loadVolume
-#' loadVolume  <- function(fileName, indices=NULL, mask=NULL) {
-#' 	src <- BrainVolumeSource(fileName, index)
-#' 	loadData(src)
-#' }
-
 
 loadVector  <- function(filename, volRange=NULL, mask=NULL) {
 	
@@ -562,16 +558,27 @@ setMethod(f="concat", signature=signature(x="BrainVector", y="BrainVector"),
 			.concat4D(x,y,...)
 		})
 
+setMethod("series", signature(x="BrainVector", i="matrix"),
+		function(x,i) {
+			if (!is.matrix(i) && length(i) == 3) {
+				i <- matrix(i, 1, 3)
+			}
+			
+			stopifnot(ncol(mat) == 3)
+			apply(mat, 1, function(i) x[i[1], i[2], i[3],])
+	
+		})
 
-
-
-
-#setMethod("series", signature(x="SparseBrainVector", i="numeric"),
-#	function(x,i, j, k) {
-#		if (missing(j) && missing(k)) {
-#			if (length(i) == 3) {
-#				return(callGeneric(x, i[1], i[2], i[3]))
-#		    }
+setMethod("series", signature(x="BrainVector", i="numeric"),
+		function(x,i, j, k) {	
+			if (missing(j) && missing(k)) {
+				vdim <- dim(x)[1:3]
+				mat <- arrayInd(i, vdim)
+				apply(mat, 1, function(i) x[i[1], i[2], i[3],])			
+			} else {
+				x[i,j,k,]	
+			}
+		})
 
 
 setMethod(f="seriesIter", signature=signature(x="BrainVector"), 
@@ -601,33 +608,45 @@ setMethod(f="seriesIter", signature=signature(x="BrainVector"),
 			
 		})
 
-
-
-setMethod(f="takeSeries", signature=signature(x="BrainVector", indices="numeric"),
-		def=function(x, indices) {
+setMethod("as.sparse", signature(x="DenseBrainVector", mask="numeric"),
+		def=function(x, mask) {
+			vdim <- dim(x)[1:3]
+			m <- array(0, vdim)
+			m[mask] <- TRUE
 			
-			D <- dim(x)[1:3]
-			if (all.equals(dim(indices), D)) {
-				indices <- which(indices>0)
-			}
+			logivol <- LogicalBrainVolume(m, dropDim(space(x)))
 			
-			vox <- t(sapply(indices, .indexToGrid, D)) 
+			dat <- as.matrix(x)[mask,]
 			
-			apply(vox, 1, function(v) {
-						x[v[1], v[2], v[3],]
-					})
+			bvec <- SparseBrainVector(dat, space(x), logivol)
 			
 		})
 
-setMethod(f="takeSeries", signature=signature(x="BrainVector", indices="BrainVolume"),
-		def=function(x, indices) {				
-			D <- dim(x)[1:3]
-			stopifnot(all.equal(dim(indices), D))
+#setMethod(f="takeSeries", signature=signature(x="BrainVector", indices="numeric"),
+#		def=function(x, indices) {
+#			
+#			D <- dim(x)[1:3]
+#			if (all.equal(dim(indices), D)) {
+#				indices <- which(indices>0)
+#			}
 			
-			idx <- which(indices > 0)
-			callGeneric(x, idx)			
+#			vox <- t(sapply(indices, .indexToGrid, D)) 
 			
-		})              
+#			apply(vox, 1, function(v) {
+#				x[v[1], v[2], v[3],]
+#			})
+			
+#		})
+
+#setMethod(f="takeSeries", signature=signature(x="BrainVector", indices="BrainVolume"),
+#		def=function(x, indices) {				
+#			D <- dim(x)[1:3]
+#			stopifnot(all.equal(dim(indices), D))
+#			
+#			idx <- which(indices > 0)
+#			callGeneric(x, idx)			
+#			
+#		})              
 
 
 setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character"),

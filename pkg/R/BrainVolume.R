@@ -42,16 +42,17 @@ DenseBrainVolume <- function(data, space, source=NULL, label="") {
 }
 
 LogicalBrainVolume <- function(data, space, source=NULL, label="") {
-	if (is.null(dim(mask)) && length(mask) == prod(dim(space))) {
+	
+	if (is.null(dim(data)) && length(data) == prod(dim(space))) {
 		data <- array(data, dim(space))
 	}
 	
 	if (length(dim(data)) != 3) {
-		stop("LogicalBrainVolume: data argument must be have three dimensions")
+		stop("LogicalBrainVolume: data argument must have three dimensions")
 	} 
 	
 	if (ndim(space) != 3) {
-		stop("LogicalVolume: space argument must be have three dimensions")
+		stop("LogicalVolume: space argument must have three dimensions")
 	} 
 	
 	
@@ -86,6 +87,7 @@ setAs("BrainVolume", "array", function(from) from[,,])
 setMethod(f="show",
 		signature=signature(object="BrainVolume"),
 			def=function(object) {
+				
 				cat("an instance of class",  class(object), "\n\n")
 				cat("   dimensions: ",       dim(object), "\n")
 				cat("   voxel spacing: ",    spacing(object), "\n")

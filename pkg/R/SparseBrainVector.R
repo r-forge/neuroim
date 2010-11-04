@@ -40,8 +40,8 @@ SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 }
 
 	
-SparseBrainVector <- function(data, space, mask, source=NullSource()) {
-	stopifnot(inherits(space), "BrainSpace")
+SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
+	stopifnot(inherits(space, "BrainSpace"))
 	
 	if (is.logical(mask) && !inherits(mask, "LogicalBrainVolume")) {
 		mspace <- BrainSpace(dim(space)[1:3], origin(space), axes(space), trans(space))
@@ -49,6 +49,7 @@ SparseBrainVector <- function(data, space, mask, source=NullSource()) {
 	}
 	
 	stopifnot(inherits(mask, "LogicalBrainVolume"))
+
 	
 	D4 <- 0
 	if (is.matrix(data)) {
@@ -62,7 +63,7 @@ SparseBrainVector <- function(data, space, mask, source=NullSource()) {
 		}
 	} else if (length(dim(data)) == 4) {
 		D4 <- dim(data)[4]
-		mat <- apply(x, 4, function(vals) vals)
+		mat <- apply(data, 4, function(vals) vals)
 		data <- mat[mask==TRUE,]
 	}
 	
@@ -70,11 +71,13 @@ SparseBrainVector <- function(data, space, mask, source=NullSource()) {
 		space <- addDim(space, nrow(data))
 	}
 		
-	if (ndim(space) == 3) {
-		space <- addDim(space, )
-	}
-	
+		
   	stopifnot(ndim(space) == 4)
+	
+	if (is.null(source)) {
+		meta <- BrainMetaInfo(dim(space), spacing(space), origin(space), "FLOAT", label)
+		source <- new("BrainSource", metaInfo=meta)	
+	}
 	
 	
   
@@ -210,7 +213,7 @@ setMethod(f="series", signature=signature(x="SparseBrainVector", i="numeric"),
          def=function(x,i, j, k) {
            if (missing(j) && missing(k)) {
              if (length(i) == 3) {
-               return(callGeneric(x, i[1], i[2], i[3]))
+               return(x[i[1], i[2], i[3]])
              }
              
              idx <- lookup(x, as.integer(i))
@@ -271,7 +274,7 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
           def=function (x, i, j, k, m, ..., drop) {
             if (missing(k)) k = 1:dim(x)[3]
             if (missing(m)) m = 1:dim(x)[4]
-
+			
            
             
             ######

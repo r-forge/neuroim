@@ -127,6 +127,8 @@ setGeneric("takeSeries", function(x, indices, ...) standardGeneric("takeSeries")
 
 
 
+setGeneric("as.sparse", function(x, mask, ...) standardGeneric("as.sparse"))
+
 setGeneric("pick", function(x, mask, ...) standardGeneric("pick"))
 
 setGeneric("coords", function(x, ...) standardGeneric("coords"))
