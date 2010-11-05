@@ -1,4 +1,4 @@
-#! /usr/bin/env Rscript
+#! /usr/bin/env Rscript --arch=x86_64
 
 library(RUnit)
 source("/Users/brad/Rcode/neuroim/pkg/workspace.R")
