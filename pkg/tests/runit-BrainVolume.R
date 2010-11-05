@@ -68,6 +68,12 @@ test.vol.indexToGrid <- function() {
 	checkException(indexToGrid(vol1, -1))
 }
 
+test.LogicalBrainVolume <- function() {
+	vol1 <- loadVolume("data/global_mask.nii")
+	vol2 <- as(vol1, "LogicalBrainVolume")
+	checkTrue(!is.null(vol2))
+}
+
 
 test.vol.eachSlice <- function() {
 	vol1 <- loadVolume("data/global_mask.nii")
@@ -79,6 +85,25 @@ test.vol.eachSlice <- function() {
 	checkEquals(mean.slice1, mean.slice2)
 	
 	checkEquals(unlist(mean.slice1), apply(vol1, 3, mean))
+}
+
+test.writeVolume <- function() {
+	vol1 <- loadVolume("data/global_mask.nii")
+	fname <- paste(tempfile(), ".nii", sep="")
+	writeVolume(vol1, fname)
+	
+	
+	vol2 <- loadVolume(fname)
+	checkTrue(all(vol1 == vol2))
+	checkEquals(vol2@source@metaInfo@dataType, vol1@source@metaInfo@dataType)
+	
+	checkTrue(identical(space(vol1), space(vol2)))
+	
+	fname <- paste(tempfile(), ".nii", sep="")
+	writeVolume(vol1, fname, dataType="DOUBLE")
+	vol3 <- loadVolume(fname)
+	checkEquals(vol3@source@metaInfo@dataType, "DOUBLE")
+	
 }
 
 
