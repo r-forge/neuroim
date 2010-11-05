@@ -2,6 +2,4 @@
 \alias{spacing,BrainData-method}
 \alias{spacing}
 \title{spacing,BrainData-method}
-\usage{\S4method{spacing}{BrainData}(x)
-}
 
