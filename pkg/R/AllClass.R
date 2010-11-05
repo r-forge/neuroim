@@ -4,6 +4,7 @@ roxygen()
 
 
 setOldClass(c("file", "connection"))
+setOldClass(c("gzfile", "connection"))
 
 .package_env <- new.env()
 
@@ -234,7 +235,7 @@ setClass("BrainFileSource", representation=
 #' @slot mask the subset of voxels that will be stored in memory
 #' @exportClass BrainVectorSource
 		setClass("SparseBrainVectorSource", representation=
-						representation(mask="array"),
+						representation(mask="LogicalBrainVolume"),
 				contains=c("BrainVectorSource"))
 		
 

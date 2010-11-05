@@ -23,18 +23,26 @@
   
   
 SparseBrainVectorSource <- function(metaInfo, indices, mask) {
+	
 	stopifnot(length(dim(metaInfo)) == 4)
 	stopifnot(all(indices >= 1 & indices <= dim(metaInfo)[4]))
 	
-	
 	D <- dim(metaInfo)[1:3]
-	if (all.equals(dim(mask), D)) {
+	
+	if (is.vector(mask) && length(mask) < prod(D)) {
+		m <- array(TRUE, D)
+		m[mask] <- TRUE
+		mask <- m
+	} else if (identical(dim(mask), as.integer(D))) {
 		mask <- as.array(mask)
 	} else if (is.vector(mask) && length(mask) == prod(D)) {
 		mask <- array(mask, D)
 	} else {
-		stop("mask must have same number of elements as input file: ", D)
+		stop("illegal mask argument with dim: ", dim(mask))
 	}
+	
+	mspace <- BrainSpace(dim(mask), metaInfo@origin, metaInfo@spacing, metaInfo@spatialAxes)
+	mask <- LogicalBrainVolume(mask, mspace)
 	
 	new("SparseBrainVectorSource", metaInfo=metaInfo, indices=indices, mask=mask)				
 }
@@ -43,6 +51,7 @@ SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 	stopifnot(inherits(space, "BrainSpace"))
 	
+	#mask <- as.logical(mask)
 	if (is.logical(mask) && !inherits(mask, "LogicalBrainVolume")) {
 		mspace <- BrainSpace(dim(space)[1:3], origin(space), axes(space), trans(space))
 		mask <- LogicalBrainVolume(mask, mspace)
@@ -94,21 +103,21 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 			stopifnot(length(meta@Dim) == 4)
 			
 			meta <- x@metaInfo
-			nels <- prod(meta@Dim[1:3]) 
-			
+			nels <- prod(meta@Dim[1:3]) 		
 			datlist <- list()
 			ind <- x@indices
 			
+			M <- x@mask > 0
 			for (i in 1:length(ind)) {
 				offset <- prod(nels * (ind[i]-1)) * meta@bytesPerElement
 				reader <- dataReader(meta, offset)		
-				datlist[[i]] <- readElements(reader, nels)[mask]
+				datlist[[i]] <- readElements(reader, nels)[M]
 				close(reader)				
 			}
 			
 			arr <- do.call(rbind, datlist)		
 			bspace <- BrainSpace(meta@Dim, meta@origin, meta@spacing, meta@spatialAxes)
-			SparseBrainVector(arr, bspace, x)
+			SparseBrainVector(arr, bspace, x@mask)
 			
 		})
 
@@ -207,6 +216,29 @@ setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
            idx <- gridToIndex(x@mask, i)
            callGeneric(x,idx)
          })
+ 
+ 
+ setMethod("series", signature(x="SparseBrainVector", i="numeric"),
+		 def=function(x,i, j, k) {	
+			 if (missing(j) && missing(k)) {
+				 idx <- lookup(x, as.integer(i))
+				 idx <- idx[idx!=0]
+				 if (length(idx) == 0) {
+					 rep(0, dim(x)[4])
+				 } else {
+					 mat <- matrix(0, dim(x)[4], length(i))
+					 mat[,idx] <- x@data[,idx]     				 
+				 }
+					 
+				 
+				 vdim <- dim(x)[1:3]
+				 mat <- arrayInd(i, vdim)
+				 apply(mat, 1, function(i) x[i[1], i[2], i[3],])			
+			 } else {
+				 x[i,j,k,]	
+			 }
+		 })
+ 
            
 
 setMethod(f="series", signature=signature(x="SparseBrainVector", i="numeric"),

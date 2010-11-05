@@ -79,7 +79,6 @@ setMethod(f="readElements", signature=signature(x= "BinaryReader", numElements="
 
 setMethod(f="writeElements", signature=signature(x= "BinaryWriter", els="numeric"),
 		def=function(x, els) {
-			print(paste("bytes per element ", x@bytesPerElement))
 			if (.getRStorage(x@dataType) == "integer") {
 				writeBin(as.integer(els), x@output, size=x@bytesPerElement, endian=x@endian)		
 			} else if (.getRStorage(x@dataType) == "double") {

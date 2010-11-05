@@ -1,4 +1,7 @@
 
+#' @export
+#' @param a 3D binary array
+#' @return a two-element list of the connected components (cluster index and cluster sizes)
 connComp3D <- function(mask) {
 	stopifnot(length(dim(mask)) == 3)
 	

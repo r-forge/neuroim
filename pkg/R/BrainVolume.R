@@ -15,6 +15,8 @@ roxygen()
 #' @param data a three-dimensional \code{array}
 #' @param space an instance of class \code{\linkS4class{BrainSpace}}
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
+#' @return \code{\linkS4class{DenseBrainVolume}} instance 
+#' @export BrainVolume
 BrainVolume <- function(data, space, source=NULL) {
 	DenseBrainVolume(data,space,source)	
 }
@@ -23,13 +25,15 @@ BrainVolume <- function(data, space, source=NULL) {
 #' @param data a three-dimensional \code{array}
 #' @param space an instance of class \code{\linkS4class{BrainSpace}}
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
+#' @return \code{\linkS4class{DenseBrainVolume}} instance 
+#' @export DenseBrainVolume
 DenseBrainVolume <- function(data, space, source=NULL, label="") {
 	if (length(dim(data)) != 3) {
-		stop("DenseBrainVolume: data argument must be have three dimensions")
+		stop("DenseBrainVolume: data argument must have three dimensions")
 	} 
 	
 	if (ndim(space) != 3) {
-		stop("DenseBrainVolume: space argument must be have three dimensions")
+		stop("DenseBrainVolume: space argument must have three dimensions")
 	} 
 	
 	if (is.null(source)) {
@@ -41,6 +45,12 @@ DenseBrainVolume <- function(data, space, source=NULL, label="") {
 
 }
 
+#' Construct a \code{\linkS4class{LogicalBrainVolume}} instance
+#' @param data a three-dimensional \code{array}
+#' @param space an instance of class \code{\linkS4class{BrainSpace}}
+#' @param source an instance of class \code{\linkS4class{BrainSource}}
+#' @return \code{\linkS4class{LogicalBrainVolume}} instance 
+#' @export LogicalBrainVolume
 LogicalBrainVolume <- function(data, space, source=NULL, label="") {
 	
 	if (is.null(dim(data)) && length(data) == prod(dim(space))) {
@@ -102,6 +112,7 @@ setMethod(f="show",
 		})
 
 #' load BrainVolume
+#' @exportMethod loadData
 setMethod(f="loadData", signature=c("BrainVolumeSource"), 
 		def=function(x) {
 			
@@ -120,6 +131,7 @@ setMethod(f="loadData", signature=c("BrainVolumeSource"),
 		})
 
 #' Constructor for BrainVolumeSource
+#' @export BrainVolumeSource
 BrainVolumeSource <- function(input, index=1) {
 	stopifnot(index >= 1)
 	stopifnot(is.character(input))
@@ -156,11 +168,13 @@ setMethod(f="concat", signature=signature(x="DenseBrainVolume", y="DenseBrainVol
 			.concat4D(x,y,...)			
 		})
 
+#' @exportMethod eachSlice
 setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", withIndex="missing"),
 		def=function(x, FUN) {
 			lapply(1:(dim(x)[3]), function(z) FUN(x[,,z]))				
 		})
 
+#' @exportMethod eachSlice
 setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", withIndex="logical"),
 		def=function(x, FUN, withIndex) {
 			lapply(1:(dim(x)[3]), function(z) {					
@@ -169,30 +183,33 @@ setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", wi
 			})
 		})
 
+#' @exportMethod indexToGrid
 setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
           def=function(x, idx) {
             array.dim <- dim(x)          
             t(sapply(idx, .indexToGrid, array.dim))            
           })
-
+  
+#' @exportMethod indexToGrid
 setMethod(f="indexToGrid", signature=signature(x="BrainVector", idx="index"),
 		  def=function(x, idx) {
 			  callGeneric(space(x), idx)
 		  })
-  
+
+#' @exportMethod indexToGrid
 setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="index"),
 		  def=function(x, idx) {
 			  callGeneric(space(x), idx)
 		  })
 
-
+#' @exportMethod gridToIndex
 setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix"),
           def=function(x, coords) {
             array.dim <- dim(x)
             .gridToIndex(dim(x), coords)
           })
 
-
+#' @rdname private
 .pruneCoords <- function(coord.set,  vals,  mindist=10) {
 
 	if (NROW(coord.set) == 1) {
@@ -226,7 +243,8 @@ setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix")
 	  
 }
 
-
+#' find connected components in BrainVolume
+#' @exportMethod connComp
 setMethod(f="connComp", signature=signature(x="BrainVolume"), 
 	def=function(x, threshold=0, coords=TRUE, clusterTable=TRUE, localMaxima=TRUE, localMaximaDistance=15) {
 		mask <- (x > threshold)
@@ -294,11 +312,13 @@ setMethod(f="connComp", signature=signature(x="BrainVolume"),
 
 
 
+#' @exportMethod writeVolume
 setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="missing", dataType="missing"),
 		def=function(x, fileName) {
 			write.nifti.volume(x, fileName)           
 		})
 
+#' @exportMethod writeVolume
 setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="character", dataType="missing"),
 		def=function(x, fileName, format) {
 			if (toupper(format) == "NIFTI" || toupper(format) == "NIFTI1" || toupper(format) == "NIFTI-1") {
@@ -308,6 +328,7 @@ setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="charact
 			}      
 		})
 
+#' @exportMethod writeVolume
 setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="missing", dataType="character"),
 		def=function(x, fileName, dataType) {
 			write.nifti.volume(x, fileName, dataType)   

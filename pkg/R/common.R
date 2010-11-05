@@ -1,9 +1,10 @@
-
+#' @rdname private
 .isExtension <- function(fname, extension) {
   last <- substr(fname, nchar(fname)+1 - nchar(extension), nchar(fname))
   return(last==extension)
 }
 
+#' @rdname private
 .concat4D <- function(x,y, ...) {
 	rest <- list(...)
 	
@@ -40,6 +41,7 @@
 
  
 ## based on code from R.utils, extract.array
+#' @rdname private
 .extract.array <- function(x, ..., drop=FALSE, indices=list(...)) {
   nindices <- length(indices)
   if (nindices == 0) {
@@ -77,7 +79,7 @@
 }
 
 
-  
+#' @rdname private  
 .gridToIndex <- function(dimensions, vmat) {
 	slicedim = dimensions[1]*dimensions[2]
 	idx <- apply(vmat, 1, function(vox) {
@@ -87,6 +89,7 @@
 	return(idx)
 }
 
+#' @rdname private
 .indexToGrid <- function(idx, array.dim) {
 	stopifnot(all(idx > 0 & idx <= prod(array.dim)))
 	rank = length(array.dim)
@@ -106,7 +109,7 @@
 }
 
 
-
+#' @rdname private
 .getRStorage <- function(dataType) {
   if (any(toupper(dataType) == c("BINARY", "BYTE", "UBYTE", "SHORT", "INTEGER", "INT", "LONG"))) {
     "integer"
@@ -117,6 +120,7 @@
   }
 }
 
+#' @rdname private
 .getDataStorage <- function(code) {
   if (code == 0) {
     return("UNKNOWN")
@@ -137,7 +141,7 @@
   }
 }
 
-
+#' @rdname private
 .getDataCode <- function(dataType) {
   if (dataType == "UNKNOWN") {
     return(0)
@@ -158,6 +162,7 @@
   }
 }
 
+#' @rdname private
 .getDataSize <- function(dataType) {
   if (dataType == "BINARY") {
     return(1)
@@ -188,6 +193,7 @@
   stop(paste("unrecognized data type: ", dataType))
 }
 
+#' @rdname private
 .getEndian <- function(conn) {
   #try little endian
   endian <- "little"
@@ -206,7 +212,7 @@
   return(endian)
 }
 
-
+#' @rdname private
 .niftiExt <- function(filetype) {
 
   extensions <- list()
@@ -229,7 +235,7 @@
   return(extensions)
 }
 
-
+#' @rdname private
 .matrixToQuatern <- function(mat) {
   xd <- sqrt(drop(crossprod(mat[1:3,1])))
   yd <- sqrt(drop(crossprod(mat[1:3,2])))
@@ -294,7 +300,7 @@
 
 }
 
-
+#' @rdname private
 .quaternToMatrix <- function(quat, origin, stepSize, qfac) {
   mat <- matrix(0, 4,4)
   mat[4,] <- c(0,0,0,1)

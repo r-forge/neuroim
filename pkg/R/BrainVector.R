@@ -5,7 +5,7 @@ roxygen()
 #' @include SparseBrainVector.R
 roxygen()
 
-
+#' @rdname private
 .BrainVectorFromIndices <- function(data, space, indices) {
 	nvols <- dim(space)[4]
 	nelements <- prod(dim(space)[1:3])
@@ -31,6 +31,7 @@ roxygen()
 	new("BrainVector", .Data=mat, space=space)
 }
 
+#' @rdname private
 .BrainVectorFromMatrix <- function(data, space) {
 	nvols <- dim(space)[4]
 	nelements <-  prod(dim(space)[1:3])
@@ -46,7 +47,7 @@ roxygen()
 	}
 }
 
-
+#' @rdname private
 .createVectorSpaceFromData <- function(data, space, indices=NULL) {
 	if (numdim(space) == 4) {
 		return(space)
@@ -178,7 +179,7 @@ BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
 	if (is.null(mask)) {
 		new("BrainVectorSource", metaInfo=metaInfo, indices=indices)		
 	} else {
-		SparseBrainVectorSoure(metaInfo, indices, mask)		
+		SparseBrainVectorSource(metaInfo, indices, as(mask, "LogicalBrainVolume"))		
 	}
 	
 }
@@ -505,38 +506,16 @@ loadSeries <- function(filenames, indices, volidx=NULL, reduce=T, demean=F, verb
 	
 }
 
-
-
-loadVector  <- function(filename, volRange=NULL, mask=NULL) {
-	
-	if (!.isNIFTI(filename)) {
-		stop("only support NIFTI files at present")
-	}
-	
-	if (!is.null(mask)) {
-		return(.loadSparseVector(filename, mask))
-	}
-	
-	
-	nfile <- NIFTIFile(filename)
-	header <- readHeader(nfile)
-	ddim <- dataDim(header)
-	
-	if (length(ddim) != 4) {
-		stop("Error: file does not have 4 dimensions, which is required for a BrainVector object")
-	}
-	
-	if (is.null(volRange)) {
-		volRange <- 1:ddim[4]
-	}
-	
-	
-	data <- readData(nfile)
-	data <- array(data, ddim)
-	space <- createSpace(header)
-	new("BrainVector", .Data=data, space=space)
-	
+#' load an image volume from a file
+#' @param fileName the name of the file to load
+#' @param indices the indices of the sub-volumes to load (e.g. if the file is 4-dimensional)
+#' @param mask a mask defining the spatial elements to load 
+#' @export loadVector
+loadVector  <- function(fileName, indices=NULL, mask=NULL) {
+	src <- BrainVectorSource(fileName, indices, mask)
+	loadData(src)
 }
+
 
 
 
@@ -651,20 +630,7 @@ setMethod("as.sparse", signature(x="DenseBrainVector", mask="numeric"),
 
 setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character"),
 		def=function(x, fileName) {
-			
-			
-			if (typeof(x) == "double") {
-				dataType = "FLOAT"
-			} else if (typeof(x) == "integer") {
-				dataType = "SHORT"
-			} else {
-				stop(paste("unrecognized storage stype : ", typeof(x)))
-			}
-			
-			brainFile <- NIFTIFile(fileName, "w")
-			hdr <- createNIFTIHeader(x, fileName, dataType)
-			writeHeader(brainFile, hdr)
-			writeData(brainFile, hdr, as.vector(x))
+			stop()
 			
 		})
 

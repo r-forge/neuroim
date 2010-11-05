@@ -25,14 +25,20 @@ setMethod(f="dim", signature=signature("FileMetaInfo"),
 
 setMethod(f="dataReader", signature=signature("NIfTIMetaInfo"), 
 		def=function(x, offset=0) {
-			BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
+			if (x@fileDescriptor@dataEncoding == "gzip") {
+				BinaryReader(gzfile(x@dataFile, "rb"), x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)	
+			} else {
+				BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
+			}
 		})
 			
 setMethod(f="dataReader", signature=signature("AFNIMetaInfo"), 
 		def=function(x, offset=0) {
-			#### won't work for sub-bricks with different data types
-			BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
-			#### won't work for sub-bricks with different data types
+			if (x@fileDescriptor@dataEncoding == "gzip") {
+				BinaryReader(gzfile(x@dataFile, "rb"), x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)	
+			} else {
+				BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
+			}
 		})			
 
 niftiDim <- function(nifti_header) {
