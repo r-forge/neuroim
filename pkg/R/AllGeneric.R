@@ -90,6 +90,7 @@ setGeneric(name="value",       def=function(object, x,y, ...) standardGeneric("v
 #' @param x the object
 #' @param idx the 1D indices
 #' @return a matrix of grid coordinates
+#' @exportMethod indexToGrid
 setGeneric(name="indexToGrid",   def=function(x, idx) standardGeneric("indexToGrid"))
 
 

@@ -2,7 +2,6 @@
 roxygen()
 #' @include NIFTI_IO.R
 roxygen()
-
 #' @include AFNI_IO.R
 roxygen()
 

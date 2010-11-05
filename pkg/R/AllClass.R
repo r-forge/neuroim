@@ -1,6 +1,8 @@
 #' @include AllGeneric.R
 roxygen()
 
+
+
 setOldClass(c("file", "connection"))
 
 .package_env <- new.env()
@@ -9,7 +11,7 @@ setOldClass(c("file", "connection"))
 setClass("Base", contains=c("VIRTUAL"))
 
 
-#' This class supports reading of bulk binary data from a connection
+#' This class represents an axis with a name attribute
 #'
 #' @slot axis the name of the axis
 #' @exportClass NamedAxis		 
