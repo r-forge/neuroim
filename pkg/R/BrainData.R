@@ -1,16 +1,16 @@
 
 
 setMethod(f="ndim", signature=signature(x = "BrainData"),
-          function(x) numdim(x@space))
+          def=function(x) numdim(x@space))
 
 setMethod(f="dim", signature=signature(x = "BrainData"),
-          function(x) dim(x@space))
+          def=function(x) dim(x@space))
 
 setMethod(f="space", signature=signature(x = "BrainData"),
-          function(x) x@space)
+          def=function(x) x@space)
 
 setMethod(f="spacing",signature= signature(x = "BrainData"),
-          function(x) {
+          def=function(x) {
             sp <- space(x)
             spacing(sp)
           })

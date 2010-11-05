@@ -22,7 +22,7 @@ AxisSet3D <- function(i, j, k) {
 }
 
 #' get the number of dimensions for this AxisSet
-#' @param x the AxisSet to query
+#' @param x the AxisSet to query 
 setMethod(f="ndim",signature=signature(x= "AxisSet"), def=function(x) { x@ndim })
 
 
@@ -169,6 +169,7 @@ OrientationList3D <- list(
 #' @param axis1 the first axis
 #' @param axis2 the second axis
 #' @param axis3 the thrid axis	
+#' @export 
 matchAnatomy3D <- function(axis1, axis2, axis3) {
 	for (orient in OrientationList3D) {
 		if (identical(orient@i,axis1) && identical(orient@j,axis2) && identical(orient@k, axis3)) {
@@ -185,6 +186,7 @@ matchAnatomy3D <- function(axis1, axis2, axis3) {
 #' @param axis1 the first axis
 #' @param axis2 the second axis
 #' @param axis3 the thrid axis	
+#' @export 
 matchAnatomy2D <- function(axis1, axis2) {
 	for (orient in OrientationList2D) {
 		if (identical(orient@i,axis1) && identical(orient@j,axis2)) {

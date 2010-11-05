@@ -14,8 +14,8 @@ roxygen()
 #' Generic function to create data reader
 #' @param x an object specifying the infromation required to produce the reader
 #' @param offset the byte offset (number of bytes to skip before reading)
-#' @export dataReader
-setGeneric("dataReader", function(x, offset) standardGeneric("dataReader"))
+#' @exportMethod dataReader
+setGeneric(name="dataReader", def=function(x, offset) standardGeneric("dataReader"))
 
 
 setMethod(f="dim", signature=signature("FileMetaInfo"), 
@@ -147,6 +147,7 @@ AFNIMetaInfo <- function(descriptor, afni_header) {
 #'
 #' @param fileName the name of the file to read
 #' @return an instance of class \code{\linkS4class{FileMetaInfo}} 
+#' @export readHeader
 readHeader <- function(fileName) {
 	desc <- findDescriptor(fileName) 
 	if (is.null(desc)) {
@@ -156,7 +157,7 @@ readHeader <- function(fileName) {
 	readMetaInfo(desc, fileName)			
 }
 
-setAs("BrainMetaInfo", "NIfTIMetaInfo", function(from) {
+setAs(from="BrainMetaInfo", to="NIfTIMetaInfo", def=function(from) {
 			if (inherits(from, "NIfTIMetaInfo")) {
 				from
 			} else {

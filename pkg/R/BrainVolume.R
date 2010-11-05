@@ -71,18 +71,21 @@ LogicalBrainVolume <- function(data, space, source=NULL, label="") {
 	
 }
 
-setAs("DenseBrainVolume", "array", function(from) from@.Data)
+#' conversion from DenseBrainVolume to array
+setAs(from="DenseBrainVolume", to="array", def=function(from) from@.Data)
 
-setAs("BrainVolume", "LogicalBrainVolume", function(from) {
+#' conversion from BrainVolume to LogicalBrainVolume
+setAs(from="BrainVolume", to="LogicalBrainVolume", def=function(from) {
 	LogicalBrainVolume(as.array(from), space(from), from@source)
 })
 
-setAs("DenseBrainVolume", "LogicalBrainVolume", function(from) {
+#' conversion from DenseBrainVolume to LogicalBrainVolume
+setAs(from="DenseBrainVolume", to="LogicalBrainVolume", def=function(from) {
 	LogicalBrainVolume(as.array(from), space(from), from@source)
 })
 
-
-setAs("BrainVolume", "array", function(from) from[,,])
+#' conversion from BrainVolume to array
+setAs(from="BrainVolume", to="array", def=function(from) from[,,])
 
 setMethod(f="show",
 		signature=signature(object="BrainVolume"),

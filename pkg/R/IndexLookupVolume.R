@@ -35,7 +35,7 @@ setMethod(f="space", signature=signature(x="IndexLookupVolume"),
         
           
 setMethod(f="coords", signature(x="IndexLookupVolume"),
-          function(x,i) {
+          def=function(x,i) {
             idx <- lookup(x,i)
             idx <- idx[idx!=0]
             if (length(idx) == 0) {

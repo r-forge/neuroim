@@ -1,6 +1,8 @@
 
 #' @include AllClass.R
 roxygen()
+#' @include AllGeneric.R
+roxygen()
 
 #' Constructor for  \code{\linkS4class{BinaryReader}} class
 #' @param input file name to read from or else a \code{connection} object
@@ -8,7 +10,7 @@ roxygen()
 #' @param dataType R data type of binary elements
 #' @param bytesPerElement number of bytes in each data element (e.g. 4 or 8 for floating point numbers)
 #' @param endian endianness of binary input connection
-#' @export BinaryReader
+#' @export 
 BinaryReader <- function(input, byteOffset, dataType, bytesPerElement, endian=.Platform$endian) {
 	if (is.character(input)) { 
 		new("BinaryReader", input=file(input, open="rb"), byteOffset=as.integer(byteOffset), dataType=dataType, bytesPerElement=as.integer(bytesPerElement), endian=endian)
@@ -25,7 +27,7 @@ BinaryReader <- function(input, byteOffset, dataType, bytesPerElement, endian=.P
 #' @param dataType R data type of binary elements
 #' @param bytesPerElement number of bytes in each data element (e.g. 4 or 8 for floating point numbers)
 #' @param endian endianness of binary output connection
-#' @export BinaryWriter
+#' @export 
 BinaryWriter <- function(output, byteOffset, dataType, bytesPerElement, endian=.Platform$endian) {
 	if (is.character(output)) { 
 		new("BinaryWriter", output=file(output, open="wb"), byteOffset=as.integer(byteOffset), dataType=dataType, bytesPerElement=as.integer(bytesPerElement), endian=endian)
@@ -39,7 +41,8 @@ BinaryWriter <- function(output, byteOffset, dataType, bytesPerElement, endian=.
 ## code duplication, fix me. introduce "BinaryConnection superclass
 
 
-setMethod(f="initialize", signature=signature("BinaryReader"), def=function(.Object, input, byteOffset, dataType, bytesPerElement, endian) {
+setMethod(f="initialize", signature=signature("BinaryReader"), 
+		def=function(.Object, input, byteOffset, dataType, bytesPerElement, endian) {
 			.Object@input <- input
 			.Object@byteOffset <- byteOffset
 			.Object@dataType <- dataType
@@ -54,7 +57,8 @@ setMethod(f="initialize", signature=signature("BinaryReader"), def=function(.Obj
 
 ## code duplication, fix me
 
-setMethod(f="initialize", signature=signature("BinaryWriter"), def=function(.Object, output, byteOffset, dataType, bytesPerElement, endian) {
+setMethod(f="initialize", signature=signature("BinaryWriter"), 
+		def=function(.Object, output, byteOffset, dataType, bytesPerElement, endian) {
 			.Object@output <- output
 			.Object@byteOffset <- byteOffset
 			.Object@dataType <- dataType

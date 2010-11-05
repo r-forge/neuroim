@@ -1,5 +1,7 @@
 #' @include AllGeneric.R
+roxygen()
 
+setOldClass(c("file", "connection"))
 
 .package_env <- new.env()
 
@@ -19,41 +21,41 @@ setClass("NamedAxis", representation=
 #'
 #' @slot ndim the number of axes (or dimensions)
 #' @exportClass AxisSet
-setClass("AxisSet", representation(ndim="integer"))
+setClass("AxisSet", representation=representation(ndim="integer"))
 
 
 #' A one-dimensional axis set
 #'
 #' @slot i the first axis
 #' @exportClass AxisSet1D
-setClass("AxisSet1D", representation(i="NamedAxis"), contains=c("AxisSet"))
+setClass("AxisSet1D", representation=representation(i="NamedAxis"), contains=c("AxisSet"))
 
 #' A two-dimensional axis set
 #'
-#' @slot i the first axis
+#' @slot j the first axis
 #' @exportClass AxisSet2D
-setClass("AxisSet2D", representation(j="NamedAxis"), 
+setClass("AxisSet2D", representation=representation(j="NamedAxis"), 
 		contains=c("AxisSet1D"))
 
 #' A three-dimensional axis set
 #'
 #' @slot k the third axis
 #' @exportClass AxisSet3D
-setClass("AxisSet3D", representation(k="NamedAxis"),
+setClass("AxisSet3D", representation=representation(k="NamedAxis"),
 		contains=c("AxisSet2D"))
 
 #' A four-dimensional axis set
 #'
 #' @slot l the fourth axis
 #' @exportClass AxisSet4D
-setClass("AxisSet4D", representation(l="NamedAxis"),
+setClass("AxisSet4D", representation=representation(l="NamedAxis"),
 		contains=c("AxisSet3D"))
 
 #' A five-dimensional axis set
 #'
 #' @slot m the fifth axis
 #' @exportClass AxisSet5D
-setClass("AxisSet5D", representation(m="NamedAxis"),
+setClass("AxisSet5D", representation=representation(m="NamedAxis"),
 		contains=c("AxisSet4D"))
 
 
@@ -111,7 +113,7 @@ setMethod(f="show",
 	
 	
 #' This class contains meta information from an image
-#'
+#' @slot dataType the data type code, e.g. FLOAT
 #' @slot Dim image dimensions
 #' @slot spatialAxes image axes for spatial dimensions (x,y,z)
 #' @slot additionalAxes axes for dimensions > 3 (e.g. time, color band, direction)
@@ -119,7 +121,7 @@ setMethod(f="show",
 #' @slot origin coordinate origin
 #' @slot label name(s) of images 
 #' @exportClass BrainMetaInfo		 							 
-	setClass("BrainMetaInfo",
+setClass("BrainMetaInfo",
 			representation=
 					representation(
 							dataType="character",
@@ -177,7 +179,7 @@ setClass("AFNIMetaInfo",
 
 
 #' This is a base class to rpresent a data source
-setClass("BaseSource", representation(metaInfo="BaseMetaInfo"))
+setClass("BaseSource", representation=representation(metaInfo="BaseMetaInfo"))
 
 
 
@@ -235,14 +237,15 @@ setClass("BrainFileSource", representation=
 		
 
 #' A class that is used to produce a \code{\linkS4class{BrainBucket}} instance
-#' @slot indices the index vector of the volumes to be (lazily) loaded
+#' @slot sourceList a list of sources for the bucket sub-volumes
+#' @slot cache a cache used to store data in memory
 #' @exportClass BrainBucketSource
 		setClass("BrainBucketSource",
 				representation=representation(sourceList="list", cache="environment"),
 				contains=c("BrainVectorSource"))
 		
 		
-setOldClass(c("file", "connection"))
+
 
 #' This class supports reading of bulk binary data from a connection
 #'
@@ -262,11 +265,12 @@ setClass("BinaryReader", representation=
 #' This class supports writing of bulk binary data to a connection
 #'
 #' @slot output the binary output connection
+#' @slot byteOffset the number of bytes to skip at the start of input
 #' @slot dataType the dataType of the binary Elements
 #' @slot bytesPerElement number of bytes in each data element (e.g. 4 or 8 for floating point numbers)
 #' @slot endian endianness of binary output connection
 #' @exportClass BinaryReader		 
-	   setClass("BinaryWriter", representation=
+setClass("BinaryWriter", representation=
 							   representation(output="connection",	
 							   byteOffset="numeric",
 							   dataType="character",

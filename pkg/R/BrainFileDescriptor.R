@@ -13,7 +13,7 @@ roxygen()
 #' @param x object for which the file name is to matched to
 #' @param fileName file name to be matched
 #' @return TRUE for match, FALSE otherwise
-#' @export fileMatches
+#' @exportMethod fileMatches
 setGeneric(name="fileMatches", def=function(x, fileName) standardGeneric("fileMatches"))
 
 
@@ -22,44 +22,43 @@ setGeneric(name="fileMatches", def=function(x, fileName) standardGeneric("fileMa
 #' @param x object for which the file name is to matched to
 #' @param fileName file name to be matched
 #' @return TRUE for match, FALSE otherwise
-#' @export headerFileMatches
-setGeneric("headerFileMatches", function(x, fileName) standardGeneric("headerFileMatches"))
+#' @exportMethod headerFileMatches
+setGeneric(name="headerFileMatches", def=function(x, fileName) standardGeneric("headerFileMatches"))
 
 #' Generic function to test whether a file name conforms to the given a \code{\linkS4class{BrainFileDescriptor}} instance.
 #' Will test for match to data file only
 #' @param x object for which the file name is to matched to
 #' @param fileName file name to be matched
 #' @return TRUE for match, FALSE otherwise
-#' @export dataFileMatches
-setGeneric("dataFileMatches", function(x, fileName) standardGeneric("dataFileMatches"))
+#' @exportMethod dataFileMatches
+setGeneric(name="dataFileMatches", def=function(x, fileName) standardGeneric("dataFileMatches"))
 
 #' Generic function to get the name of the header file, given a file name and a \code{\linkS4class{BrainFileDescriptor}} instance.
 #' @param x descriptor instance
 #' @param fileName file name to be stripped of its extension
 #' @return the correct header name
-#' @export headerFile
-setGeneric("headerFile", function(x, fileName) standardGeneric("headerFile"))
+#' @exportMethod headerFile
+setGeneric(name="headerFile", def=function(x, fileName) standardGeneric("headerFile"))
 
 #' Generic function to get the name of the data file, given a file name and a \code{\linkS4class{BrainFileDescriptor}} instance.
 #' @param x descriptor instance
 #' @param fileName file name to be stripped of its extension
 #' @return the correct header name
-#' @export dataFile
-setGeneric("dataFile", function(x, fileName) standardGeneric("dataFile"))
+#' @exportMethod dataFile
+setGeneric(name="dataFile", def=function(x, fileName) standardGeneric("dataFile"))
 
 #' Generic function to strip extension from file name, given a \code{\linkS4class{BrainFileDescriptor}} instance.
 #' @param x descriptor instance
 #' @param fileName file name to be stripped of its extension
 #' @return fileName without extension
-#' @export stripExtension
-setGeneric("stripExtension", function(x, fileName) standardGeneric("stripExtension"))
+#' @exportMethod stripExtension
+setGeneric(name="stripExtension", def=function(x, fileName) standardGeneric("stripExtension"))
 
 #' Generic function to read image meta info given a file and a \code{\linkS4class{BrainFileDescriptor}} instance.
 #' @param x descriptor instance
 #' @param fileName file name contianing meta information
-#' @export readMetaInfo
-setGeneric("readMetaInfo", function(x, fileName) standardGeneric("readMetaInfo"))
-
+#' @exportMethod readMetaInfo
+setGeneric(name="readMetaInfo", def=function(x, fileName) standardGeneric("readMetaInfo"))
 
 
 

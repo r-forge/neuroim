@@ -204,7 +204,7 @@ setMethod("length", signature=c("BrainVector"),
 #' Load data from a \code{\linkS4class{BrainBucketSource}}
 #' @param x an instance of class \code{\linkS4class{BrainBucketSource}}
 #' @return an instance of class \code{\linkS4class{BrainVolume}} 
-setMethod(f="loadData", signature=c("BrainBucketSource"), 
+setMethod(f="loadData", signature=signature("BrainBucketSource"), 
 		def=function(x, key) {
 
 			if (is.numeric(key)) {
@@ -283,13 +283,13 @@ loadBucket <- function(fileName, pattern=NULL, indices=NULL) {
 	buck <- new("BrainBucket", source=bsource, space=bspace, labels=labels[idx])
 }
 
-setMethod("[[", signature(x="BrainBucket", i = "character", j = "missing"),
-		function(x, i) {
+setMethod(f="[[", signature=signature(x="BrainBucket", i = "character", j = "missing"),
+		def=function(x, i) {
 			loadData(x@source, i)
 		})
 
-setMethod("[[", signature(x="BrainBucket", i = "numeric", j = "missing"),
-		function(x, i) {
+setMethod(f="[[", signature=signature(x="BrainBucket", i = "numeric", j = "missing"),
+		def=function(x, i) {
 			loadData(x@source, i)
 		})
 
@@ -301,7 +301,7 @@ setAs("BrainVector", "array", function(from) from[,,,])
 
 setMethod(f="show",
 		signature=signature(object="BrainVectorSource"),
-		function(object) {
+		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")
 			cat("   indices: ", object@indices, "\n\n")
 			cat("   metaInfo: \n")
@@ -312,7 +312,7 @@ setMethod(f="show",
 
 setMethod("show",
 		signature=signature(object="BrainVector"),
-		function(object) {
+		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")
 			cat("   dimensions: ", dim(object), "\n")
 			cat("   voxel spacing: ", spacing(object))
@@ -322,18 +322,18 @@ setMethod("show",
 
 
 #' apply function to each volume in a BrainVector object
-setMethod(f="eachVolume", signature=c(x="BrainVector", FUN="function", withIndex="missing"),
+setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="missing"),
 		def=function(x, FUN, ...) {
 			lapply(1:(dim(x)[4]), function(tt) FUN(x[,,,tt]))				
 		})
 
 #' apply function to each volume in a BrainBucket object
-setMethod(f="eachVolume", signature=c(x="BrainBucket", FUN="function", withIndex="missing"),
+setMethod(f="eachVolume", signature=signature(x="BrainBucket", FUN="function", withIndex="missing"),
 		def=function(x, FUN, ...) {
 			lapply(1:(dim(x)[4]), function(tt) FUN(x[[tt]]))				
 		})
 #' apply function to each volume in a BrainVector object
-setMethod("eachVolume", signature(x="BrainBucket", FUN="function", withIndex="logical"),
+setMethod("eachVolume", signature=signature(x="BrainBucket", FUN="function", withIndex="logical"),
 		def=function(x, FUN, withIndex, ...) {
 			lapply(1:(dim(x)[4]), function(tt) {					
 						vol <- x[[tt]]
@@ -342,7 +342,7 @@ setMethod("eachVolume", signature(x="BrainBucket", FUN="function", withIndex="lo
 		})
 
 #' apply function to each volume in a BrainVector object
-setMethod("eachVolume", signature(x="BrainVector", FUN="function", withIndex="logical"),
+setMethod("eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="logical"),
 		def=function(x, FUN, withIndex, ...) {
 			lapply(1:(dim(x)[4]), function(tt) {					
 						vol <- x[,,,tt]
@@ -351,7 +351,7 @@ setMethod("eachVolume", signature(x="BrainVector", FUN="function", withIndex="lo
 		})
 
 #' extract one or more volumes from a  BrainVector object
-setMethod(f="takeVolume", signature=c(x="BrainVector", i="numeric"),
+setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 		def=function(x, i, merge=FALSE) {
 			makevol <- function(i) {
 				xs <- space(x)
@@ -373,8 +373,8 @@ setMethod(f="takeVolume", signature=c(x="BrainVector", i="numeric"),
 		})
 
 
-setMethod("eachSeries", signature=signature(x="BrainVector", FUN="function", withIndex="missing"),
-		function(x, FUN, withIndex=FALSE, ...) {
+setMethod(f="eachSeries", signature=signature(x="BrainVector", FUN="function", withIndex="missing"),
+		def=function(x, FUN, withIndex=FALSE, ...) {
 			
 			NX <- dim(x)[1]
 			NY <- dim(x)[2]
@@ -559,7 +559,7 @@ setMethod(f="concat", signature=signature(x="BrainVector", y="BrainVector"),
 		})
 
 setMethod("series", signature(x="BrainVector", i="matrix"),
-		function(x,i) {
+		def=function(x,i) {
 			if (!is.matrix(i) && length(i) == 3) {
 				i <- matrix(i, 1, 3)
 			}
@@ -570,7 +570,7 @@ setMethod("series", signature(x="BrainVector", i="matrix"),
 		})
 
 setMethod("series", signature(x="BrainVector", i="numeric"),
-		function(x,i, j, k) {	
+		def=function(x,i, j, k) {	
 			if (missing(j) && missing(k)) {
 				vdim <- dim(x)[1:3]
 				mat <- arrayInd(i, vdim)
