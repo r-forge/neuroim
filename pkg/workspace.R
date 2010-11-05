@@ -25,9 +25,10 @@ fnames = c("AllGeneric.R",
   "Axis.R",
   "NIFTI_IO.R",
   "AFNI_IO.R",
-  "BinaryReader.R",
+  "BinaryIO.R",
   "BrainFileDescriptor.R",
   "BrainMetaInfo.R",
+  "IndexLookupVolume.R",
   "Ops.R")
 
 fnames <- paste(prefix, "/", fnames, sep="")
