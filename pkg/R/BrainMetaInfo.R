@@ -51,6 +51,7 @@ niftiDim <- function(nifti_header) {
 #' @param Dim image dimensions
 #' @param spacing voxel dimensions
 #' @param origin coordinate origin
+#' @param dataType the type of the data (e.g. " FLOAT")
 #' @param label name(s) of images 
 #' @param spatialAxes image axes for spatial dimensions (x,y,z)
 #' @param additionalAxes axes for dimensions > 3 (e.g. time, color band, direction)
@@ -116,12 +117,14 @@ setMethod(f="show", signature=signature("FileMetaInfo"),
 		})
 
 
-
+#' AFNIMetaInfo 
+#' 
 #' Constructor for \code{\linkS4class{AFNIMetaInfo}} class
 #' @param descriptor an instance of class \code{\linkS4class{AFNIFileDescriptor}}
 #' @param afni_header a \code{list} returned by \code{readAFNIHeader}
 #' @return an instance of class \code{\linkS4class{AFNIMetaInfo}}
 #' @export AFNIMetaInfo
+#' @rdname AFNIMetaInfo-class
 AFNIMetaInfo <- function(descriptor, afni_header) {
 		.Dim <- afni_header$DATASET_DIMENSIONS$content[afni_header$DATASET_DIMENSIONS$content > 0]
 		if (afni_header$DATASET_RANK$content[2] > 1) {

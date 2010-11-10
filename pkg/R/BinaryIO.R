@@ -4,12 +4,16 @@ roxygen()
 #' @include AllGeneric.R
 roxygen()
 
+#' BinaryReader
+#' 
 #' Constructor for  \code{\linkS4class{BinaryReader}} class
+#' 
 #' @param input file name to read from or else a \code{connection} object
 #' @param byteOffset the number of bytes to skip at the start of input
 #' @param dataType R data type of binary elements
 #' @param bytesPerElement number of bytes in each data element (e.g. 4 or 8 for floating point numbers)
 #' @param endian endianness of binary input connection
+#' @rdname BinaryReader-class
 #' @export 
 BinaryReader <- function(input, byteOffset, dataType, bytesPerElement, endian=.Platform$endian) {
 	if (is.character(input)) { 
@@ -21,12 +25,15 @@ BinaryReader <- function(input, byteOffset, dataType, bytesPerElement, endian=.P
 
 }
 
-
+#' BinaryWriter
+#' 
 #' Constructor for  \code{\linkS4class{BinaryWriter}} class
 #' @param output file name to write to or else a \code{connection} object
+#' @param byteOffset the number of bytes to skip at the start of output
 #' @param dataType R data type of binary elements
 #' @param bytesPerElement number of bytes in each data element (e.g. 4 or 8 for floating point numbers)
 #' @param endian endianness of binary output connection
+#' @rdname BinaryWriter-class
 #' @export 
 BinaryWriter <- function(output, byteOffset, dataType, bytesPerElement, endian=.Platform$endian) {
 	if (is.character(output)) { 

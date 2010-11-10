@@ -87,30 +87,36 @@ roxygen()
 
 
 
-#' constructor function for class \code{\linkS4class{BrainVector}}
-BrainVector <- function(data, space, indices=NULL, mask=NULL) {
-	
-	space <- .createVectorSpaceFromData(data, space, indices)
-	
-	bvec <- NULL
-	
-	if (is.null(indices)) {    
-		if (is.matrix(data)) {
-			bvec <- .BrainVectorFromMatrix(data, space)
-		} else if ( all(dim(space) == dim(data)) ) {
-			bvec <- new("BrainVector", .Data=data, space=space)
-		} else {
-			data <- array(data, c(dim(space)[1], dim(space)[2], dim(space)[3], dim(space)[4]))
-			bvec <- new("BrainVector", .Data=data, space=space)
-		}      
-	} else {  
-		bvec <- .BrainVectorFromIndices(data, space, indices)
-	}
-	
-	bvec
-}
+#BrainVector <- function(data, space, indices=NULL, mask=NULL) {
+#	
+#	space <- .createVectorSpaceFromData(data, space, indices)
+#	
+#	bvec <- NULL
+#	
+#	if (is.null(indices)) {    
+#		if (is.matrix(data)) {
+#			bvec <- .BrainVectorFromMatrix(data, space)
+#		} else if ( all(dim(space) == dim(data)) ) {
+#			bvec <- new("BrainVector", .Data=data, space=space)
+#		} else {
+#			data <- array(data, c(dim(space)[1], dim(space)[2], dim(space)[3], dim(space)[4]))
+#			bvec <- new("BrainVector", .Data=data, space=space)
+#		}      
+#	} else {  
+#		bvec <- .BrainVectorFromIndices(data, space, indices)
+#	}
+#	
+#	bvec
+#}
 
+#' DenseBrainVector
+#' 
 #' constructor function for class \code{\linkS4class{DenseBrainVector}}
+#' 
+#' @param data a 4-dimensonal \code{array}
+#' @param space a \code{\linkS4class{BrainSpace}} object
+#' @param source an optional \code{\linkS4class{BrainSource}} object
+#' @param label a label of type \code{character} 
 DenseBrainVector <- function(data, space, source=NULL, label="") {
 	if (ndim(space) != 4) {
 		stop("DenseBrainVector: data array must be 4-dimensional")
@@ -238,8 +244,15 @@ setMethod(f="loadData", signature=signature("BrainBucketSource"),
 			}
 			
 		})
-
-#' Constructor function for BrainBucketSource
+#' BrainBucketSource
+#' 
+#' Constructor function for \code{\linkS4class{BrainBucketSource}} class
+#' 
+#' @param fileName the name of the bucket file
+#' @param pattern optional regular expression used to filter the sub-volumes using associated labels
+#' @param indices optional set of sub-volume indices to load
+#' @export BrainBucketSource
+#' @rdname BrainBucketSource-class
 BrainBucketSource <- function(fileName, pattern=NULL, indices=NULL) {
 	stopifnot(is.character(fileName))
 	stopifnot(file.exists(fileName))
@@ -271,7 +284,14 @@ BrainBucketSource <- function(fileName, pattern=NULL, indices=NULL) {
 	new("BrainBucketSource", metaInfo=metaInfo, indices=indices, sourceList=sourceList, cache=new.env(hash=TRUE))	
 }
 
-#' load brain bucket from file
+#' loadBucket
+#' 
+#' load a BrainBucket object from file
+#' 
+#' @param fileName the name of the file to load
+#' @param pattern optional regular expression used to filter the sub-volumes using associated labels
+#' @param indices optional set of sub-volume indices to load
+#' @export loadBucket
 loadBucket <- function(fileName, pattern=NULL, indices=NULL) {
 	bsource <- BrainBucketSource(fileName, pattern, indices)
 	

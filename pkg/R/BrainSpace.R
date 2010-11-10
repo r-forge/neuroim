@@ -49,11 +49,18 @@ setMethod(f="show", signature=signature("BrainSpace"),
 		}
 )
 
+#' add dimension to \code{\linkS4class{BrainSpace}}
+#' 
+#' function is used to add a dimension to a \code{\linkS4class{BrainSpace}} object
+#' @param x an \code{\linkS4class{BrainSpace}} object
+#' @param n the size of the dimension to be added
+#' @rdname addDim-methods
 setMethod(f="addDim", signature=signature(x = "BrainSpace", n="numeric"),
 		def=function(x, n) {
 			BrainSpace(c(dim(x), n), origin(x), spacing(x), axes(x), trans(x))
 		})
 
+#' @rdname addDim-methods
 setMethod(f="dropDim", signature=signature(x = "BrainSpace"),
 		def=function(x) {			
 			D <- dim(x)		
