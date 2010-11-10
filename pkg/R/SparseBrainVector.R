@@ -279,19 +279,16 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
           def=function (x, i, j, k, m, ..., drop) {
             if (missing(k)) k = 1:dim(x)[3]
             if (missing(m)) m = 1:dim(x)[4]
-			
-           
-            
-            
+			b            
           })
 
 
- setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
+ setMethod(f="takeVolume", signature=signature(x="SparseBrainVector", i="numeric"),
 		  def=function(x, i, merge=FALSE) {
 			  idx <- which(x@mask > 0)
 			  
-			  makevol <- function(i) {
-				  bspace <- dropDim(space(x))
+			  bspace <- dropDim(space(x))
+			  makevol <- function(i) {				  
 				  bv <- BrainVolume(x@data[,i], bspace, indices=idx)
 			  }
 			  

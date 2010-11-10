@@ -17,8 +17,8 @@ roxygen()
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
 #' @return \code{\linkS4class{DenseBrainVolume}} instance 
 #' @export BrainVolume
-BrainVolume <- function(data, space, indices=NULL, source=NULL) {
-	DenseBrainVolume(data,space,source)	
+BrainVolume <- function(data, space, label="", source=NULL, indices=NULL) {
+	DenseBrainVolume(data,space,source=source, label=label, indices=indices)	
 }
 
 #' Construct a \code{\linkS4class{DenseBrainVolume}} instance
@@ -27,7 +27,7 @@ BrainVolume <- function(data, space, indices=NULL, source=NULL) {
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
 #' @return \code{\linkS4class{DenseBrainVolume}} instance 
 #' @export DenseBrainVolume
-DenseBrainVolume <- function(data, space, indices=NULL, source=NULL, label="") {
+DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 	if (length(dim(data)) != 3) {
 		stop("DenseBrainVolume: data argument must have three dimensions")
 	} 
@@ -40,6 +40,13 @@ DenseBrainVolume <- function(data, space, indices=NULL, source=NULL, label="") {
 		meta <- BrainMetaInfo(dim(data), spacing(space), origin(space), "FLOAT", label)
 		source <- new("BrainSource", metaInfo=meta)
 	}
+	
+	if (!is.null(indices)) {
+		newdat <- array(0, dim(space))
+		newdat[indices] <- data
+		data <- newdat
+	}
+	
 			
 	new("DenseBrainVolume", source=source, .Data=data, space=space)
 

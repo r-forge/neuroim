@@ -354,9 +354,11 @@ setMethod("eachVolume", signature=signature(x="BrainVector", FUN="function", wit
 #' extract one or more volumes from a  BrainVector object
 setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 		def=function(x, i, merge=FALSE) {
+			
+			xs <- space(x)
+			bspace <- BrainSpace(dim(x)[1:3], origin=origin(xs), spacing=spacing(xs), axes(xs), trans(xs))
+			
 			makevol <- function(i) {
-				xs <- space(x)
-				bspace <- BrainSpace(dim(x)[1:3], origin=origin(xs), spacing=spacing(xs), axes(xs), trans(xs))
 				bv <- BrainVolume(x@.Data[,,,i], bspace)
 			}
 			
