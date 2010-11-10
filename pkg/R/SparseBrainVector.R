@@ -220,54 +220,27 @@ setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
  
  setMethod("series", signature(x="SparseBrainVector", i="numeric"),
 		 def=function(x,i, j, k) {	
-			 if (missing(j) && missing(k)) {
+			 if (missing(j) && missing(k)) { 
 				 idx <- lookup(x, as.integer(i))
-				 idx <- idx[idx!=0]
-				 if (length(idx) == 0) {
-					 rep(0, dim(x)[4])
+				 idx.nz <- idx[idx!=0]
+				 if (length(idx.nz) == 0) {
+					 matrix(0, dim(x)[4], length(i))
 				 } else {
 					 mat <- matrix(0, dim(x)[4], length(i))
-					 mat[,idx] <- x@data[,idx]     				 
+					 mat[, idx != 0] <- x@data[,idx.nz]     
+					 mat
 				 }
-					 
-				 
-				 vdim <- dim(x)[1:3]
-				 mat <- arrayInd(i, vdim)
-				 apply(mat, 1, function(i) x[i[1], i[2], i[3],])			
 			 } else {
-				 x[i,j,k,]	
+				 vdim <- dim(x)
+				 slicedim <- vdim[1] * vdim[2]
+				 idx <- slicedim*(k-1) + (j-1)*vdim[1] + i
+				 callGeneric(x, idx)
 			 }
+				 
+			
 		 })
  
            
-
-setMethod(f="series", signature=signature(x="SparseBrainVector", i="numeric"),
-         def=function(x,i, j, k) {
-           if (missing(j) && missing(k)) {
-             if (length(i) == 3) {
-               return(x[i[1], i[2], i[3]])
-             }
-             
-             idx <- lookup(x, as.integer(i))
-             idx <- idx[idx!=0]
-
-             if (length(idx) == 0) {
-               rep(0, dim(x)[4])
-             } else {
-               mat <- matrix(0, dim(x)[4], length(idx))
-               mat[,idx != 0] <- x@data[,idx]               
-             }
-           } else if (missing(k)) {
-             stop("must supply either linearized index (i) or grid location (i,j,k)")
-           } else {
-             
-             xdim <- dim(x)
-             slicedim <- xdim[1] * xdim[2]
-             idx <- slicedim*(k-1) + (j-1)*xdim[1] + i
-             x@data[,idx]
-           }
-         })
-
 
 setMethod(f="concat", signature=signature(x="SparseBrainVector", y="SparseBrainVector"),
           def=function(x,y,...) {
@@ -309,24 +282,31 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
 			
            
             
-            ######
-            ## cache grid coordinates?
-          })
-
-setMethod(f="takeVolume", signature=signature(x="SparseBrainVector", i="numeric"),
-          def=function(x,i) {
             
-            if (length(i) > 1) {
-              stop("can only take one volume at a time (for now).")
-            }
-
-            xs <- space(x)
-            bspace <- BrainSpace(dim(x)[1:3], origin=origin(xs), spacing=spacing(xs), orientation(xs), trans(xs))
-            vals <- array(0, (dim(x)[1:3]))
-            vals[indices(x)] <- x@data[i,]
-            bv <- BrainVolume(vals, bspace)
-            return(bv)
           })
+
+
+ setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
+		  def=function(x, i, merge=FALSE) {
+			  idx <- which(x@mask > 0)
+			  
+			  makevol <- function(i) {
+				  bspace <- dropDim(space(x))
+				  bv <- BrainVolume(x@data[,i], bspace, indices=idx)
+			  }
+			  
+			  res <- lapply(i, makevol)
+			  
+			  if (length(res) > 1 && merge) {
+				  res <- do.call("concat", res)				
+			  }
+			  
+			  if (length(res) == 1) {
+				  res[[1]]
+			  } else {
+				  res
+			  }											
+		  })
 
 
 
