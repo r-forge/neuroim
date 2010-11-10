@@ -17,7 +17,7 @@ roxygen()
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
 #' @return \code{\linkS4class{DenseBrainVolume}} instance 
 #' @export BrainVolume
-BrainVolume <- function(data, space, source=NULL) {
+BrainVolume <- function(data, space, indices=NULL, source=NULL) {
 	DenseBrainVolume(data,space,source)	
 }
 
@@ -27,7 +27,7 @@ BrainVolume <- function(data, space, source=NULL) {
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
 #' @return \code{\linkS4class{DenseBrainVolume}} instance 
 #' @export DenseBrainVolume
-DenseBrainVolume <- function(data, space, source=NULL, label="") {
+DenseBrainVolume <- function(data, space, indices=NULL, source=NULL, label="") {
 	if (length(dim(data)) != 3) {
 		stop("DenseBrainVolume: data argument must have three dimensions")
 	} 
