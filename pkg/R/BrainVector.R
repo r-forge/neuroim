@@ -587,6 +587,8 @@ setMethod(f="seriesIter", signature=signature(x="BrainVector"),
 			
 		})
 
+
+
 setMethod("as.sparse", signature(x="DenseBrainVector", mask="numeric"),
 		def=function(x, mask) {
 			vdim <- dim(x)[1:3]
