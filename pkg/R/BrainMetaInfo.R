@@ -15,14 +15,16 @@ roxygen()
 #' @param x an object specifying the infromation required to produce the reader
 #' @param offset the byte offset (number of bytes to skip before reading)
 #' @exportMethod dataReader
+#' @rdname dataReader-methods
 setGeneric(name="dataReader", def=function(x, offset) standardGeneric("dataReader"))
 
-
+#' @rdname dim-methods
 setMethod(f="dim", signature=signature("FileMetaInfo"), 
 		def=function(x) {
 			x@Dim
 		})
 
+#' @rdname dataReader-methods
 setMethod(f="dataReader", signature=signature("NIfTIMetaInfo"), 
 		def=function(x, offset=0) {
 			if (x@fileDescriptor@dataEncoding == "gzip") {
@@ -31,7 +33,8 @@ setMethod(f="dataReader", signature=signature("NIfTIMetaInfo"),
 				BinaryReader(x@dataFile, x@dataOffset+offset, .getRStorage(x@dataType), x@bytesPerElement, x@endian)
 			}
 		})
-			
+
+#' @rdname dataReader-methods
 setMethod(f="dataReader", signature=signature("AFNIMetaInfo"), 
 		def=function(x, offset=0) {
 			if (x@fileDescriptor@dataEncoding == "gzip") {
@@ -57,6 +60,7 @@ niftiDim <- function(nifti_header) {
 #' @param additionalAxes axes for dimensions > 3 (e.g. time, color band, direction)
 #' @return an instance of class \code{\linkS4class{BrainMetaInfo}}
 #' @export BrainMetaInfo
+#' @rdname BrainMetaInfo-class
 BrainMetaInfo <- function(Dim, spacing, origin=rep(0, length(spacing)), dataType="FLOAT", label="", spatialAxes=OrientationList3D$AXIAL_LPI, additionalAxes=NullAxis) {
 	new("BrainMetaInfo",
 			Dim=Dim,
@@ -74,6 +78,7 @@ BrainMetaInfo <- function(Dim, spacing, origin=rep(0, length(spacing)), dataType
 #' @param nifti_header a \code{list} returned by \code{readNIftiHeader}
 #' @return an instance of class \code{\linkS4class{NIfTIMetaInfo}}
 #' @export NIfTIMetaInfo
+#' @rdname NIfTIMetaInfo-class
 NIfTIMetaInfo <- function(descriptor, nifti_header) {
 	stopifnot(!is.null(nifti_header$fileType) || (nifti_header$fileType == "NIfTI"))
 
@@ -97,7 +102,7 @@ NIfTIMetaInfo <- function(descriptor, nifti_header) {
 }
 
 
-
+#' @rdname show-methods
 setMethod(f="show", signature=signature("FileMetaInfo"), 
 		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")

@@ -18,7 +18,7 @@ BrainSlice <- function(data, space, indices=NULL) {
 	}
 }
 
-
+#' @rdname gridToIndex-methods
 setMethod(f="gridToIndex", signature=signature(x = "BrainSlice", coords="matrix"),
 		def=function(x, coords) {            
 			dx <- dim(x)
@@ -28,7 +28,7 @@ setMethod(f="gridToIndex", signature=signature(x = "BrainSlice", coords="matrix"
 					})
 		})
 
-
+#' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x = "BrainSlice", idx="index"),
 		def=function(x, idx) {            
 			adim <- dim(x)

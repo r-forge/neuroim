@@ -29,30 +29,35 @@ AxisSet3D <- function(i, j, k) {
 #' get the number of dimensions for this AxisSet
 #' @param x the AxisSet to query 
 #' @exportMethod ndim
+#' @rdname ndim-methods
 setMethod(f="ndim",signature=signature(x= "AxisSet"), def=function(x) { x@ndim })
 
-
+#' @rdname show-methods
 setMethod(f="show", signature=signature("NamedAxis"), 
 		def=function(object) {
 			cat(object@axis)
 		})
 
+#' @rdname print-methods
 setMethod(f="print", signature=signature("NamedAxis"), 
 		def=function(x, ...) {
 			x@axis
 		})
 
+#' @rdname show-methods
 setMethod(f="show", signature=signature("AxisSet1D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
 			cat("Axis 1:", print(object@i), "\n")
 		})
 
+#' @rdname print-methods
 setMethod(f="print", signature=signature("AxisSet2D"), 
 		def=function(x, ...) {
 			paste(print(x@i), "-", print(x@j))
 		})
 
+#' @rdname show-methods
 setMethod(f="show", signature=signature("AxisSet2D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
@@ -60,11 +65,14 @@ setMethod(f="show", signature=signature("AxisSet2D"),
 			cat("Axis 2:", print(object@j), "\n")
 		})
 
+#' @rdname print-methods
 setMethod(f="print", signature=signature("AxisSet3D"), 
 		def=function(x, ...) {
 			paste(print(x@i), "-", print(x@j), "-", print(x@k))
 		})
 
+
+#' @rdname show-methods
 setMethod(f="show", signature=signature("AxisSet3D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
@@ -72,6 +80,9 @@ setMethod(f="show", signature=signature("AxisSet3D"),
 			cat("Axis 2:", print(object@j), "\n")
 			cat("Axis 3:", print(object@k), "\n")
 		})
+
+
+#' @rdname show-methods
 setMethod(f="show", signature=signature("AxisSet4D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
@@ -191,7 +202,6 @@ matchAnatomy3D <- function(axis1, axis2, axis3) {
 #' given two named axes return AxisSet2D singleton
 #' @param axis1 the first axis
 #' @param axis2 the second axis
-#' @param axis3 the thrid axis	
 #' @export matchAnatomy2D 
 matchAnatomy2D <- function(axis1, axis2) {
 	for (orient in OrientationList2D) {

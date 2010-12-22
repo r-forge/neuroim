@@ -13,6 +13,7 @@ roxygen()
 #' @param fileName file name to be matched
 #' @return TRUE for match, FALSE otherwise
 #' @exportMethod fileMatches
+#' @rdname fileMatches-methods
 setGeneric(name="fileMatches", def=function(x, fileName) standardGeneric("fileMatches"))
 
 
@@ -22,6 +23,7 @@ setGeneric(name="fileMatches", def=function(x, fileName) standardGeneric("fileMa
 #' @param fileName file name to be matched
 #' @return TRUE for match, FALSE otherwise
 #' @exportMethod headerFileMatches
+#' @rdname headerFileMatches-methods
 setGeneric(name="headerFileMatches", def=function(x, fileName) standardGeneric("headerFileMatches"))
 
 #' Generic function to test whether a file name conforms to the given a \code{\linkS4class{BrainFileDescriptor}} instance.
@@ -30,6 +32,7 @@ setGeneric(name="headerFileMatches", def=function(x, fileName) standardGeneric("
 #' @param fileName file name to be matched
 #' @return TRUE for match, FALSE otherwise
 #' @exportMethod dataFileMatches
+#' @rdname dataFileMatches-methods
 setGeneric(name="dataFileMatches", def=function(x, fileName) standardGeneric("dataFileMatches"))
 
 #' Generic function to get the name of the header file, given a file name and a \code{\linkS4class{BrainFileDescriptor}} instance.
@@ -37,6 +40,7 @@ setGeneric(name="dataFileMatches", def=function(x, fileName) standardGeneric("da
 #' @param fileName file name to be stripped of its extension
 #' @return the correct header name
 #' @exportMethod headerFile
+#' @rdname headerFile-methods
 setGeneric(name="headerFile", def=function(x, fileName) standardGeneric("headerFile"))
 
 #' Generic function to get the name of the data file, given a file name and a \code{\linkS4class{BrainFileDescriptor}} instance.
@@ -44,6 +48,7 @@ setGeneric(name="headerFile", def=function(x, fileName) standardGeneric("headerF
 #' @param fileName file name to be stripped of its extension
 #' @return the correct header name
 #' @exportMethod dataFile
+#' @rdname dataFile-methods
 setGeneric(name="dataFile", def=function(x, fileName) standardGeneric("dataFile"))
 
 #' Generic function to strip extension from file name, given a \code{\linkS4class{BrainFileDescriptor}} instance.
@@ -51,36 +56,40 @@ setGeneric(name="dataFile", def=function(x, fileName) standardGeneric("dataFile"
 #' @param fileName file name to be stripped of its extension
 #' @return fileName without extension
 #' @exportMethod stripExtension
+#' @rdname stripExtension-methods
 setGeneric(name="stripExtension", def=function(x, fileName) standardGeneric("stripExtension"))
 
 #' Generic function to read image meta info given a file and a \code{\linkS4class{BrainFileDescriptor}} instance.
 #' @param x descriptor instance
 #' @param fileName file name contianing meta information
 #' @exportMethod readMetaInfo
+#' @rdname readMetaInfo-methods
 setGeneric(name="readMetaInfo", def=function(x, fileName) standardGeneric("readMetaInfo"))
 
 
 
 
 
-
+#' @rdname fileMatches-methods
 setMethod(f="fileMatches", signature=signature(x= "BrainFileDescriptor", fileName="character"),
 		def=function(x, fileName) {
 			headerFileMatches(x,fileName) || dataFileMatches(x,fileName)			
 		})
 
-
+#' @rdname headerFileMatches-methods
 setMethod(f="headerFileMatches", signature=signature(x= "BrainFileDescriptor", fileName="character"),
 		def=function(x, fileName) {
 			regexpr(paste(".*", x@headerExtension, "$", sep=""), fileName) > 0
 					
 		})
- 
+
+#' @rdname dataFileMatches-methods
 setMethod(f="dataFileMatches", signature=signature(x= "BrainFileDescriptor", fileName="character"),
 		def=function(x, fileName) {
 			regexpr(paste(".*", x@dataExtension, "$", sep=""), fileName) > 0
 		})
 
+#' @rdname headerFile-methods
 setMethod(f="headerFile",signature=signature(x= "BrainFileDescriptor", fileName="character"),
 		def=function(x, fileName) {
 			if (headerFileMatches(x, fileName)) {
@@ -92,6 +101,7 @@ setMethod(f="headerFile",signature=signature(x= "BrainFileDescriptor", fileName=
 			}		
 		})
 
+#' @rdname dataFileMatches-methods
 setMethod(f="dataFile",signature=signature(x= "BrainFileDescriptor", fileName="character"),
 		def=function(x, fileName) {
 			if (dataFileMatches(x, fileName)) {
@@ -103,6 +113,7 @@ setMethod(f="dataFile",signature=signature(x= "BrainFileDescriptor", fileName="c
 			}				
 		})
 
+#' @rdname stripExtension-methods
 setMethod(f="stripExtension",signature=signature(x= "BrainFileDescriptor", fileName="character"),
 		def=function(x, fileName) {
 			if (headerFileMatches(x, fileName)) {
@@ -116,13 +127,14 @@ setMethod(f="stripExtension",signature=signature(x= "BrainFileDescriptor", fileN
 			}		
 		})
 
-
+#' @rdname readMetaInfo-methods
 setMethod(f="readMetaInfo",signature=signature(x= "NIfTIFileDescriptor"),
 		def=function(x, fileName) {
 			header <- readNIfTIHeader(fileName)			
 			NIfTIMetaInfo(x, header)
 		})
 
+#' @rdname readMetaInfo-methods
 setMethod(f="readMetaInfo",signature=signature(x= "AFNIFileDescriptor"),
 		def=function(x, fileName) {
 			header <- readAFNIHeader(fileName)	

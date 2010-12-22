@@ -1,5 +1,5 @@
 
-
+#' @rdname Arith-methods
 setMethod(f="Arith", signature=signature(e1="BrainVolume", e2="BrainVolume"),
           def=function(e1, e2) {
             if (!all(dim(e1) == dim(e2))) {
@@ -10,7 +10,8 @@ setMethod(f="Arith", signature=signature(e1="BrainVolume", e2="BrainVolume"),
             bv <- BrainVolume(ret, space(e1))
      
           })
-          
+
+#' @rdname Arith-methods
 setMethod(f="Arith", signature=signature(e1="BrainVector", e2="BrainVector"),
           def=function(e1, e2) {
             if (!all(dim(e1) == dim(e2))) {
@@ -21,7 +22,8 @@ setMethod(f="Arith", signature=signature(e1="BrainVector", e2="BrainVector"),
             bv <- BrainVector(ret, space(e1))
      
           })
-  
+ 
+#' @rdname Arith-methods
  setMethod(f="Arith", signature=signature(e1="BrainVector", e2="BrainVolume"),
 		  def=function(e1, e2) {
 			  if (!all(dim(e1)[1:3] == dim(e2))) {

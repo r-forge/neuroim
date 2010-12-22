@@ -47,7 +47,7 @@ BinaryWriter <- function(output, byteOffset, dataType, bytesPerElement, endian=.
 
 ## code duplication, fix me. introduce "BinaryConnection superclass
 
-
+#' @rdname initialize-methods
 setMethod(f="initialize", signature=signature("BinaryReader"), 
 		def=function(.Object, input, byteOffset, dataType, bytesPerElement, endian) {
 			.Object@input <- input
@@ -63,7 +63,7 @@ setMethod(f="initialize", signature=signature("BinaryReader"),
 		}) 
 
 ## code duplication, fix me
-
+#' @rdname initialize-methods
 setMethod(f="initialize", signature=signature("BinaryWriter"), 
 		def=function(.Object, output, byteOffset, dataType, bytesPerElement, endian) {
 			.Object@output <- output
@@ -78,12 +78,13 @@ setMethod(f="initialize", signature=signature("BinaryWriter"),
 			.Object
 		})  
 
-
+#' @rdname readElements-methods
 setMethod(f="readElements", signature=signature(x= "BinaryReader", numElements="numeric"),
 		def=function(x, numElements) {
 			readBin(x@input, what=x@dataType, size=x@bytesPerElement, n=numElements, endian=x@endian)		
 		})
 
+#' @rdname writeElements-methods
 setMethod(f="writeElements", signature=signature(x= "BinaryWriter", els="numeric"),
 		def=function(x, els) {
 			if (.getRStorage(x@dataType) == "integer") {
@@ -97,12 +98,13 @@ setMethod(f="writeElements", signature=signature(x= "BinaryWriter", els="numeric
 		})
 
 ## should there be a common superclass for Reader/Writer?
-
+#' @rdname close-methods
 setMethod(f="close", signature=signature(con= "BinaryReader"),
 		def=function(con) {
 			base::close(con@input)				
 		})
 
+#' @rdname close-methods
 setMethod(f="close", signature=signature(con= "BinaryWriter"),
 		def=function(con) {
 			base::close(con@output)				

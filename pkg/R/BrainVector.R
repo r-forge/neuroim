@@ -117,6 +117,9 @@ roxygen()
 #' @param space a \code{\linkS4class{BrainSpace}} object
 #' @param source an optional \code{\linkS4class{BrainSource}} object
 #' @param label a label of type \code{character} 
+#' @return \code{\linkS4class{DenseBrainVector}} instance 
+#' @export 
+#' @rdname DenseBrainVector-class
 DenseBrainVector <- function(data, space, source=NULL, label="") {
 	if (ndim(space) != 4) {
 		stop("DenseBrainVector: data array must be 4-dimensional")
@@ -320,6 +323,7 @@ setAs("DenseBrainVector", "array", function(from) from@.Data)
 setAs("BrainVector", "array", function(from) from[,,,])
 
 
+#' @rdname show-methods
 setMethod(f="show",
 		signature=signature(object="BrainVectorSource"),
 		def=function(object) {
@@ -331,6 +335,8 @@ setMethod(f="show",
 			
 		})
 
+
+#' @rdname show-methods
 setMethod("show",
 		signature=signature(object="BrainVector"),
 		def=function(object) {
@@ -343,17 +349,20 @@ setMethod("show",
 
 
 #' apply function to each volume in a BrainVector object
+#' @rdname eachVolume-methods
 setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="missing"),
 		def=function(x, FUN, ...) {
 			lapply(1:(dim(x)[4]), function(tt) FUN(x[,,,tt]))				
 		})
 
 #' apply function to each volume in a BrainBucket object
+#' @rdname eachVolume-methods
 setMethod(f="eachVolume", signature=signature(x="BrainBucket", FUN="function", withIndex="missing"),
 		def=function(x, FUN, ...) {
 			lapply(1:(dim(x)[4]), function(tt) FUN(x[[tt]]))				
 		})
 #' apply function to each volume in a BrainVector object
+#' @rdname eachVolume-methods
 setMethod("eachVolume", signature=signature(x="BrainBucket", FUN="function", withIndex="logical"),
 		def=function(x, FUN, withIndex, ...) {
 			lapply(1:(dim(x)[4]), function(tt) {					
@@ -363,6 +372,7 @@ setMethod("eachVolume", signature=signature(x="BrainBucket", FUN="function", wit
 		})
 
 #' apply function to each volume in a BrainVector object
+#' @rdname eachVolume-methods
 setMethod("eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="logical"),
 		def=function(x, FUN, withIndex, ...) {
 			lapply(1:(dim(x)[4]), function(tt) {					
@@ -371,7 +381,12 @@ setMethod("eachVolume", signature=signature(x="BrainVector", FUN="function", wit
 					})
 		})
 
+
+#' takeVolume
+#' 
 #' extract one or more volumes from a  BrainVector object
+#' 
+#' @rdname takeVolume-methods
 setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 		def=function(x, i, merge=FALSE) {
 			
@@ -396,6 +411,7 @@ setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 		})
 
 
+#' @rdname eachSeries-methods
 setMethod(f="eachSeries", signature=signature(x="BrainVector", FUN="function", withIndex="missing"),
 		def=function(x, FUN, withIndex=FALSE, ...) {
 			
@@ -500,38 +516,42 @@ loadSeries <- function(filenames, indices, volidx=NULL, reduce=T, demean=F, verb
 
 
 
-.loadSparseVector <- function(filename, mask) {
-	if (!.isNIFTI(filename)) {
-		stop("only support NIFTI files at present")
-	}
-	
-	nfile <- NIFTIFile(filename)
-	header <- readHeader(nfile)
-	ddim <- dataDim(header)
-	
-	if (length(ddim) != 4) {
-		stop("Error: file does not have 4 dimensions, which is required for a BrainVector object")
-	}
-	
-	
-	if (inherits(mask, "array") || inherits(mask, "BrainData")) {
-		# should check that dimensions are equal
-		ind <- which(mask > 0)
-	} else {
-		stop("mask must be of type array or BrainData")
-	}
-	
-	mat <- readData(nfile, ind)
-	
-	space <- createSpace(header)
-	SparseBrainVector(mat, space, indices=ind)
-	
-}
+#.loadSparseVector <- function(filename, mask) {
+#	if (!.isNIFTI(filename)) {
+#		stop("only support NIFTI files at present")
+#	}
+#	
+#	nfile <- NIFTIFile(filename)
+#	header <- readHeader(nfile)
+#	ddim <- dataDim(header)
+#	
+#	if (length(ddim) != 4) {
+#		stop("Error: file does not have 4 dimensions, which is required for a BrainVector object")
+#	}
+#	
+#	
+#	if (inherits(mask, "array") || inherits(mask, "BrainData")) {
+#		# should check that dimensions are equal
+#		ind <- which(mask > 0)
+#	} else {
+#		stop("mask must be of type array or BrainData")
+#	}
+#	
+#	mat <- readData(nfile, ind)
+#	
+#	space <- createSpace(header)
+#	SparseBrainVector(mat, space, indices=ind)
+#}
 
+
+#' loadVector
+#' 
 #' load an image volume from a file
+#' 
 #' @param fileName the name of the file to load
 #' @param indices the indices of the sub-volumes to load (e.g. if the file is 4-dimensional)
 #' @param mask a mask defining the spatial elements to load 
+#' @return an \code{\linkS4Class{BrainVector}} object
 #' @export loadVector
 loadVector  <- function(fileName, indices=NULL, mask=NULL) {
 	src <- BrainVectorSource(fileName, indices, mask)
@@ -548,17 +568,21 @@ loadVector  <- function(fileName, indices=NULL, mask=NULL) {
 
 
 
+#' @rdname concat-methods
 setMethod(f="concat", signature=signature(x="BrainVector", y="BrainVolume"),
 		def=function(x,y, ...) {
 			.concat4D(x,y,...)			
 		})
 
 
+#' @rdname concat-methods
 setMethod(f="concat", signature=signature(x="BrainVector", y="BrainVector"),
 		def=function(x,y,...) {
 			.concat4D(x,y,...)
 		})
 
+
+#' @rdname series-methods
 setMethod("series", signature(x="BrainVector", i="matrix"),
 		def=function(x,i) {
 			if (!is.matrix(i) && length(i) == 3) {
@@ -570,6 +594,7 @@ setMethod("series", signature(x="BrainVector", i="matrix"),
 	
 		})
 
+#' @rdname series-methods
 setMethod("series", signature(x="BrainVector", i="numeric"),
 		def=function(x,i, j, k) {	
 			if (missing(j) && missing(k)) {
@@ -581,7 +606,7 @@ setMethod("series", signature(x="BrainVector", i="numeric"),
 			}
 		})
 
-
+#' @rdname seriesIter-methods
 setMethod(f="seriesIter", signature=signature(x="BrainVector"), 
 		def=function(x) {
 			len <- prod(dim(x)[1:3])
@@ -610,7 +635,7 @@ setMethod(f="seriesIter", signature=signature(x="BrainVector"),
 		})
 
 
-
+#' @rdname as.sparse-methods
 setMethod("as.sparse", signature(x="DenseBrainVector", mask="numeric"),
 		def=function(x, mask) {
 			vdim <- dim(x)[1:3]
@@ -651,7 +676,8 @@ setMethod("as.sparse", signature(x="DenseBrainVector", mask="numeric"),
 #			
 #		})              
 
-
+#' @rdname writeVector-methods
+#' @exportMethod writeVector
 setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character"),
 		def=function(x, fileName) {
 			stop()

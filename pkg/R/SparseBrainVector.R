@@ -46,8 +46,14 @@ SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 	
 	new("SparseBrainVectorSource", metaInfo=metaInfo, indices=indices, mask=mask)				
 }
-
-	
+#' SparseBrainVector
+#' 
+#' constructs a SparseBrainVector object
+#' 
+#' @param data an array which can be a \code{matrix} or 4-D \code{array}
+#' @param space a BrainSpace instance
+#' @param mask a 3D \code{array} of type \code{logical} 
+#' @rdname SparseBrainVector-class 	
 SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 	stopifnot(inherits(space, "BrainSpace"))
 	
@@ -97,6 +103,7 @@ SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 #' Load data from a \code{\linkS4class{SparseBrainVectorSource}}
 #' @param x an instance of class \code{\linkS4class{SparseBrainVectorSource}} 
 #' @return an instance of class \code{\linkS4class{SparseBrainVector}} 
+#' @rdname loadData-methods 
 setMethod(f="loadData", signature=c("SparseBrainVectorSource"), 
 		def=function(x) {		
 			meta <- x@metaInfo
@@ -122,30 +129,31 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 		})
 
 
-          
+#' @rdname indices-methods           
 setMethod(f="indices", signature=signature(x="SparseBrainVector"),
           def=function(x) {
             indices(x@map)
           })
           
-setMethod(f="indices", signature=signature(x="TiledBrainVector"),
-          def=function(x) {
-            ret <- unlist(x@indexList)
-            names(ret) <- NULL
-            ret
-          })
+#setMethod(f="indices", signature=signature(x="TiledBrainVector"),
+#          def=function(x) {
+#           ret <- unlist(x@indexList)
+#            names(ret) <- NULL
+#            ret
+#          })
   
 
-setMethod(f="coords", signature=signature(x="TiledBrainVector"),
-          def=function(x,i) {
-            if (missing(i)) {
-              return(indexToGrid(space(mask), indices(x)))
-            }
-            indexToGrid(space(mask), i)
-          })
+#setMethod(f="coords", signature=signature(x="TiledBrainVector"),
+#          def=function(x,i) {
+#            if (missing(i)) {
+#              return(indexToGrid(space(mask), indices(x)))
+#            }
+#
+#            indexToGrid(space(mask), i)
+#          })
             
             
-            
+#' @rdname coords-methods             
 setMethod(f="coords", signature=signature(x="SparseBrainVector"),
           def=function(x,i) {           
             if (missing(i)) {
@@ -154,6 +162,8 @@ setMethod(f="coords", signature=signature(x="SparseBrainVector"),
             coords(x@map, i)            
           })            
 
+  
+#' @rdname eachSeries-methods 
 setMethod(f="eachSeries", signature=signature(x="SparseBrainVector", FUN="function"),
           def=function(x, FUN, withIndex=FALSE) {
             ret <- list()
@@ -172,6 +182,8 @@ setMethod(f="eachSeries", signature=signature(x="SparseBrainVector", FUN="functi
           })
 
 
+  
+ #' @rdname series-methods 
 setMethod(f="seriesIter", signature=signature(x="SparseBrainVector"), 
 	def=function(x) {
 		len <- NCOL(x@data)
@@ -198,19 +210,22 @@ setMethod(f="seriesIter", signature=signature(x="SparseBrainVector"),
 
 
             
-setMethod(f="series", signature=signature(x="TiledBrainVector", i="numeric"),
-	def=function(x,i, j, k) {
-		stop()         
-       })
+
+
+#setMethod(f="series", signature=signature(x="TiledBrainVector", i="numeric"),
+#	def=function(x,i, j, k) {
+#		stop()         
+#      })
               
-            
-setMethod(f="series", signature=signature(x="TiledBrainVector", i="matrix"),
-         def=function(x,i) {
-           idx <- gridToIndex(x@mask, i)
-           callGeneric(x,idx)
-         })
+
+#setMethod(f="series", signature=signature(x="TiledBrainVector", i="matrix"),
+#         def=function(x,i) {
+#          idx <- gridToIndex(x@mask, i)
+#           callGeneric(x,idx)
+#         })
   
 
+ #' @rdname series-methods 
 setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
          def=function(x,i) {
            idx <- gridToIndex(x@mask, i)
@@ -218,6 +233,7 @@ setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
          })
  
  
+ #' @rdname series-methods 
  setMethod("series", signature(x="SparseBrainVector", i="numeric"),
 		 def=function(x,i, j, k) {	
 			 if (missing(j) && missing(k)) { 
@@ -241,7 +257,7 @@ setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
 		 })
  
            
-
+#' @rdname concat-methods 
 setMethod(f="concat", signature=signature(x="SparseBrainVector", y="SparseBrainVector"),
           def=function(x,y,...) {
             if (!all(indices(x) == indices(y))) {
@@ -268,13 +284,14 @@ setMethod(f="concat", signature=signature(x="SparseBrainVector", y="SparseBrainV
           })
           
           
-          
+#' @rdname lookup-methods          
 setMethod(f="lookup", signature=signature(x="SparseBrainVector", i="numeric"),
          def=function(x,i) {
             lookup(x@map, i)
           })
                       
 
+  #' @rdname [-methods
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j = "numeric"),
           def=function (x, i, j, k, m, ..., drop) {
             if (missing(k)) k = 1:dim(x)[3]
@@ -283,6 +300,7 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
           })
 
 
+ #' @rdname takeVolume-methods
  setMethod(f="takeVolume", signature=signature(x="SparseBrainVector", i="numeric"),
 		  def=function(x, i, merge=FALSE) {
 			  idx <- which(x@mask > 0)
@@ -306,7 +324,7 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
 		  })
 
 
-
+#' @rdname writeVector-methods
 setMethod(f="writeVector",signature=signature(x="SparseBrainVector", fileName="character"),
           def=function(x, fileName) {
             if (typeof(x) == "double") {

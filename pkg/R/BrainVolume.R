@@ -10,23 +10,32 @@ roxygen()
 roxygen()
 
 
-
+#' BrainVolume
+#' 
 #' Construct a \code{\linkS4class{BrainVolume}} instance, using default (dense) implementation
 #' @param data a three-dimensional \code{array}
 #' @param space an instance of class \code{\linkS4class{BrainSpace}}
+#' @param label a \code{character} string
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
+#' @param indices an optional 1-d index vector
 #' @return \code{\linkS4class{DenseBrainVolume}} instance 
 #' @export BrainVolume
-BrainVolume <- function(data, space, label="", source=NULL, indices=NULL) {
+#' @rdname BrainVolume-class
+BrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 	DenseBrainVolume(data,space,source=source, label=label, indices=indices)	
 }
 
+#' DenseBrainVolume
+#' 
 #' Construct a \code{\linkS4class{DenseBrainVolume}} instance
 #' @param data a three-dimensional \code{array}
 #' @param space an instance of class \code{\linkS4class{BrainSpace}}
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
+#' @param label a \code{character} string
+#' @param indices an optional 1-d index vector
 #' @return \code{\linkS4class{DenseBrainVolume}} instance 
 #' @export DenseBrainVolume
+#' @rdname DenseBrainVolume-class
 DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 	if (length(dim(data)) != 3) {
 		stop("DenseBrainVolume: data argument must have three dimensions")
@@ -52,13 +61,18 @@ DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 
 }
 
+#' LogicalBrainVolume
+#' 
 #' Construct a \code{\linkS4class{LogicalBrainVolume}} instance
 #' @param data a three-dimensional \code{array}
 #' @param space an instance of class \code{\linkS4class{BrainSpace}}
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
+#' @param label a \code{character} string
+#' @param indices an optional 1-d index vector
 #' @return \code{\linkS4class{LogicalBrainVolume}} instance 
 #' @export LogicalBrainVolume
-LogicalBrainVolume <- function(data, space, source=NULL, label="") {
+#' @rdname LogicalBrainVolume-class
+LogicalBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 	
 	if (is.null(dim(data)) && length(data) == prod(dim(space))) {
 		data <- array(data, dim(space))
@@ -71,6 +85,12 @@ LogicalBrainVolume <- function(data, space, source=NULL, label="") {
 	if (ndim(space) != 3) {
 		stop("LogicalVolume: space argument must have three dimensions")
 	} 
+	
+	if (!is.null(indices)) {
+		newdat <- array(FALSE, dim(space))
+		newdat[indices] <- data
+		data <- newdat
+	}
 	
 	
 	if (!is.logical(data)) {
@@ -104,6 +124,7 @@ setAs(from="DenseBrainVolume", to="LogicalBrainVolume", def=function(from) {
 #' conversion from BrainVolume to array
 setAs(from="BrainVolume", to="array", def=function(from) from[,,])
 
+#' @rdname show-methods
 setMethod(f="show",
 		signature=signature(object="BrainVolume"),
 			def=function(object) {
@@ -120,6 +141,7 @@ setMethod(f="show",
 
 #' load BrainVolume
 #' @exportMethod loadData
+#' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainVolumeSource"), 
 		def=function(x) {
 			
@@ -139,6 +161,7 @@ setMethod(f="loadData", signature=c("BrainVolumeSource"),
 
 #' Constructor for BrainVolumeSource
 #' @export BrainVolumeSource
+#' @rdname BrainVolumeSource-class
 BrainVolumeSource <- function(input, index=1) {
 	stopifnot(index >= 1)
 	stopifnot(is.character(input))
@@ -170,18 +193,21 @@ loadVolume  <- function(fileName, index=1) {
 #' @param ... extra arguments of class BrainVolume or other concatenable objects
 #' @note dimensions of x and y must be equal
 #' @export concat
+#' @rdname concat-methods
 setMethod(f="concat", signature=signature(x="DenseBrainVolume", y="DenseBrainVolume"),
 		def=function(x,y,...) {
 			.concat4D(x,y,...)			
 		})
 
 #' @exportMethod eachSlice
+#' @rdname eachSlice-methods
 setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", withIndex="missing"),
 		def=function(x, FUN) {
 			lapply(1:(dim(x)[3]), function(z) FUN(x[,,z]))				
 		})
 
 #' @exportMethod eachSlice
+#' @rdname eachSlice-methods
 setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", withIndex="logical"),
 		def=function(x, FUN, withIndex) {
 			lapply(1:(dim(x)[3]), function(z) {					
@@ -191,6 +217,7 @@ setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", wi
 		})
 
 #' @exportMethod indexToGrid
+#' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
           def=function(x, idx) {
             array.dim <- dim(x)          
@@ -198,18 +225,21 @@ setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
           })
   
 #' @exportMethod indexToGrid
+#' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x="BrainVector", idx="index"),
 		  def=function(x, idx) {
 			  callGeneric(space(x), idx)
 		  })
 
 #' @exportMethod indexToGrid
+#' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="index"),
 		  def=function(x, idx) {
 			  callGeneric(space(x), idx)
 		  })
 
 #' @exportMethod gridToIndex
+#' @rdname gridToIndex-methods
 setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix"),
           def=function(x, coords) {
             array.dim <- dim(x)
@@ -320,12 +350,14 @@ setMethod(f="connComp", signature=signature(x="BrainVolume"),
 
 
 #' @exportMethod writeVolume
+#' @rdname writeVolume-methods
 setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="missing", dataType="missing"),
 		def=function(x, fileName) {
 			write.nifti.volume(x, fileName)           
 		})
 
 #' @exportMethod writeVolume
+#' @rdname writeVolume-methods
 setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="character", dataType="missing"),
 		def=function(x, fileName, format) {
 			if (toupper(format) == "NIFTI" || toupper(format) == "NIFTI1" || toupper(format) == "NIFTI-1") {
@@ -336,6 +368,7 @@ setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="charact
 		})
 
 #' @exportMethod writeVolume
+#' @rdname writeVolume-methods
 setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="missing", dataType="character"),
 		def=function(x, fileName, dataType) {
 			write.nifti.volume(x, fileName, dataType)   

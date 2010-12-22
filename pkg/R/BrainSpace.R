@@ -3,6 +3,8 @@ roxygen()
 #' @include Axis.R
 roxygen()
 
+
+#' @rdname BrainSpace-class
 BrainSpace <- function(Dim, origin=NULL, spacing=NULL, axes=NULL, trans=NULL) {
 	
 	
@@ -32,7 +34,7 @@ BrainSpace <- function(Dim, origin=NULL, spacing=NULL, axes=NULL, trans=NULL) {
 			inverseTrans=solve(trans))
 }
 
-
+#' @rdname show-methods
 setMethod(f="show", signature=signature("BrainSpace"),
 		def=function(object) {
 			cat("BrainSpace\n")
@@ -60,7 +62,7 @@ setMethod(f="addDim", signature=signature(x = "BrainSpace", n="numeric"),
 			BrainSpace(c(dim(x), n), origin(x), spacing(x), axes(x), trans(x))
 		})
 
-#' @rdname addDim-methods
+#' @rdname dropDim-methods
 setMethod(f="dropDim", signature=signature(x = "BrainSpace"),
 		def=function(x) {			
 			D <- dim(x)		
@@ -71,18 +73,21 @@ setMethod(f="dropDim", signature=signature(x = "BrainSpace"),
 			BrainSpace(D[Dind], origin(x)[Dind], spacing(x)[Dind], axes(x), trans(x))
 		})
 
+
+#' @rdname dim-methods
 setMethod(f="dim", signature=signature(x = "BrainSpace"),
 		def=function(x) x@Dim)
 
 
+#' @rdname ndim-methods
 setMethod(f="ndim", signature=signature(x = "BrainSpace"),
 		def=function(x) length(x@Dim))
 
-
+#' @rdname spacing-methods
 setMethod(f="spacing", signature=signature(x = "BrainSpace"),
 		def=function(x) x@spacing)
 
-
+#' @rdname bounds-methods
 setMethod(f="bounds", signature=signature(x = "BrainSpace"),
 		def=function(x) {
 			mat <- cbind(origin(x), origin(x)+(spacing(x)*dim(x)))
@@ -90,42 +95,48 @@ setMethod(f="bounds", signature=signature(x = "BrainSpace"),
 		}
 )
 
-
+#' @rdname origin-methods
 setMethod(f="origin", signature=signature(x = "BrainSpace"),
 		def=function(x) x@origin)
 
+#' @rdname axes-methods
 setMethod(f="axes", signature=signature(x = "BrainSpace"),
 		def=function(x) x@axes)
 
+#' @rdname trans-methods
 setMethod(f="trans", signature=signature(x = "BrainSpace"),
 		def=function(x) x@trans)
 
+#' @rdname inverseTrans-methods
 setMethod(f="inverseTrans", signature=signature(x = "BrainSpace"),
 		def=function(x) x@inverseTrans)
 
 
 ## delegate methods
 
-
+#' @rdname bounds-methods
 setMethod(f="bounds", signature=signature(x = "BrainData"),
 		def=function(x) {
 			bounds(space(x))
 		})
 
+#' @rdname axes-methods
 setMethod(f="axes", signature=signature(x = "BrainData"),
 		def=function(x) {
 			axes(space(x))
 		})
 
+#' @rdname origin-methods
 setMethod(f="origin", signature=signature(x = "BrainData"),
 		def=function(x) {
 			origin(space(x))
 		})
 
-
+#' @rdname trans-methods
 setMethod(f="trans", signature=signature(x = "BrainData"),
 		def=function(x) trans(space(x)))
 
+#' @rdname inverseTrans-methods
 setMethod(f="inverseTrans", signature=signature(x = "BrainData"),
 		def=function(x) inverseTrans(space(x)))
 
