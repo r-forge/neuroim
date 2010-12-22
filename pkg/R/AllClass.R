@@ -231,12 +231,7 @@ setClass("BrainFileSource", representation=
 		
 
 		
-#' A class that is used to produce a \code{\linkS4class{SparseBrainVector}} instance
-#' @slot mask the subset of voxels that will be stored in memory
-#' @exportClass BrainVectorSource
-		setClass("SparseBrainVectorSource", representation=
-						representation(mask="LogicalBrainVolume"),
-				contains=c("BrainVectorSource"))
+
 		
 
 #' A class that is used to produce a \code{\linkS4class{BrainBucket}} instance
@@ -377,6 +372,13 @@ setClass("DenseBrainVector",
 setClass("SparseBrainVector", 
 		representation=representation(mask="LogicalBrainVolume",data="matrix", map="IndexLookupVolume"),
 		contains=c("BrainVector")) 
+
+#' A class that is used to produce a \code{\linkS4class{SparseBrainVector}} instance
+#' @slot mask the subset of voxels that will be stored in memory
+#' @exportClass BrainVectorSource
+setClass("SparseBrainVectorSource", representation=
+				representation(mask="LogicalBrainVolume"),
+		contains=c("BrainVectorSource"))
 
 
 

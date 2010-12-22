@@ -589,8 +589,8 @@ setMethod("series", signature(x="BrainVector", i="matrix"),
 				i <- matrix(i, 1, 3)
 			}
 			
-			stopifnot(ncol(mat) == 3)
-			apply(mat, 1, function(i) x[i[1], i[2], i[3],])
+			stopifnot(ncol(i) == 3)
+			apply(i, 1, function(i) x[i[1], i[2], i[3],])
 	
 		})
 
