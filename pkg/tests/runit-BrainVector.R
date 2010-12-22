@@ -52,6 +52,28 @@ test.DenseBrainVector.takeVolume <- function() {
 	
 }
 
+test.SparseBrainVector.takeVolume <- function() {
+	dat <- array(0, c(64,64,64,4))
+	spc <- BrainSpace(c(64,64,64,4))
+	bv1 <- DenseBrainVector(dat, spc)
+	bv2 <- DenseBrainVector(dat, spc)
+	
+	bv3 <- concat(bv1, bv2)
+	
+	vol1 <- takeVolume(bv3, 1)
+	checkEquals(dim(vol1), c(64,64,64))
+	
+	vec1 <- takeVolume(bv3, 1:2)
+	checkTrue(inherits(vec1, "list"))
+	checkEquals(dim(vec1[[1]]), c(64,64,64))
+	
+	vec2 <- takeVolume(bv3, 1:2, merge=TRUE)
+	checkTrue(inherits(vec2, "BrainVector"))
+	checkEquals(dim(vec2), c(64,64,64,2))
+	
+}
+
+
 
 test.BrainVector.eachVolume <- function() {
 	dat <- array(rnorm(64*64*64*4), c(64,64,64,4))
@@ -73,11 +95,11 @@ test.BrainVector.series <- function() {
 	spc <- BrainSpace(c(64,64,64,4))
 	bv1 <- DenseBrainVector(dat, spc)
 	checkEquals(series(bv1, 1,1,1), bv1[1,1,1,])
-	checkEquals(series(bv1, c(1,1,1)), bv1[1,1,1,])
 	
     mat <- rbind(c(1,1,1), c(2,2,2), c(3,3,3))
 	
-	r1 <- apply(mat, 1, function(i) series(bv1,i))
+	r1 <- apply(mat, 1, function(i) { series(bv1, i[1], i[2], i[3]) })
+			
 	r2 <- series(bv1, mat)
 	
 	checkEquals(r1, r2)
@@ -93,7 +115,7 @@ test.BrainVector.as.matrix <- function() {
 	mat <- as.matrix(bv1)
 	
 	ind <- 1:(64*64*64)
-	mat2 <- do.call(rbind, lapply(ind, function(i) series(bv1, i)))
+	mat2 <- t(do.call(cbind, lapply(ind, function(i) series(bv1, i))))
 	
 	checkEquals(mat, mat2)
 	

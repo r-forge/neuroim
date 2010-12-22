@@ -34,7 +34,7 @@ test.loadVolume <- function() {
 	checkTrue(!is.null(vol))
 	checkEquals(dim(vol), c(64,64,25))
 	
-	checkException(loadVolume("data/global_mask.nii", index=5))
+	checkException(loadVolume("data/global_mask.nii", index=5), silent=TRUE)
 	
 	checkEquals(dim(loadVolume("data/epivector.nii", index=3)), c(64,64,38))
 	
@@ -64,8 +64,8 @@ test.vol.indexToGrid <- function() {
 	
 	i <- 65
 	checkEquals(indexToGrid(vol1, i), matrix(c(1,2,1), nrow=1))
-	checkException(indexToGrid(vol1, 64*64*25 +1))
-	checkException(indexToGrid(vol1, -1))
+	checkException(indexToGrid(vol1, 64*64*25 +1), silent=TRUE)
+	checkException(indexToGrid(vol1, -1), silent=TRUE)
 }
 
 test.LogicalBrainVolume <- function() {
