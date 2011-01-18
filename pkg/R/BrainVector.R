@@ -130,7 +130,7 @@ DenseBrainVector <- function(data, space, source=NULL, label="") {
 		source <- new("BrainSource", metaInfo=meta)	
 	}
 	
-	new("DenseBrainVector", source=source, .Data=data, space=space)
+	new("DenseBrainVector", .Data=data, source=source, space=space)
 	
 }
 

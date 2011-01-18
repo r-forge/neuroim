@@ -57,7 +57,7 @@ DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 	}
 	
 			
-	new("DenseBrainVolume", source=source, .Data=data, space=space)
+	new("DenseBrainVolume", .Data=data, source=source, space=space)
 
 }
 
