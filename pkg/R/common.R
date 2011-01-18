@@ -80,14 +80,31 @@
 
 
 #' @rdname private  
-.gridToIndex <- function(dimensions, vmat) {
+.gridToIndex3D <- function(dimensions, vmat) {
+	stopifnot(length(dimensions) == 3)
 	slicedim = dimensions[1]*dimensions[2]
-	idx <- apply(vmat, 1, function(vox) {
+	
+	apply(vmat, 1, function(vox) {
 				(slicedim*(vox[3]-1)) + (vox[2]-1)*dimensions[1] + vox[1]   
 			})
 	
-	return(idx)
+	
 }
+
+
+
+#' @rdname private  
+.gridToIndex <- function(dimensions, vmat) {
+	D <- Reduce("*", dimensions, accumulate=TRUE)
+	apply(vmat, 1, function(vox) {
+		sum(sapply(length(D):2, function(i) {
+			D[i-1]*(vox[i]-1)
+		})) + vox[1]
+	})
+	
+}
+
+
 
 #' @rdname private
 .indexToGrid <- function(idx, array.dim) {

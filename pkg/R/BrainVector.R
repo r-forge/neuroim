@@ -650,6 +650,15 @@ setMethod("as.sparse", signature(x="DenseBrainVector", mask="numeric"),
 			
 		})
 
+#' @exportMethod gridToIndex
+#' @rdname gridToIndex-methods
+# setMethod(f="gridToIndex", signature=signature(x="BrainVector", coords="matrix"),
+#		def=function(x, coords) {
+#			stopifnot(ncol(coords) == 4)
+#			array.dim <- dim(x)
+#			ind3d <- .gridToIndex(dim(x), coords[,1:3])
+#		})
+
 #setMethod(f="takeSeries", signature=signature(x="BrainVector", indices="numeric"),
 #		def=function(x, indices) {
 #			
