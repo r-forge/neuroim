@@ -8,9 +8,6 @@
 }
 \alias{takeVolume,BrainVector,numeric-method}
 \alias{takeVolume}
-\details{\code{takeVolume,BrainVector,numeric-method}: extract one or more volumes from a  BrainVector object
-
-}
 \alias{takeVolume,SparseBrainVector,numeric-method}
 \alias{takeVolume}
 

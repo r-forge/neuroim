@@ -12,6 +12,4 @@ Will test for match to data file only}
 }
 \alias{dataFileMatches,BrainFileDescriptor,character-method}
 \alias{dataFileMatches}
-\alias{dataFile,BrainFileDescriptor,character-method}
-\alias{dataFile}
 

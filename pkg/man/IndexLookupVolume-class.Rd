@@ -12,6 +12,4 @@ Currently used in the \code{\linkS4class{SparseBrainVector}} class.}
 \arguments{\item{space}{a BrainSpace object}
 \item{indices}{the set of 1-d indices defining the lookup map}
 }
-\alias{initialize,IndexLookupVolume-method}
-\alias{initialize}
 
