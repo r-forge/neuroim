@@ -137,9 +137,34 @@ test.SparseBrainVector <- function() {
 	tmp <- rnorm(64*64*64)
 	mask <- tmp > .8
 	mask <- LogicalBrainVolume(mask, dropDim(spc))
-	bec <- SparseBrainVector(dat, spc, mask)
+	bvec <- SparseBrainVector(dat, spc, mask)
+	
+	checkEquals(dim(bvec), dim(dat))
+	checkEquals(dat[1,1,1,1], bvec[1,1,1,1])
 	
 }
+
+test.SparseBrainVector.concat <- function() {
+	dat <- array(0, c(64,64,64,4))
+	spc <- BrainSpace(c(64,64,64,4))
+	tmp <- rnorm(64*64*64)
+	mask <- tmp > .8
+	mask <- LogicalBrainVolume(mask, dropDim(spc))
+	
+	bv1 <- SparseBrainVector(dat, spc, mask)
+	
+	bv2 <- concat(bv1, bv1)
+	checkTrue(inherits(bv2, "BrainVector"))
+	checkEquals(dim(bv2), c(64,64,64,8))
+	
+	bv3 <- concat(bv1,bv2, bv1, bv2)
+	checkTrue(inherits(bv3, "BrainVector"))
+	checkEquals(dim(bv3), c(64,64,64,24))
+	#checkEquals(bv4[1,1,1,1],0)
+}
+	
+
+
 	
 
 
