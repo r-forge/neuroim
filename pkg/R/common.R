@@ -1,10 +1,10 @@
-#' @rdname private
+#' @nord
 .isExtension <- function(fname, extension) {
   last <- substr(fname, nchar(fname)+1 - nchar(extension), nchar(fname))
   return(last==extension)
 }
 
-#' @rdname private
+#' @nord
 .concat4D <- function(x,y, ...) {
 	rest <- list(...)
 	
@@ -41,7 +41,7 @@
 
  
 ## based on code from R.utils, extract.array
-#' @rdname private
+#' @nord
 .extract.array <- function(x, ..., drop=FALSE, indices=list(...)) {
   nindices <- length(indices)
   if (nindices == 0) {
@@ -79,7 +79,7 @@
 }
 
 
-#' @rdname private  
+#' @nord
 .gridToIndex3D <- function(dimensions, vmat) {
 	stopifnot(length(dimensions) == 3)
 	slicedim = dimensions[1]*dimensions[2]
@@ -93,7 +93,7 @@
 
 
 
-#' @rdname private  
+#' @nord
 .gridToIndex <- function(dimensions, vmat) {
 	D <- Reduce("*", dimensions, accumulate=TRUE)
 	apply(vmat, 1, function(vox) {
@@ -106,7 +106,7 @@
 
 
 
-#' @rdname private
+#' @nord
 .indexToGrid <- function(idx, array.dim) {
 	stopifnot(all(idx > 0 & idx <= prod(array.dim)))
 	rank = length(array.dim)
@@ -126,7 +126,7 @@
 }
 
 
-#' @rdname private
+#' @nord
 .getRStorage <- function(dataType) {
   if (any(toupper(dataType) == c("BINARY", "BYTE", "UBYTE", "SHORT", "INTEGER", "INT", "LONG"))) {
     "integer"
@@ -137,7 +137,7 @@
   }
 }
 
-#' @rdname private
+#' @nord
 .getDataStorage <- function(code) {
   if (code == 0) {
     return("UNKNOWN")
@@ -158,7 +158,7 @@
   }
 }
 
-#' @rdname private
+#' @nord
 .getDataCode <- function(dataType) {
   if (dataType == "UNKNOWN") {
     return(0)
@@ -179,7 +179,7 @@
   }
 }
 
-#' @rdname private
+#' @nord
 .getDataSize <- function(dataType) {
   if (dataType == "BINARY") {
     return(1)
@@ -210,7 +210,7 @@
   stop(paste("unrecognized data type: ", dataType))
 }
 
-#' @rdname private
+#' @nord
 .getEndian <- function(conn) {
   #try little endian
   endian <- "little"
@@ -229,7 +229,7 @@
   return(endian)
 }
 
-#' @rdname private
+#' @nord
 .niftiExt <- function(filetype) {
 
   extensions <- list()
@@ -252,7 +252,7 @@
   return(extensions)
 }
 
-#' @rdname private
+#' @nord
 .matrixToQuatern <- function(mat) {
   xd <- sqrt(drop(crossprod(mat[1:3,1])))
   yd <- sqrt(drop(crossprod(mat[1:3,2])))
@@ -317,7 +317,7 @@
 
 }
 
-#' @rdname private
+#' @nord
 .quaternToMatrix <- function(quat, origin, stepSize, qfac) {
   mat <- matrix(0, 4,4)
   mat[4,] <- c(0,0,0,1)

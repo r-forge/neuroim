@@ -1,9 +1,14 @@
 #' @include AllClass.R
-roxygen()
+{}
 #' @include Axis.R
-roxygen()
+{}
 
-
+#' Constructor function for BrainSpace class
+#' @param Dim the dimensions
+#' @param origin the coordinate origin of the image space
+#' @param spacing the voxel dimensions
+#' @param axes the images axes specification
+#' @param trans the coordinate transformation associated with the image space
 #' @rdname BrainSpace-class
 BrainSpace <- function(Dim, origin=NULL, spacing=NULL, axes=NULL, trans=NULL) {
 	
@@ -34,7 +39,7 @@ BrainSpace <- function(Dim, origin=NULL, spacing=NULL, axes=NULL, trans=NULL) {
 			inverseTrans=solve(trans))
 }
 
-#' @rdname show-methods
+#' @nord
 setMethod(f="show", signature=signature("BrainSpace"),
 		def=function(object) {
 			cat("BrainSpace\n")
@@ -74,7 +79,7 @@ setMethod(f="dropDim", signature=signature(x = "BrainSpace"),
 		})
 
 
-#' @rdname dim-methods
+#' @nord
 setMethod(f="dim", signature=signature(x = "BrainSpace"),
 		def=function(x) x@Dim)
 

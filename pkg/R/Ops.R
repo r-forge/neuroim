@@ -1,5 +1,15 @@
+#' @include AllClass.R
+roxygen()
+#' @include AllGeneric.R
+roxygen()
+#' @include BrainVector.R
+roxygen()
+#' @include BrainVolume.R
+roxygen()
 
-#' @rdname Arith-methods
+
+
+#' @nord Arith-methods
 setMethod(f="Arith", signature=signature(e1="BrainVolume", e2="BrainVolume"),
           def=function(e1, e2) {
             if (!all(dim(e1) == dim(e2))) {
@@ -7,11 +17,11 @@ setMethod(f="Arith", signature=signature(e1="BrainVolume", e2="BrainVolume"),
             }
             
             ret <- callGeneric(e1@.Data,e2@.Data)
-            bv <- BrainVolume(ret, space(e1))
+            bv <- DenseBrainVolume(ret, space(e1))
      
           })
 
-#' @rdname Arith-methods
+#' @nord Arith-methods
 setMethod(f="Arith", signature=signature(e1="BrainVector", e2="BrainVector"),
           def=function(e1, e2) {
             if (!all(dim(e1) == dim(e2))) {
@@ -19,11 +29,11 @@ setMethod(f="Arith", signature=signature(e1="BrainVector", e2="BrainVector"),
             }
             
             ret <- callGeneric(e1@.Data,e2@.Data)
-            bv <- BrainVector(ret, space(e1))
+            bv <- DenseBrainVector(ret, space(e1))
      
           })
  
-#' @rdname Arith-methods
+#' @nord Arith-methods
  setMethod(f="Arith", signature=signature(e1="BrainVector", e2="BrainVolume"),
 		  def=function(e1, e2) {
 			  if (!all(dim(e1)[1:3] == dim(e2))) {

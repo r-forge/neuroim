@@ -36,7 +36,7 @@ setGeneric(name="space", def=function(x, ...) standardGeneric("space"))
 #' @exportMethod spacing 
 setGeneric(name="spacing", def=function(x) standardGeneric("spacing"))
 
-#' generic function to extract the spatial bounds (origin + dim * spacing) of an image
+#' Generic function to extract the spatial bounds (origin + dim * spacing) of an image
 #' param x the object
 #' @exportMethod bounds
 setGeneric(name="bounds",     def=function(x) standardGeneric("bounds"))
@@ -58,6 +58,7 @@ setGeneric(name="origin", def=function(x) standardGeneric("origin"))
 setGeneric(name="trans",  def=function(x) standardGeneric("trans"))
 
 #' Generic getter to extract inverse image coordinate transformation
+#' @param x an object
 #' @exportMethod inverseTrans
 setGeneric(name="inverseTrans", def=function(x) standardGeneric("inverseTrans"))
 
@@ -76,14 +77,21 @@ setGeneric(name="readElements", def=function(x, numElements) standardGeneric("re
 setGeneric(name="writeElements", def=function(x, els) standardGeneric("writeElements"))
 
 
-#### generics related to BrainVolume class
+#' Generic function to write an image volume to disk
+#' @param x an image object
+#' @param fileName a file name
+#' @param format file format string
+#' @param dataType output data type
 #' @exportMethod writeVolume
 setGeneric(name="writeVolume",  def=function(x, fileName, format, dataType) standardGeneric("writeVolume"))
 
+
+#' Generic function to write an image vector to disk
+#' @param x the image to write
 #' @exportMethod writeVector 
 setGeneric(name="writeVector",  def=function(x, fileName, format, dataType) standardGeneric("writeVector"))
 
-
+#' Generic function to extract a value
 setGeneric(name="value",       def=function(object, x,y, ...) standardGeneric("value"))
 
 #' Generic function to convert a 1D index to N-dimensional grid coordinate
@@ -147,12 +155,42 @@ setGeneric(name="as.sparse", def=function(x, mask, ...) standardGeneric("as.spar
 
 setGeneric(name="pick", def=function(x, mask, ...) standardGeneric("pick"))
 
+
+#' Extract coordinates
+#' @param x the object to extract coordinates from
+#' @exportMethod coords
 setGeneric(name="coords", def=function(x, ...) standardGeneric("coords"))
+
+#' Extract indices
+#' @param x the object to extract indices
+#' @exportMethod indices
 setGeneric(name="indices", def=function(x) standardGeneric("indices"))
+
+#' Index Lookup operation
+#' @param x the object to query
+#' @exportMethod lookup
 setGeneric(name="lookup", def=function(x, i, ...) standardGeneric("lookup"))
-setGeneric(name="series", def=function(x, i, ...) standardGeneric("series"))          
+
+#' Extract vector series from object
+#' @param x the object
+#' @exportMethod series
+setGeneric(name="series", def=function(x, i, ...) standardGeneric("series"))   
+
+#' Concatenate two objects
+#' @param x the first object
+#' @param y the second object
+#' @param ... additonal objects
+#' @exportMethod concat
 setGeneric(name="concat", def=function(x,y, ...) standardGeneric("concat"))
 
+#' Find connected components
+#' @param x the image object
+#' @param ... additonal arguments
+#' @exportMethod concat
 setGeneric(name="connComp", def=function(x, ...) standardGeneric("connComp"))
+
+#' Construct a series iterator
+#' @param x the object to be iterated
+#' @exportMethod seriesIter
 setGeneric(name="seriesIter", def=function(x) standardGeneric("seriesIter"))
 

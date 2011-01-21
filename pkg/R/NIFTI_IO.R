@@ -1,7 +1,7 @@
 #' @include common.R
-roxygen()
+{}
 #' @include BinaryIO.R
-roxygen()
+{}
 
 
 .checkDimensions <- function(dimvec) {

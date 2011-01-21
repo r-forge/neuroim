@@ -1,5 +1,7 @@
-
-
+#' @include AllClass.R
+{}
+#' @include AllGeneric.R
+{}
 
 #TiledBrainVector <- function(fname, mask, ntiles=5, capacity=.5) {
 #  stopifnot(capacity <= 1 && capacity > 0)
@@ -21,7 +23,14 @@
 #  .Object
 #})
   
-  
+#' SparseBrainVectorSource
+#' 
+#' constructs a SparseBrainVectorSource object
+#' 
+#' @param metaInfo an object of class \code{\linkS4class{BrainMetaInfo}}
+#' @param indices a vector of 1D indices
+#' @param mask a 3D \code{array} of type \code{logical} 
+#' @rdname SparseBrainVectorSource-class 	  
 SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 	
 	stopifnot(length(dim(metaInfo)) == 4)
@@ -46,6 +55,8 @@ SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 	
 	new("SparseBrainVectorSource", metaInfo=metaInfo, indices=indices, mask=mask)				
 }
+
+
 #' SparseBrainVector
 #' 
 #' constructs a SparseBrainVector object
@@ -53,6 +64,8 @@ SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 #' @param data an array which can be a \code{matrix} or 4-D \code{array}
 #' @param space a BrainSpace instance
 #' @param mask a 3D \code{array} of type \code{logical} 
+#' @param source the data source -- an instance of class \code{\linkS4class{BrainSource}}
+#' @param label associated sub-image labels
 #' @rdname SparseBrainVector-class 	
 SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 	stopifnot(inherits(space, "BrainSpace"))
@@ -183,7 +196,7 @@ setMethod(f="eachSeries", signature=signature(x="SparseBrainVector", FUN="functi
 
 
   
- #' @rdname series-methods 
+ #' @rdname seriesIter-methods 
 setMethod(f="seriesIter", signature=signature(x="SparseBrainVector"), 
 	def=function(x) {
 		len <- NCOL(x@data)
@@ -269,7 +282,7 @@ setMethod(f="concat", signature=signature(x="SparseBrainVector", y="SparseBrainV
             d2 <- dim(y)
             
             ndim <- c(d1[1:3], d1[4] + d2[4])
-            nspace <- BrainSpace(ndim, origin(x@space), spacing(x@space),  orientation(x@space), trans(x@space), reptime=1)
+            nspace <- BrainSpace(ndim, origin(x@space), spacing(x@space),  axes(x@space), trans(x@space))
   
             
             ret <- SparseBrainVector(ndat, nspace, mask=x@mask)
@@ -291,7 +304,7 @@ setMethod(f="lookup", signature=signature(x="SparseBrainVector", i="numeric"),
           })
                       
 
- #' @rdname [-methods
+#' @nord
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j = "numeric"),
           def=function (x, i, j, k, m, ..., drop=TRUE) {
 		    

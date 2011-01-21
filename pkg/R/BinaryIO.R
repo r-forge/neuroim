@@ -47,7 +47,7 @@ BinaryWriter <- function(output, byteOffset, dataType, bytesPerElement, endian=.
 
 ## code duplication, fix me. introduce "BinaryConnection superclass
 
-#' @rdname initialize-methods
+#' @nord
 setMethod(f="initialize", signature=signature("BinaryReader"), 
 		def=function(.Object, input, byteOffset, dataType, bytesPerElement, endian) {
 			.Object@input <- input
@@ -63,7 +63,7 @@ setMethod(f="initialize", signature=signature("BinaryReader"),
 		}) 
 
 ## code duplication, fix me
-#' @rdname initialize-methods
+#' @nord
 setMethod(f="initialize", signature=signature("BinaryWriter"), 
 		def=function(.Object, output, byteOffset, dataType, bytesPerElement, endian) {
 			.Object@output <- output
@@ -92,19 +92,19 @@ setMethod(f="writeElements", signature=signature(x= "BinaryWriter", els="numeric
 			} else if (.getRStorage(x@dataType) == "double") {
 				writeBin(as.double(els), x@output, size=x@bytesPerElement, endian=x@endian)	
 			} else {
-				stop("failed to handle data type: ", dataType)
+				stop("failed to handle data type: ", x@dataType)
 			}				
 			
 		})
 
 ## should there be a common superclass for Reader/Writer?
-#' @rdname close-methods
+#' @nord
 setMethod(f="close", signature=signature(con= "BinaryReader"),
 		def=function(con) {
 			base::close(con@input)				
 		})
 
-#' @rdname close-methods
+#' @nord
 setMethod(f="close", signature=signature(con= "BinaryWriter"),
 		def=function(con) {
 			base::close(con@output)				

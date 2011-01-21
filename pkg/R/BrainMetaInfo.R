@@ -18,7 +18,7 @@ roxygen()
 #' @rdname dataReader-methods
 setGeneric(name="dataReader", def=function(x, offset) standardGeneric("dataReader"))
 
-#' @rdname dim-methods
+#' @nord
 setMethod(f="dim", signature=signature("FileMetaInfo"), 
 		def=function(x) {
 			x@Dim
@@ -102,7 +102,7 @@ NIfTIMetaInfo <- function(descriptor, nifti_header) {
 }
 
 
-#' @rdname show-methods
+#' @nord
 setMethod(f="show", signature=signature("FileMetaInfo"), 
 		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")

@@ -26,38 +26,36 @@ AxisSet3D <- function(i, j, k) {
 	new("AxisSet3D", ndim=as.integer(3), i=i, j=j, k=k)	
 }
 
-#' get the number of dimensions for this AxisSet
-#' @param x the AxisSet to query 
-#' @exportMethod ndim
+
 #' @rdname ndim-methods
 setMethod(f="ndim",signature=signature(x= "AxisSet"), def=function(x) { x@ndim })
 
-#' @rdname show-methods
+#' @nord
 setMethod(f="show", signature=signature("NamedAxis"), 
 		def=function(object) {
 			cat(object@axis)
 		})
 
-#' @rdname print-methods
+#' @nord
 setMethod(f="print", signature=signature("NamedAxis"), 
 		def=function(x, ...) {
 			x@axis
 		})
 
-#' @rdname show-methods
+#' @nord
 setMethod(f="show", signature=signature("AxisSet1D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
 			cat("Axis 1:", print(object@i), "\n")
 		})
 
-#' @rdname print-methods
+#' @nord
 setMethod(f="print", signature=signature("AxisSet2D"), 
 		def=function(x, ...) {
 			paste(print(x@i), "-", print(x@j))
 		})
 
-#' @rdname show-methods
+#' @nord
 setMethod(f="show", signature=signature("AxisSet2D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
@@ -65,14 +63,14 @@ setMethod(f="show", signature=signature("AxisSet2D"),
 			cat("Axis 2:", print(object@j), "\n")
 		})
 
-#' @rdname print-methods
+#' #' @nord
 setMethod(f="print", signature=signature("AxisSet3D"), 
 		def=function(x, ...) {
 			paste(print(x@i), "-", print(x@j), "-", print(x@k))
 		})
 
 
-#' @rdname show-methods
+#' @nord
 setMethod(f="show", signature=signature("AxisSet3D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
@@ -82,7 +80,7 @@ setMethod(f="show", signature=signature("AxisSet3D"),
 		})
 
 
-#' @rdname show-methods
+#' @nord
 setMethod(f="show", signature=signature("AxisSet4D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")

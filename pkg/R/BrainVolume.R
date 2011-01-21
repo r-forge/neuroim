@@ -1,13 +1,13 @@
 #' @include AllClass.R
-roxygen()
+{}
 #' @include BrainVector.R
-roxygen()
+{}
 #' @include common.R
-roxygen()
+{}
 #' @include BrainMetaInfo.R
-roxygen()
+{}
 #' @include NIFTI_IO.R
-roxygen()
+{}
 
 
 #' BrainVolume
@@ -124,7 +124,7 @@ setAs(from="DenseBrainVolume", to="LogicalBrainVolume", def=function(from) {
 #' conversion from BrainVolume to array
 setAs(from="BrainVolume", to="array", def=function(from) from[,,])
 
-#' @rdname show-methods
+#' @nord
 setMethod(f="show",
 		signature=signature(object="BrainVolume"),
 			def=function(object) {
@@ -160,6 +160,8 @@ setMethod(f="loadData", signature=c("BrainVolumeSource"),
 		})
 
 #' Constructor for BrainVolumeSource
+#' @param input the input file name
+#' @param index the image subvolume index
 #' @export BrainVolumeSource
 #' @rdname BrainVolumeSource-class
 BrainVolumeSource <- function(input, index=1) {
@@ -246,7 +248,7 @@ setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix")
             .gridToIndex(dim(x), coords)
           })
 
-#' @rdname private
+#' @nord
 .pruneCoords <- function(coord.set,  vals,  mindist=10) {
 
 	if (NROW(coord.set) == 1) {
@@ -282,6 +284,7 @@ setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix")
 
 #' find connected components in BrainVolume
 #' @exportMethod connComp
+#' @rdname connComp-methods
 setMethod(f="connComp", signature=signature(x="BrainVolume"), 
 	def=function(x, threshold=0, coords=TRUE, clusterTable=TRUE, localMaxima=TRUE, localMaximaDistance=15) {
 		mask <- (x > threshold)

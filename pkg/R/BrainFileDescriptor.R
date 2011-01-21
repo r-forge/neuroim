@@ -101,7 +101,7 @@ setMethod(f="headerFile",signature=signature(x= "BrainFileDescriptor", fileName=
 			}		
 		})
 
-#' @rdname dataFileMatches-methods
+#' @rdname dataFile-methods
 setMethod(f="dataFile",signature=signature(x= "BrainFileDescriptor", fileName="character"),
 		def=function(x, fileName) {
 			if (dataFileMatches(x, fileName)) {
@@ -142,6 +142,7 @@ setMethod(f="readMetaInfo",signature=signature(x= "AFNIFileDescriptor"),
 			AFNIMetaInfo(x, header)
 		})
 
+#' @nord
 findDescriptor <- function(fileName) {
 	if (fileMatches(NIFTI, fileName)) NIFTI
 	else if (fileMatches(NIFTI_GZ, fileName)) NIFTI_GZ

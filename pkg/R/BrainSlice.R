@@ -1,8 +1,10 @@
 #' @include AllClass.R
-roxygen()
+{}
+#' @include AllGeneric.R
+{}
 
 BrainSlice <- function(data, space, indices=NULL) {
-	if (numdim(space) != 2) {
+	if (ndim(space) != 2) {
 		stop("incorrect dimension for BrainSlice")
 	}
 	

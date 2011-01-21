@@ -1,3 +1,9 @@
+#' @include AllClass.R
+{}
+#' @include AllGeneric.R
+{}
+
+
 #' IndexLookupVolume
 #' 
 #' @param space a BrainSpace object
@@ -8,7 +14,7 @@ IndexLookupVolume <- function(space, indices) {
   new("IndexLookupVolume", space=space, indices=indices)
 }
 
-#' @rdname IndexLookupVolume-class
+#' @nord
 setMethod(f="initialize", signature=signature("IndexLookupVolume"),
           def=function(.Object, space, indices) {
             

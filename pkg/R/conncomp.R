@@ -1,4 +1,4 @@
-
+#' Extract connected components from a 3D mask
 #' @export
 #' @param mask a 3D binary array
 #' @return a two-element list of the connected components (cluster index and cluster sizes)

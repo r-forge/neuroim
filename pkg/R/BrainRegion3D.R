@@ -1,13 +1,21 @@
+#' @include AllClass.R
+{}
+#' @include AllGeneric.R
+{}
 
-
-
+#' Create A Spherical Region of interest
+#' @param bvol an image volume
+#' @param centroid the center of the cube in voxel space
+#' @param surround the number of voxels on either side of the central voxel
+#' @param mask an optional mask that wil be intersected with the ROI cube.
+#' @export
 RegionCube <- function(bvol, centroid, surround, mask=NULL) {
   bspace <- space(bvol)
 
   vspacing <- spacing(bvol)
   vdim <- dim(bvol)
   
-  mcentroid <- (centroid * vspacing)
+  #mcentroid <- (centroid * vspacing)
 
   x <- round(seq(centroid[1]-surround, centroid[1]+surround))
   y <- round(seq(centroid[2]-surround, centroid[2]+surround))
@@ -18,7 +26,6 @@ RegionCube <- function(bvol, centroid, surround, mask=NULL) {
   z <- z[z > 0 & z <= vdim[3]]
 
   
-
   if (all(c(length(x), length(y), length(z)) == 0)) {
     stop(paste("invalid sphere for centroid", centroid, " with surround", surround))
   }
@@ -40,6 +47,12 @@ RegionCube <- function(bvol, centroid, surround, mask=NULL) {
   
 }
 
+
+#' Create A Spherical Region of interest
+#' @param bvol an image volume
+#' @param centroid the center of the sphere in voxel space
+#' @param radius the radius of the spherical ROI
+#' @export
 RegionSphere <- function (bvol, centroid, radius) {
     bspace <- space(bvol)
     vspacing <- spacing(bvol)
@@ -91,24 +104,25 @@ setMethod(f="coords", signature=signature(x="BrainRegion3D"),
           })
 
  
-#' @param x a BrainRegion3D object
-#' @rdname length-methods  
+#' @nord
 setMethod(f="length", signature=signature(x="BrainRegion3D"),
           function(x) {
             length(x@data)
           })
 
+#' @nord
 setMethod(f="[", signature=signature(x = "BrainRegion3D", i = "numeric", j = "missing", drop = "ANY"),
           function (x, i, j, drop) {
             x@data[i]
           })
-          
+  
+#' @nord          
 .distance <- function(p1, p2) {
   diffs = (p1 - p2)
   return(sqrt(sum(diffs*diffs)))
 }
 
-
+#' @nord
 makeKernel <- function(kerndim, pdim, FUN=dnorm) {
   if (length(kerndim) < 2) {
     stop("kernel dim length must be greater than 1")

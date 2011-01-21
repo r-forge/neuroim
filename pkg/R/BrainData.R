@@ -1,9 +1,13 @@
+#' @include AllClass.R
+{}
+#' @include AllGeneric.R
+{}
 
 #' @rdname ndim-methods
 setMethod(f="ndim", signature=signature(x = "BrainData"),
           def=function(x) numdim(x@space))
 
-#' @rdname dim-methods
+#' @nord
 setMethod(f="dim", signature=signature(x = "BrainData"),
           def=function(x) dim(x@space))
 
@@ -18,11 +22,11 @@ setMethod(f="spacing",signature= signature(x = "BrainData"),
             spacing(sp)
           })
 
-#' @rdname as.matrix-methods
+#' @nord 
 setMethod(f="as.matrix", signature=signature(x = "BrainData"), def=function(x) as(x, "matrix"))
 
-#' @rdname as.array-methods
+#' @nord 
 setMethod(f="as.array", signature=signature(x = "BrainData"), def=function(x) as(x, "array"))
 
-#' @rdname as.vector-methods
+#' @nord 
 setMethod(f="as.vector", signature=signature(x = "BrainData"), def=function(x) as(x, "vector"))

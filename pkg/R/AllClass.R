@@ -100,13 +100,14 @@ setClass("BaseMetaInfo")
 #' This is class is used to denote the absense of meta information
 setClass("NullMetaInfo", contains=c("BaseMetaInfo"))
 
-
+#' @nord
 setMethod(f="show",
 		signature=signature(object="BaseMetaInfo"),
 		def=function(object) {
 			cat("an instance of class",  class(object), "\n\n")
 		})
 
+#' @nord
 setMethod(f="show",
 		signature=signature(object="NullMetaInfo"),
 			def=function(object) {

@@ -1,37 +1,15 @@
 #' @include AllClass.R
-roxygen()
+{}
+#' @include AllGeneric.R
+{}
 #' @include common.R
-roxygen()
+{}
 #' @include SparseBrainVector.R
-roxygen()
+{}
 
-#' @rdname private
-.BrainVectorFromIndices <- function(data, space, indices) {
-	nvols <- dim(space)[4]
-	nelements <- prod(dim(space)[1:3])
-	
-	if (nvols == dim(data)[1]) {
-		mat <- matrix(0, nelements, nvols)
-		for (i in 1:nvols) {
-			mat[indices,i] <- data[i,]
-		}
-		
-	} else if (nvols == dim(data)[2]) {
-		mat <- matrix(0, nelements, nvols)
-		for (i in 1:nvols) {
-			mat[indices,i] <- data[,i]
-		}
-	} else {
-		stop(paste("illegal matrix dimension ", dim(data)))
-	}
-	
-	
-	dim(mat) <- dim(space)
-	
-	new("BrainVector", .Data=mat, space=space)
-}
 
-#' @rdname private
+
+#' @nord 
 .BrainVectorFromMatrix <- function(data, space) {
 	nvols <- dim(space)[4]
 	nelements <-  prod(dim(space)[1:3])
@@ -47,67 +25,8 @@ roxygen()
 	}
 }
 
-#' @rdname private
-.createVectorSpaceFromData <- function(data, space, indices=NULL) {
-	if (numdim(space) == 4) {
-		return(space)
-	}
-	
-	if (numdim(space) < 3) {
-		stop(paste("incorrect dimensions : ", dim(space)))
-	}
-	
-		
-	if (numdim(space) == 3 && is.matrix(data)) {
-		if (is.null(indices)) {
-			nels <- prod(dim(space)[1:3])
-		} else {
-			nels <- length(indices)
-		}
-		
-		if (nels == NROW(data)) {
-			#cols is 4th dimension
-			nvols <- NCOL(data)
-			d <- c(dim(space), nvols)
-			space <- BrainSpace(c(dim(space), nvols), origin=origin(space), spacing=spacing(space),
-					orientation=orientation(space), trans=trans(space),
-					reptime=nvols)
-		} else if (nels == NCOL(data)) {
-			#rows is 4th dimension
-			nvols <- NROW(data)
-			d <- c(dim(space), nvols)
-			space <- BrainSpace(c(dim(space), nvols), origin=origin(space), spacing=spacing(space),
-					orientation=orientation(space), trans=trans(space),
-					reptime=nvols)
-		}
-	} else {
-		stop(paste("space argument has incorrect dimensions : ", dim(space)))
-	}
-}
 
 
-
-#BrainVector <- function(data, space, indices=NULL, mask=NULL) {
-#	
-#	space <- .createVectorSpaceFromData(data, space, indices)
-#	
-#	bvec <- NULL
-#	
-#	if (is.null(indices)) {    
-#		if (is.matrix(data)) {
-#			bvec <- .BrainVectorFromMatrix(data, space)
-#		} else if ( all(dim(space) == dim(data)) ) {
-#			bvec <- new("BrainVector", .Data=data, space=space)
-#		} else {
-#			data <- array(data, c(dim(space)[1], dim(space)[2], dim(space)[3], dim(space)[4]))
-#			bvec <- new("BrainVector", .Data=data, space=space)
-#		}      
-#	} else {  
-#		bvec <- .BrainVectorFromIndices(data, space, indices)
-#	}
-#	
-#	bvec
-#}
 
 #' DenseBrainVector
 #' 
@@ -138,6 +57,7 @@ DenseBrainVector <- function(data, space, source=NULL, label="") {
 #' Load data from a \code{\linkS4class{BrainVectorSource}}
 #' @param x an instance of class \code{\linkS4class{BrainVectorSource}}
 #' @return an instance of class \code{\linkS4class{BrainVector}} 
+#' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainVectorSource"), 
 		def=function(x) {		
 			meta <- x@metaInfo
@@ -169,6 +89,7 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 #' @param fileName name of the 4-dimensional image file
 #' @param indices the subset of volume indices to load -- if \code{NULL} then all volumes will be loaded
 #' @param mask the subset of voxels that will be loaded
+#' @rdname BrainVectorSource-class
 #' @export BrainVectorSource
 BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
 	stopifnot(is.character(fileName))
@@ -193,19 +114,20 @@ BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
 	
 }
 
-#' get bucket names
+
+#' @nord
 setMethod("names", signature=c("BrainBucketSource"),
 		def=function(x) {
 			x@metaInfo@label[x@indices]
 		})
 
-#' get bucket names
+#' @nord
 setMethod("names", signature=c("BrainBucket"),
 		def=function(x) {
 			x@labels
 		})
 
-#' length of 4th dimension
+#' @nord
 setMethod("length", signature=c("BrainVector"),
 		def=function(x) {
 			dim(x)[4]
@@ -214,6 +136,8 @@ setMethod("length", signature=c("BrainVector"),
 #' Load data from a \code{\linkS4class{BrainBucketSource}}
 #' @param x an instance of class \code{\linkS4class{BrainBucketSource}}
 #' @return an instance of class \code{\linkS4class{BrainVolume}} 
+#' @docType methods
+#' @rdname loadData-methods
 setMethod(f="loadData", signature=signature("BrainBucketSource"), 
 		def=function(x, key) {
 
@@ -307,11 +231,14 @@ loadBucket <- function(fileName, pattern=NULL, indices=NULL) {
 	buck <- new("BrainBucket", source=bsource, space=bspace, labels=labels[idx])
 }
 
+
+#' @nord
 setMethod(f="[[", signature=signature(x="BrainBucket", i = "character", j = "missing"),
 		def=function(x, i) {
 			loadData(x@source, i)
 		})
 
+#' @nord
 setMethod(f="[[", signature=signature(x="BrainBucket", i = "numeric", j = "missing"),
 		def=function(x, i) {
 			loadData(x@source, i)
@@ -323,7 +250,7 @@ setAs("DenseBrainVector", "array", function(from) from@.Data)
 setAs("BrainVector", "array", function(from) from[,,,])
 
 
-#' @rdname show-methods
+#' @nord
 setMethod(f="show",
 		signature=signature(object="BrainVectorSource"),
 		def=function(object) {
@@ -336,7 +263,7 @@ setMethod(f="show",
 		})
 
 
-#' @rdname show-methods
+#' @nord
 setMethod("show",
 		signature=signature(object="BrainVector"),
 		def=function(object) {
@@ -348,20 +275,20 @@ setMethod("show",
 		})
 
 
-#' apply function to each volume in a BrainVector object
+
 #' @rdname eachVolume-methods
 setMethod(f="eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="missing"),
 		def=function(x, FUN, ...) {
 			lapply(1:(dim(x)[4]), function(tt) FUN(x[,,,tt]))				
 		})
 
-#' apply function to each volume in a BrainBucket object
+
 #' @rdname eachVolume-methods
 setMethod(f="eachVolume", signature=signature(x="BrainBucket", FUN="function", withIndex="missing"),
 		def=function(x, FUN, ...) {
 			lapply(1:(dim(x)[4]), function(tt) FUN(x[[tt]]))				
 		})
-#' apply function to each volume in a BrainVector object
+
 #' @rdname eachVolume-methods
 setMethod("eachVolume", signature=signature(x="BrainBucket", FUN="function", withIndex="logical"),
 		def=function(x, FUN, withIndex, ...) {
@@ -371,7 +298,7 @@ setMethod("eachVolume", signature=signature(x="BrainBucket", FUN="function", wit
 					})
 		})
 
-#' apply function to each volume in a BrainVector object
+
 #' @rdname eachVolume-methods
 setMethod("eachVolume", signature=signature(x="BrainVector", FUN="function", withIndex="logical"),
 		def=function(x, FUN, withIndex, ...) {
@@ -382,10 +309,7 @@ setMethod("eachVolume", signature=signature(x="BrainVector", FUN="function", wit
 		})
 
 
-#' takeVolume
-#' 
-#' extract one or more volumes from a  BrainVector object
-#' 
+
 #' @rdname takeVolume-methods
 setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 		def=function(x, i, merge=FALSE) {
@@ -433,86 +357,37 @@ setMethod(f="eachSeries", signature=signature(x="BrainVector", FUN="function", w
 			
 		})
 
-loadSeries <- function(filenames, indices, volidx=NULL, reduce=T, demean=F, verbose=F, bulk.thresh=100 ) {
-	stopifnot(all(sapply(filenames, .isNIFTI)))
+#loadSeries <- function(filenames, indices, volidx=NULL, reduce=T, demean=F, verbose=F, bulk.thresh=100 ) {
+	#stopifnot(all(sapply(filenames, .isNIFTI)))
 	
-	
-	ret <- lapply(filenames, function(filename) {
-				
-				nfile <- NIFTIFile(filename)
-				header <- readHeader(nfile)
-				ddim <- dataDim(header)
-				NT <- ddim[4]
-				if (is.null(volidx)) {
-					volidx <- 1:NT
-				}
-				
-				if (any(volidx > ddim[4])) {
-					stop("invalid volidx : index exceeds data dimenion")
-				}
-				
-				# check for invalid volidx (i.e. < 0 or duplicates)
-				if (length(ddim) < 4) {
-					stop("loadSeries requires a four dimensional input file")
-				}
-				
-				conn <- .openRead(nfile)
-				rstorage <- .getRStorage(dataType(header))
-				dsize <- .getDataSize(dataType(header))
-				offset <- dataOffset(header)  
-				seek(conn, where=offset, origin="start")
-				indices <- sort(indices)
-				
-				
-				VOLSIZE <- prod(ddim[1:3])
-				ENDIAN <- endian(header)
-				retmat <- matrix(0, length(volidx), length(indices))
-				
-				for (i in 1:length(volidx)) {
-					vol <- volidx[i]
-					VOLSTART <- VOLSIZE*(vol-1)*dsize + offset
-					if (verbose) {
-						print(paste("reading data from volume : ", vol))
-					}
-					
-					
-					if (length(indices) < bulk.thresh) {
-						retmat[i,] <- sapply(indices, function(idx) {
-									seek(conn, VOLSTART + ((idx-1)*dsize), origin="start")
-									readBin(conn, what=rstorage, n=1,size=dsize, endian=ENDIAN)
-								})
-					} else {
-						seek(conn, VOLSTART, origin="start")
-						vals <- readBin(conn, what=rstorage, n=VOLSIZE,size=dsize, endian=ENDIAN)
-						retmat[i,] <- vals[indices]
-					}
-				}
-				
-				if (demean) {
-					cmeans <- colMeans(retmat)
-					retmat <- sweep(retmat, 2, cmeans)
-				}
-				
-				if (reduce) {
-					retmat <- rowMeans(retmat)
-				}
-				
-				if (is.matrix(retmat) && NCOL(retmat) == 1) {
-					retmat <- retmat[,1]
-				}
-				
-				close(conn)
-				
-				retmat
-			})
-	
-	
-	if (length(ret) == 1) {
-		ret[[1]]
-	} else {
-		ret
-	}
-}
+	#ret <- lapply(filenames, function(filename) {
+	#			bvec <- loadVector(filename, indices)
+	#			
+	#			if (demean) {
+	#				cmeans <- colMeans(retmat)
+	#				retmat <- sweep(retmat, 2, cmeans)
+	#			}
+	#			
+	#			if (reduce) {
+	#				retmat <- rowMeans(retmat)
+	#			}
+	#			
+	#			if (is.matrix(retmat) && NCOL(retmat) == 1) {
+	#				retmat <- retmat[,1]
+	#			}
+	#			
+	#			close(conn)
+	#			
+	#			retmat
+	#		})
+#	
+#	
+#	if (length(ret) == 1) {
+#		ret[[1]]
+#	} else {
+#		ret
+#	}
+#}
 
 
 
@@ -551,7 +426,7 @@ loadSeries <- function(filenames, indices, volidx=NULL, reduce=T, demean=F, verb
 #' @param fileName the name of the file to load
 #' @param indices the indices of the sub-volumes to load (e.g. if the file is 4-dimensional)
 #' @param mask a mask defining the spatial elements to load 
-#' @return an \code{\linkS4Class{BrainVector}} object
+#' @return an \code{\linkS4class{BrainVector}} object
 #' @export loadVector
 loadVector  <- function(fileName, indices=NULL, mask=NULL) {
 	src <- BrainVectorSource(fileName, indices, mask)
@@ -650,8 +525,8 @@ setMethod("as.sparse", signature(x="DenseBrainVector", mask="numeric"),
 			
 		})
 
-#' @exportMethod gridToIndex
-#' @rdname gridToIndex-methods
+# @exportMethod gridToIndex
+# @rdname gridToIndex-methods
 # setMethod(f="gridToIndex", signature=signature(x="BrainVector", coords="matrix"),
 #		def=function(x, coords) {
 #			stopifnot(ncol(coords) == 4)
@@ -683,10 +558,12 @@ setMethod("as.sparse", signature(x="DenseBrainVector", mask="numeric"),
 #			idx <- which(indices > 0)
 #			callGeneric(x, idx)			
 #			
-#		})              
+#		})          
 
+
+#' @param x an object of class \code{\linkS4class{BrainVector}}
+#' @param fileName the output file name
 #' @rdname writeVector-methods
-#' @exportMethod writeVector
 setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character"),
 		def=function(x, fileName) {
 			stop()
