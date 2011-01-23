@@ -167,6 +167,14 @@ setMethod(f="loadData", signature=c("BrainVolumeSource"),
 BrainVolumeSource <- function(input, index=1) {
 	stopifnot(index >= 1)
 	stopifnot(is.character(input))
+	
+	if (!file.exists(input)) {
+		candidates <- Sys.glob(paste(input, "*", sep=""))
+		if (length(candidates) > 0) {
+			input <- candidates[1]
+		}
+	}
+	
 	stopifnot(file.exists(input))
 		
 	metaInfo <- readHeader(input)

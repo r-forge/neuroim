@@ -70,7 +70,6 @@ SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 	stopifnot(inherits(space, "BrainSpace"))
 	
-	#mask <- as.logical(mask)
 	if (is.logical(mask) && !inherits(mask, "LogicalBrainVolume")) {
 		mspace <- BrainSpace(dim(space)[1:3], origin(space), axes(space), trans(space))
 		mask <- LogicalBrainVolume(mask, mspace)
@@ -78,44 +77,38 @@ SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 	
 	stopifnot(inherits(mask, "LogicalBrainVolume"))
 
-	
-	D4 <- 0
-	if (is.matrix(data)) {
+	D4 <- if (is.matrix(data)) {
 		Nind <- sum(mask == TRUE)
 		if (nrow(data) == Nind) {
-			D4 <- ncol(data)	
+			ncol(data)	
 		} else if (ncol(data) == Nind) {
-			D4 <- nrow(data)
+			nrow(data)
 		} else {
 			stop(paste("matrix with dim:", dim(data), " does not match mask cardinality: ", Nind))
 		}
-	} else if (length(dim(data)) == 4) {
-		D4 <- dim(data)[4]
+	} else if (length(dim(data)) == 4) {		
 		mat <- apply(data, 4, function(vals) vals)
 		data <- mat[mask==TRUE,]
+		dim(data)[4]
 	}
 	
 	if (ndim(space) == 3) {
 		space <- addDim(space, nrow(data))
 	}
-		
-		
+				
   	stopifnot(ndim(space) == 4)
 	
 	if (is.null(source)) {
 		meta <- BrainMetaInfo(dim(space), spacing(space), origin(space), "FLOAT", label)
 		source <- new("BrainSource", metaInfo=meta)	
 	}
-	
-	
+		
   
   	new("SparseBrainVector", source=source, space=space, mask=mask, data=data, map=IndexLookupVolume(space(mask), as.integer(which(mask))))
   
 }
 
-#' Load data from a \code{\linkS4class{SparseBrainVectorSource}}
-#' @param x an instance of class \code{\linkS4class{SparseBrainVectorSource}} 
-#' @return an instance of class \code{\linkS4class{SparseBrainVector}} 
+
 #' @rdname loadData-methods 
 setMethod(f="loadData", signature=c("SparseBrainVectorSource"), 
 		def=function(x) {		

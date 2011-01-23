@@ -73,7 +73,13 @@ setGeneric(name="readMetaInfo", def=function(x, fileName) standardGeneric("readM
 #' @rdname fileMatches-methods
 setMethod(f="fileMatches", signature=signature(x= "BrainFileDescriptor", fileName="character"),
 		def=function(x, fileName) {
-			headerFileMatches(x,fileName) || dataFileMatches(x,fileName)			
+			if (headerFileMatches(x,fileName)) {
+				file.exists(paste(stripExtension(x, fileName), ".", x@dataExtension, sep=""))				
+			} else if (dataFileMatches(x,fileName)) {
+				file.exists(paste(stripExtension(x, fileName), ".", x@headerExtension, sep=""))				
+			} else {
+				FALSE
+			}	
 		})
 
 #' @rdname headerFileMatches-methods
@@ -127,19 +133,25 @@ setMethod(f="stripExtension",signature=signature(x= "BrainFileDescriptor", fileN
 			}		
 		})
 
+#' @nord
+.readMetaInfo <- function(desc, fileName, readFunc, constructor) {
+	hfile <- headerFile(desc, fileName)
+	header <- readFunc(hfile)		
+	header$fileName <- hfile
+	constructor(desc, header)	
+}
+
 #' @rdname readMetaInfo-methods
 setMethod(f="readMetaInfo",signature=signature(x= "NIfTIFileDescriptor"),
 		def=function(x, fileName) {
-			header <- readNIfTIHeader(fileName)			
-			NIfTIMetaInfo(x, header)
+			.readMetaInfo(x, fileName, readNIfTIHeader, NIfTIMetaInfo)
 		})
 
 #' @rdname readMetaInfo-methods
 setMethod(f="readMetaInfo",signature=signature(x= "AFNIFileDescriptor"),
 		def=function(x, fileName) {
-			header <- readAFNIHeader(fileName)	
-			header$fileName <- fileName
-			AFNIMetaInfo(x, header)
+			.readMetaInfo(x, fileName, readAFNIHeader, AFNIMetaInfo)
+			
 		})
 
 #' @nord
@@ -163,7 +175,7 @@ AFNI <- new("AFNIFileDescriptor",
 AFNI_GZ <- new("AFNIFileDescriptor",
 		fileFormat="AFNI",
 		headerEncoding="gzip",
-		headerExtension="HEAD.gz",
+		headerExtension="HEAD",
 		dataEncoding="gzip",
 		dataExtension="BRIK.gz")
 

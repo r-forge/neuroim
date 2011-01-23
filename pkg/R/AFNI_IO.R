@@ -23,6 +23,7 @@ parseStringAttribute <- function(line) {
 
 parseElement <- function(inputLines) {
 	
+	
 	atype <- str_trim(str_split(inputLines[[1]], "=")[[1]])[2]	
 	name <- str_trim(str_split(inputLines[[2]], "=")[[1]])[2]	
 	count <- str_trim(str_split(inputLines[[3]], "=")[[1]])[2]	
