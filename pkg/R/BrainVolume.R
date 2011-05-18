@@ -46,7 +46,7 @@ DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 	} 
 	
 	if (is.null(source)) {
-		meta <- BrainMetaInfo(dim(data), spacing(space), origin(space), "FLOAT", label)
+		meta <- BrainMetaInfo(dim(space), spacing(space), origin(space), "FLOAT", label)
 		source <- new("BrainSource", metaInfo=meta)
 	}
 	
