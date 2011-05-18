@@ -1,14 +1,18 @@
 \name{DenseBrainVector-class}
 \alias{DenseBrainVector-class}
 \alias{DenseBrainVector}
-\title{Four-dimensional brain image, backed by an array...}
-\description{Four-dimensional brain image, backed by an array}
+\title{DenseBrainVector...}
+\description{DenseBrainVector}
+\details{\code{DenseBrainVector-class}: Four-dimensional brain image, backed by an array
+
+\code{DenseBrainVector}: constructor function for class \code{\linkS4class{DenseBrainVector}}
+
+
+}
 \section{Extends}{\code{\linkS4class{BrainVector}}, \code{\linkS4class{array}}}
+\section{Methods}{\describe{\item{\code{\link[=as.matrix,DenseBrainVector-method]{as.matrix}}}{}\item{\code{\link[=as.sparse,DenseBrainVector,numeric-method]{as.sparse}}}{}}}
 \alias{DenseBrainVector}
 \usage{DenseBrainVector(data, space, source, label="")
-}
-\details{\code{DenseBrainVector}: constructor function for class \code{\linkS4class{DenseBrainVector}}
-
 }
 \value{\code{DenseBrainVector}: \code{\linkS4class{DenseBrainVector}} instance
 

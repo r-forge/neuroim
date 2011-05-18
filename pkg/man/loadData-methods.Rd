@@ -12,9 +12,6 @@
 \code{loadData,BrainBucketSource-method}: an instance of class \code{\linkS4class{BrainVolume}}
 
 
-\code{loadData,SparseBrainVectorSource-method}: an instance of class \code{\linkS4class{SparseBrainVector}}
-
-
 }
 \alias{loadData,BrainBucketSource-method}
 \alias{loadData}

@@ -6,6 +6,6 @@
 \arguments{\item{x}{the object to sparsify}
 \item{mask}{the elements to retain}
 }
-\alias{as.sparse,-method}
+\alias{as.sparse,DenseBrainVector,numeric-method}
 \alias{as.sparse}
 

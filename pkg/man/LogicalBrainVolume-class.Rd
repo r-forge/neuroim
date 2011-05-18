@@ -1,14 +1,17 @@
 \name{LogicalBrainVolume-class}
 \alias{LogicalBrainVolume-class}
 \alias{LogicalBrainVolume}
-\title{Three-dimensional brain image where all values are either TRUE or FALSE...}
-\description{Three-dimensional brain image where all values are either TRUE or FALSE}
+\title{LogicalBrainVolume...}
+\description{LogicalBrainVolume}
+\details{\code{LogicalBrainVolume-class}: Three-dimensional brain image where all values are either TRUE or FALSE
+
+\code{LogicalBrainVolume}: Construct a \code{\linkS4class{LogicalBrainVolume}} instance
+
+
+}
 \section{Extends}{\code{\linkS4class{DenseBrainVolume}}}
 \alias{LogicalBrainVolume}
 \usage{LogicalBrainVolume(data, space, source, label="", indices)
-}
-\details{\code{LogicalBrainVolume}: Construct a \code{\linkS4class{LogicalBrainVolume}} instance
-
 }
 \value{\code{LogicalBrainVolume}: \code{\linkS4class{LogicalBrainVolume}} instance
 
