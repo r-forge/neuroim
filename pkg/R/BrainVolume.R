@@ -37,7 +37,7 @@ BrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 #' @export DenseBrainVolume
 #' @rdname DenseBrainVolume-class
 DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
-	if (length(dim(data)) != 3) {
+	if (length(dim(space)) != 3) {
 		stop("DenseBrainVolume: data argument must have three dimensions")
 	} 
 	
