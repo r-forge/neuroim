@@ -22,7 +22,12 @@ write.nifti.volume <- function(vol, fileName, dataType=NULL) {
 		dataType <- vol@source@metaInfo@dataType
 	}
 	
-	conn <- file(fileName, open="wb")
+	conn <- if (substr(fileName, nchar(fileName)-3, nchar(fileName)) == ".gz") {
+		gzfile(fileName, open="wb")
+	} else {
+		file(fileName, open="wb")
+	}
+
 	writeNIfTIHeader(hdr, conn, close=FALSE)
 	writer <- BinaryWriter(conn, hdr$voxOffset, dataType, hdr$bitpix/8, hdr$endian)
 	writeElements(writer, as.numeric(vol))
