@@ -215,6 +215,8 @@ setClass("BrainSource", representation=
 setClass("BrainFileSource", representation=
 				representation(metaInfo="FileMetaInfo"),
 				contains=c("BrainSource"))
+
+		
 		
 #' A class is used to produce a \code{\linkS4class{BrainVolume}} instance
 #' @slot index the index of the volume to be read -- must be of length 1.
@@ -222,7 +224,9 @@ setClass("BrainFileSource", representation=
 		setClass("BrainVolumeSource", representation=
 						representation(index="integer"),
 				contains=c("BrainSource"))
-		
+
+#' BrainVectorSource
+#' 
 #' A class that is used to produce a \code{\linkS4class{BrainVector}} instance
 #' @slot indices the index vector of the volumes to be loaded
 #' @exportClass BrainVectorSource
@@ -234,7 +238,8 @@ setClass("BrainFileSource", representation=
 		
 
 		
-
+#' BrainBucketSource
+#' 
 #' A class that is used to produce a \code{\linkS4class{BrainBucket}} instance
 #' @slot sourceList a list of sources for the bucket sub-volumes
 #' @slot cache a cache used to store data in memory
@@ -245,7 +250,8 @@ setClass("BrainFileSource", representation=
 		
 		
 
-
+#' BinaryReader
+#' 
 #' This class supports reading of bulk binary data from a connection
 #'
 #' @slot input the binary input connection
@@ -261,6 +267,8 @@ setClass("BinaryReader", representation=
 							   bytesPerElement="integer",
 							   endian="character"))
 
+#' BinaryWriter
+#' 
 #' This class supports writing of bulk binary data to a connection
 #'
 #' @slot output the binary output connection
@@ -276,7 +284,8 @@ setClass("BinaryWriter", representation=
 							   bytesPerElement="integer",
 							   endian="character"))
 					   
-
+#' BrainSpace
+#' 
 #' This class represents the geometry of a brain image
 #' @slot Dim the grid dimensions of the image
 #' @slot origin the coordinates of the spatial origin
@@ -307,7 +316,8 @@ setClass("BrainSpace",
       }
     })
          
-
+#' BrainData
+#' 
 #' Base class for brain image data
 #' @slot source an instance of class \code{\linkS4class{BaseSource}} to store the source of the data
 #' @slot space an instance of class \code{\linkS4class{BrainSpace}} to represent the geometry of the data space
@@ -318,7 +328,8 @@ setClass("BrainData",
 					       space="BrainSpace"), 
 	contains=c("VIRTUAL"))
 
-
+#' BrainVolume
+#' 
 #' Two-dimensional brain image
 #' @exportClass BrainSlice
 setClass("BrainSlice",       
@@ -330,18 +341,23 @@ setClass("BrainVolume",
 	    contains=c("BrainData"))
 
 
-
+#' DenseBrainVolume
+#' 
 #' Three-dimensional brain image, backed by an \code{array}	   
 #' @exportClass DenseBrainVolume  
 setClass("DenseBrainVolume", 	
 		contains=c("BrainVolume", "array"))
 
+
+#' LogicalBrainVolume
+#' 
 #' Three-dimensional brain image where all values are either TRUE or FALSE	   
 #' @exportClass LogicalBrainVolume    
 setClass("LogicalBrainVolume", 	
 		contains=c("DenseBrainVolume"))
 
-
+#' IndexLookupVolume
+#' 
 #' Three-dimensional brain image that can be used as a map between 1D grid indices and a table of values
 #' Currently used in the \code{\linkS4class{SparseBrainVector}} class. 
 #' @exportClass IndexLookupVolume
@@ -359,11 +375,15 @@ setClass("IndexLookupVolume",
 setClass("BrainVector", 
 		contains=c("BrainData"))
 
+#' DenseBrainVector
+#' 
 #' Four-dimensional brain image, backed by an array   
-#' @exportClass BrainVector  
+#' @exportClass DenseBrainVector  
 setClass("DenseBrainVector", 
 		contains=c("BrainVector", "array"))
 
+#' SparseBrainVector
+#' 
 #' a sparse four-dimensional brain image, backed by a \code{matrix}, where each column represents 
 #' a vector spanning the fourth dimension (e.g. time)
 #' @slot mask the mask defining the sparse domain
@@ -374,6 +394,8 @@ setClass("SparseBrainVector",
 		representation=representation(mask="LogicalBrainVolume",data="matrix", map="IndexLookupVolume"),
 		contains=c("BrainVector")) 
 
+#' SparseBrainVectorSource
+#' 
 #' A class that is used to produce a \code{\linkS4class{SparseBrainVector}} instance
 #' @slot mask the subset of voxels that will be stored in memory
 #' @exportClass BrainVectorSource
@@ -391,7 +413,8 @@ setClass("TiledBrainVector",
 setClass("ROIVolume", 
 		representation=representation(data="numeric", coords="matrix"),
 		contains=c("BrainData"))
-
+#' BrainBucket
+#' 
 #' a four-dimensional image this conists of a sequence of labelled image volumes backed by a list
 #' @slot source the data source for the bucket volumes
 #' @slot labels the names of the sub-volumes contained in the bucket

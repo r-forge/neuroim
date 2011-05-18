@@ -510,8 +510,27 @@ setMethod(f="seriesIter", signature=signature(x="BrainVector"),
 		})
 
 
+#' @nord
+setAs(from="DenseBrainVector", to="matrix",
+		function(from) {
+			data <- from@.Data
+			dm <- dim(data)
+			d123 <- prod(dm[1:3])
+			d4 <- dm[4]
+			
+			dim(data) <- c(d123,d4)
+			return(data)
+			
+		})
+
+#' @rdname as.matrix-methods
+setMethod(f="as.matrix", signature=signature(x = "DenseBrainVector"), def=function(x) {
+			as(x, "matrix")						
+		})
+
+
 #' @rdname as.sparse-methods
-setMethod("as.sparse", signature(x="DenseBrainVector", mask="numeric"),
+setMethod(f="as.sparse", signature=signature(x="DenseBrainVector", mask="numeric"),
 		def=function(x, mask) {
 			vdim <- dim(x)[1:3]
 			m <- array(0, vdim)
@@ -571,16 +590,6 @@ setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="charact
 		})
 
 
-setAs(from="BrainVector", to="matrix",
-		def=function(from) {
-			data <- from@.Data
-			dm <- dim(data)
-			d123 <- prod(dm[1:3])
-			d4 <- dm[4]
-			
-			dim(data) <- c(d123,d4)
-			data
-			
-		})
+
 
 
