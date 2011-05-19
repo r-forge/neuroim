@@ -221,7 +221,7 @@
     endian <- "big"
     seek(conn, 0)
     hsize <- readBin(conn, integer(), 1, endian=endian)
-    if (hsize != "348") {
+    if (hsize != 348) {
       stop("nifti(getEndian): header size is not 348, invalid header.")
     }
   }
