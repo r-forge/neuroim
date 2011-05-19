@@ -81,6 +81,7 @@ BrainMetaInfo <- function(Dim, spacing, origin=rep(0, length(spacing)), dataType
 #' @rdname NIfTIMetaInfo-class
 NIfTIMetaInfo <- function(descriptor, nifti_header) {
 	stopifnot(!is.null(nifti_header$fileType) || (nifti_header$fileType == "NIfTI"))
+	
 
 	new("NIfTIMetaInfo",
 			headerFile=headerFile(descriptor, nifti_header$fileName),

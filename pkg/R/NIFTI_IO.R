@@ -12,7 +12,7 @@
 
 write.nifti.volume <- function(vol, fileName, dataType=NULL) {      
 	stopifnot(length(dim(vol)) == 3)
-	hdr <- as.nifti.header(vol@source@metaInfo)
+	hdr <- as.nifti.header(vol, vol@source@metaInfo)
 	
 	if (!is.null(dataType) && dataType != vol@source@metaInfo@dataType) {
 		hdr$datatype <- .getDataCode(dataType)
@@ -36,7 +36,7 @@ write.nifti.volume <- function(vol, fileName, dataType=NULL) {
 
 
 
-as.nifti.header <- function(metaInfo, fname=NULL, oneFile=TRUE) {
+as.nifti.header <- function(vol, metaInfo, fname=NULL, oneFile=TRUE) {
 	if (inherits(metaInfo, "NIfTIMetaInfo")) {
 		ret <- metaInfo@header
 		if (!is.null(fname)) {
@@ -73,14 +73,18 @@ as.nifti.header <- function(metaInfo, fname=NULL, oneFile=TRUE) {
 		hd$sclIntercept <- metaInfo@intercept
 		hd$sclSlope <- metaInfo@sclSlope
 	
-		tmat <- diag(c(metaInfo@spacing, 1))
-		tmat[1:3, 4] <- metaInfo@origin
+		#tmat <- diag(c(metaInfo@spacing, 1))
+		#tmat[1:3, 4] <- metaInfo@origin
+		
+		
+		
+		tmat <- trans(vol)
 		
 		hd$qform <- tmat
 		hd$sform <- tmat
 		
 		quat1 <- .matrixToQuatern(tmat)
-		hd$quaternion <- quat1$quaterninon
+		hd$quaternion <- quat1$quaternion
 		hd$qfac <- quat1$qfac
 		hd$pixdim[1] <- hd$qfac
 		hd
@@ -115,15 +119,15 @@ as.nifti.header <- function(metaInfo, fname=NULL, oneFile=TRUE) {
 		hd$sclIntercept <- 0
 		hd$sclSlope <- 0
 		
-		#browser()
-		tmat <- diag(c(metaInfo@spacing, 1))
-		tmat[1:3, 4] <- metaInfo@origin
+		
+		tmat <- trans(vol)
+		
 		
 		hd$qform <- tmat
 		hd$sform <- tmat
 		
 		quat1 <- .matrixToQuatern(tmat)
-		hd$quaternion <- quat1$quaterninon
+		hd$quaternion <- quat1$quaternion
 		hd$qfac <- quat1$qfac
 		hd$pixdim[1] <- hd$qfac
 		hd
@@ -181,8 +185,8 @@ createNIfTIHeader <- function(oneFile=TRUE, fileName=NULL) {
 	header$glmax <- 0
 	header$glmin <- 0
 	
-	header$description <- ""
-	header$auxfile <- ""
+	header$description <- character(80)
+	header$auxfile <- character(24)
 	
 	header$qformCode <- 1
 	header$sformCode <- 1
@@ -209,6 +213,7 @@ createNIfTIHeader <- function(oneFile=TRUE, fileName=NULL) {
 
 readNIfTIHeader <- function(fname) {
 	
+
 	header <- list()
 	header$fileType <- "NIfTI"
 	header$encoding <- "binary"
@@ -307,8 +312,6 @@ readNIfTIHeader <- function(fname) {
 }
 
 writeNIfTIHeader <- function(niftiInfo, conn, close=TRUE) {
-	
-	
 	endian <- niftiInfo$endian
 	
 		
@@ -316,7 +319,9 @@ writeNIfTIHeader <- function(niftiInfo, conn, close=TRUE) {
 	writeBin(integer(34),conn,1,endian)
 	writeChar("r", conn,1,eos=NULL)
 	writeBin(as.integer(niftiInfo$diminfo), conn, size=1, endian) #diminfo, not supported currently -- write zero  
-	writeBin(as.integer(niftiInfo$ndim), conn, 2, endian)         #num dimensions 
+	#writeBin(as.integer(niftiInfo$numDimensions), conn, 2, endian)         #num dimensions 
+	
+	stopifnot(length(niftiInfo$dimensions) == 8)
 	writeBin(as.integer(niftiInfo$dimensions), conn, 2, endian)   #dimension vector 
 	writeBin(as.double(niftiInfo$intent1), conn, 4, endian)       #intent1
 	writeBin(as.double(niftiInfo$intent2), conn, 4, endian)       #intent2
@@ -342,6 +347,7 @@ writeNIfTIHeader <- function(niftiInfo, conn, close=TRUE) {
 	writeBin(as.integer(niftiInfo$auxfile), conn, 1, endian)      #aux_file
 	writeBin(as.integer(niftiInfo$qformCode), conn, 2, endian)    #qform code
 	writeBin(as.integer(niftiInfo$sformCode), conn, 2, endian)    #sform code
+	
 	writeBin(as.double(niftiInfo$quaternion), conn, 4, endian)    #quaternion
 	writeBin(as.double(niftiInfo$qoffset), conn, 4, endian)       #qoffset
 	writeBin(as.double(t(niftiInfo$sform[1:3,])), conn, 4, endian) #sform
