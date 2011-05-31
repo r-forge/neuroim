@@ -109,7 +109,7 @@ BrainVectorSource <- function(fileName, indices=NULL, mask=NULL) {
 	if (is.null(mask)) {
 		new("BrainVectorSource", metaInfo=metaInfo, indices=indices)		
 	} else {
-		SparseBrainVectorSource(metaInfo, indices, as(mask, "LogicalBrainVolume"))		
+		SparseBrainVectorSource(metaInfo, indices, mask)		
 	}
 	
 }
@@ -580,14 +580,33 @@ setMethod(f="as.sparse", signature=signature(x="DenseBrainVector", mask="numeric
 #		})          
 
 
-#' @param x an object of class \code{\linkS4class{BrainVector}}
-#' @param fileName the output file name
+
+#' @exportMethod writeVector
 #' @rdname writeVector-methods
-setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character"),
+setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character", format="missing", dataType="missing"),
 		def=function(x, fileName) {
-			stop()
+			write.nifti.vector(x, fileName)           
+		})
+
+#' @exportMethod writeVector
+#' @rdname writeVector-methods
+setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character", format="character", dataType="missing"),
+		def=function(x, fileName, format) {
+			if (toupper(format) == "NIFTI" || toupper(format) == "NIFTI1" || toupper(format) == "NIFTI-1") {
+				callGeneric(x, fileName)
+			} else {
+				stop(paste("sorry, cannot write format: ", format))
+			}      
+		})
+
+#' @exportMethod writeVector
+#' @rdname writeVolume-methods
+setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character", format="missing", dataType="character"),
+		def=function(x, fileName, dataType) {
+			write.nifti.vector(x, fileName, dataType)   
 			
 		})
+
 
 
 

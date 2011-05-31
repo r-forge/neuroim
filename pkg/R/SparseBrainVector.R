@@ -50,8 +50,12 @@ SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 		stop("illegal mask argument with dim: ", dim(mask))
 	}
 	
-	mspace <- BrainSpace(dim(mask), metaInfo@origin, metaInfo@spacing, metaInfo@spatialAxes)
-	mask <- LogicalBrainVolume(mask, mspace)
+	if (!inherits(mask, "LogicalBrainVolume")) {
+		mspace <- BrainSpace(dim(mask), metaInfo@origin, metaInfo@spacing, metaInfo@spatialAxes)
+		mask <- LogicalBrainVolume(mask, mspace)		
+	}
+	
+	stopifnot(all(dim(mask) == D))
 	
 	new("SparseBrainVectorSource", metaInfo=metaInfo, indices=indices, mask=mask)				
 }
@@ -71,9 +75,10 @@ SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 	stopifnot(inherits(space, "BrainSpace"))
 	
-	if (is.logical(mask) && !inherits(mask, "LogicalBrainVolume")) {
+	
+	if (!inherits(mask, "LogicalBrainVolume")) {
 		mspace <- BrainSpace(dim(space)[1:3], spacing(space), origin(space), axes(space), trans(space))
-		mask <- LogicalBrainVolume(mask, mspace)
+		mask <- LogicalBrainVolume(as.logical(mask), mspace)
 	}
 	
 	stopifnot(inherits(mask, "LogicalBrainVolume"))
@@ -110,9 +115,13 @@ SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 }
 
 
+
+
 #' @rdname loadData-methods 
 setMethod(f="loadData", signature=c("SparseBrainVectorSource"), 
 		def=function(x) {		
+			
+			### considerable code duplication with BrainVectorSource#loadData
 			meta <- x@metaInfo
 			stopifnot(length(meta@Dim) == 4)
 			
@@ -130,7 +139,7 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 			}
 			
 			arr <- do.call(rbind, datlist)		
-			bspace <- BrainSpace(meta@Dim, meta@origin, meta@spacing, meta@spatialAxes)
+			bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)), meta@origin, meta@spacing, meta@spatialAxes)
 			SparseBrainVector(arr, bspace, x@mask)
 			
 		})
@@ -337,7 +346,7 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
 			  
 			  bspace <- dropDim(space(x))
 			  makevol <- function(i) {				  
-				  bv <- BrainVolume(x@data[,i], bspace, indices=idx)
+				  bv <- BrainVolume(x@data[i,], bspace, indices=idx)
 			  }
 			  
 			  res <- lapply(i, makevol)
@@ -354,32 +363,7 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
 		  })
 
 
-#' @rdname writeVector-methods
-setMethod(f="writeVector",signature=signature(x="SparseBrainVector", fileName="character"),
-          def=function(x, fileName) {
-            if (typeof(x) == "double") {
-              dataType = "FLOAT"
-            } else if (typeof(x) == "integer") {
-              dataType = "SHORT"
-            } else {
-              stop(paste("unrecognized storage stype : ", typeof(x)))
-            }
 
-            
-            brainFile <- NIFTIFile(fileName, "w")
-            hdr <- createNIFTIHeader(x, fileName, dataType)
-            
-            writeHeader(brainFile, hdr)
-
-            NVOLS <- dim(x)[4]
-            
-            for (i in 1:NVOLS) {
-              vol <- takeVolume(x,i)
-              print(paste("writing volume ", i))
-              writeData(brainFile, hdr, as.vector(vol))
-            }
-              
-          })
 
 #		setAs(from="BrainVector", to="matrix",
 #		      function(from) {

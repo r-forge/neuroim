@@ -10,6 +10,35 @@
 	}
 }
 
+write.nifti.vector <- function(vec, fileName, dataType=NULL) {      
+	stopifnot(length(dim(vec)) == 4)
+	hdr <- as.nifti.header(vec, vec@source@metaInfo)
+	
+	if (!is.null(dataType) && dataType != vec@source@metaInfo@dataType) {
+		hdr$datatype <- .getDataCode(dataType)
+		hdr$dataStorage <- .getDataStorage(hdr$datatype)		
+		hdr$bitpix <- .getDataSize(dataType) * 8		
+	} else {
+		dataType <- vec@source@metaInfo@dataType
+	}
+	
+	conn <- if (substr(fileName, nchar(fileName)-2, nchar(fileName)) == ".gz") {
+				gzfile(fileName, open="wb")
+			} else {
+				file(fileName, open="wb")
+			}
+	
+	writeNIfTIHeader(hdr, conn, close=FALSE)
+	writer <- BinaryWriter(conn, hdr$voxOffset, dataType, hdr$bitpix/8, .Platform$endian)
+	
+	NVOLS <- dim(bvec)[4]
+	for (i in 1:NVOLS) {
+		writeElements(writer, as.numeric(takeVolume(bvec, i)))
+	}
+	close(writer)
+}  
+
+
 write.nifti.volume <- function(vol, fileName, dataType=NULL) {      
 	stopifnot(length(dim(vol)) == 3)
 	hdr <- as.nifti.header(vol, vol@source@metaInfo)
@@ -68,7 +97,9 @@ as.nifti.header <- function(vol, metaInfo, fname=NULL, oneFile=TRUE) {
 		N <- 8 - length(hd$dimensions)
 		hd$dimensions <- c(hd$dimensions,  rep(1, N))
 		hd$numDimensions <- length(metaInfo@Dim)
-		hd$pixdim <- c(0, metaInfo@spacing, rep(0,N))
+		
+		### only encodes pixdim for three dimensions
+		hd$pixdim <- c(0, metaInfo@spacing, rep(0,4))
 		hd$qoffset <- metaInfo@origin
 		hd$sclIntercept <- metaInfo@intercept
 		hd$sclSlope <- metaInfo@sclSlope
@@ -114,7 +145,11 @@ as.nifti.header <- function(vol, metaInfo, fname=NULL, oneFile=TRUE) {
 		N <- 8 - length(hd$dimensions)
 		hd$dimensions <- c(hd$dimensions,  rep(1, N))
 		hd$numDimensions <- length(metaInfo@Dim)
-		hd$pixdim <- c(0, metaInfo@spacing, rep(0,N))
+		
+		### only encodes pixdim for three dimensions
+		hd$pixdim <- c(0, metaInfo@spacing, rep(0,4))
+		
+		
 		hd$qoffset <- metaInfo@origin
 		hd$sclIntercept <- 0
 		hd$sclSlope <- 0
@@ -322,6 +357,8 @@ writeNIfTIHeader <- function(niftiInfo, conn, close=TRUE) {
 	#writeBin(as.integer(niftiInfo$numDimensions), conn, 2, endian)         #num dimensions 
 	
 	stopifnot(length(niftiInfo$dimensions) == 8)
+	stopifnot(length(niftiInfo$pixdim) == 8)
+	
 	writeBin(as.integer(niftiInfo$dimensions), conn, 2, endian)   #dimension vector 
 	writeBin(as.double(niftiInfo$intent1), conn, 4, endian)       #intent1
 	writeBin(as.double(niftiInfo$intent2), conn, 4, endian)       #intent2
