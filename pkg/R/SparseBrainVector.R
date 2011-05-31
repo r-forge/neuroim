@@ -66,12 +66,13 @@ SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 #' @param mask a 3D \code{array} of type \code{logical} 
 #' @param source the data source -- an instance of class \code{\linkS4class{BrainSource}}
 #' @param label associated sub-image labels
+#' @export 
 #' @rdname SparseBrainVector-class 	
 SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 	stopifnot(inherits(space, "BrainSpace"))
 	
 	if (is.logical(mask) && !inherits(mask, "LogicalBrainVolume")) {
-		mspace <- BrainSpace(dim(space)[1:3], origin(space), axes(space), trans(space))
+		mspace <- BrainSpace(dim(space)[1:3], spacing(space), origin(space), axes(space), trans(space))
 		mask <- LogicalBrainVolume(mask, mspace)
 	}
 	

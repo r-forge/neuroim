@@ -9,6 +9,7 @@
 #' @param spacing the voxel dimensions
 #' @param axes the images axes specification
 #' @param trans the coordinate transformation associated with the image space
+#' @export
 #' @rdname BrainSpace-class
 BrainSpace <- function(Dim, origin=NULL, spacing=NULL, axes=NULL, trans=NULL) {
 	
