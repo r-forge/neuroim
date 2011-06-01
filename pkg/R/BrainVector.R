@@ -511,6 +511,7 @@ setMethod(f="seriesIter", signature=signature(x="BrainVector"),
 
 
 #' @nord
+#' @export
 setAs(from="DenseBrainVector", to="matrix",
 		function(from) {
 			data <- from@.Data
@@ -524,6 +525,7 @@ setAs(from="DenseBrainVector", to="matrix",
 		})
 
 #' @rdname as.matrix-methods
+#' @export 
 setMethod(f="as.matrix", signature=signature(x = "DenseBrainVector"), def=function(x) {
 			as(x, "matrix")						
 		})
