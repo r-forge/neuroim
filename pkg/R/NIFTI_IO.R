@@ -31,7 +31,7 @@ write.nifti.vector <- function(vec, fileName, dataType=NULL) {
 	writeNIfTIHeader(hdr, conn, close=FALSE)
 	writer <- BinaryWriter(conn, hdr$voxOffset, dataType, hdr$bitpix/8, .Platform$endian)
 	
-	NVOLS <- dim(bvec)[4]
+	NVOLS <- dim(vec)[4]
 	for (i in 1:NVOLS) {
 		writeElements(writer, as.numeric(takeVolume(vec, i)))
 	}
