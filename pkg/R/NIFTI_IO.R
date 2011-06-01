@@ -33,7 +33,7 @@ write.nifti.vector <- function(vec, fileName, dataType=NULL) {
 	
 	NVOLS <- dim(bvec)[4]
 	for (i in 1:NVOLS) {
-		writeElements(writer, as.numeric(takeVolume(bvec, i)))
+		writeElements(writer, as.numeric(takeVolume(vec, i)))
 	}
 	close(writer)
 }  
