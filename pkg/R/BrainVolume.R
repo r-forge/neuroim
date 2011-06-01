@@ -154,7 +154,7 @@ setMethod(f="loadData", signature=c("BrainVolumeSource"),
 			close(reader)
 			arr <- array(dat, meta@Dim[1:3])
 			
-			bspace <- BrainSpace(meta@Dim[1:3], meta@origin, meta@spacing, meta@spatialAxes)
+			bspace <- BrainSpace(meta@Dim[1:3], meta@origin, meta@spacing, meta@spatialAxes, trans(meta))
 			DenseBrainVolume(arr, bspace, x)
 					
 		})

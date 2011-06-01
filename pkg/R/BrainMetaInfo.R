@@ -44,6 +44,20 @@ setMethod(f="dataReader", signature=signature("AFNIMetaInfo"),
 			}
 		})			
 
+#' @rdname trans-methods
+setMethod(f="trans", signature=signature("BrainMetaInfo"), 
+		def=function(x) {
+			D <- min(length(x@Dim), 3)
+			trans <- diag(c(x@spacing,1))
+			trans[1:D,D+1] <- x@origin		
+		})
+
+#' @rdname trans-methods
+setMethod(f="trans", signature=signature("NIfTIMetaInfo"), 
+		def=function(x) {
+			x@header$qform
+		})
+
 niftiDim <- function(nifti_header) {
 	dimarray <- nifti_header$dimensions
 	lastidx <- min(which(dimarray == 1)) - 1
