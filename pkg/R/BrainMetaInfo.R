@@ -104,7 +104,7 @@ NIfTIMetaInfo <- function(descriptor, nifti_header) {
 			endian=nifti_header$endian,
 			dataOffset=nifti_header$voxOffset,
 			dataType=nifti_header$dataStorage,
-			bytesPerElement=as.integer(nifti_header$bitpix/8),
+			bytesPerElement=as.integer(.getDataSize(nifti_header$dataStorage)),
 			Dim=niftiDim(nifti_header),
 			spatialAxes=OrientationList3D$AXIAL_LPI,
 			additionalAxes=NullAxis,

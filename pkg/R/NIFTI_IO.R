@@ -20,6 +20,11 @@ write.nifti.vector <- function(vec, fileName, dataType=NULL) {
 		hdr$bitpix <- .getDataSize(dataType) * 8		
 	} else {
 		dataType <- vec@source@metaInfo@dataType
+		
+		### code duplication
+		hdr$datatype <- .getDataCode(dataType)
+		hdr$dataStorage <- .getDataStorage(hdr$datatype)		
+		hdr$bitpix <- .getDataSize(dataType) * 8		
 	}
 	
 	conn <- if (substr(fileName, nchar(fileName)-2, nchar(fileName)) == ".gz") {
@@ -49,6 +54,10 @@ write.nifti.volume <- function(vol, fileName, dataType=NULL) {
 		hdr$bitpix <- .getDataSize(dataType) * 8		
 	} else {
 		dataType <- vol@source@metaInfo@dataType
+		### code duplication
+		hdr$datatype <- .getDataCode(dataType)
+		hdr$dataStorage <- .getDataStorage(hdr$datatype)		
+		hdr$bitpix <- .getDataSize(dataType) * 8		
 	}
 	
 	conn <- if (substr(fileName, nchar(fileName)-2, nchar(fileName)) == ".gz") {
