@@ -121,6 +121,48 @@ test.BrainVector.as.matrix <- function() {
 	
 }
 
+test.BrainVector.roundtrip.io <- function() {
+	bvec <- loadVector("data/qrscan01.nii.gz", indices=1:4)
+	template <- takeVolume(bvec,1)
+	
+	mask.idx <- sort(sample(1:length(template), 1000))
+	vals <- rnorm(length(mask.idx))
+	bv <- BrainVolume(vals, space(template), indices=mask.idx)
+	fname <- paste(tempfile(), ".nii", sep="")
+	writeVolume(bv,fname)
+	bv2 <- loadVolume(fname)
+	
+	checkEquals(dim(bv2), dim(bv))
+	checkEquals(trans(bv2), trans(bv))
+	
+}
+
+test.SparseBrainVector.series <- function() {
+	
+	spvec <- loadVector("data/qrscan01.nii.gz", indices=1:4, mask=rep(TRUE, 96*96*26))
+	bvec <- loadVector("data/qrscan01.nii.gz", indices=1:4)
+	
+	voxmat <- rbind(c(10,10,10), c(20,20,10), c(30,30, 10), c(40,40,10), c(50,50,10))
+	
+	checkEquals(series(bvec, voxmat), series(spvec, voxmat))
+	
+
+test.SparseBrainVector.roundtrip.io <- function() {
+	bvec <- loadVector("data/qrscan01.nii.gz", indices=1:4, mask=rep(TRUE, 96*96*26))
+	template <- takeVolume(bvec,1)
+	
+	mask.idx <- sort(sample(1:length(template), 1000))
+	vals <- rnorm(length(mask.idx))
+	bv <- BrainVolume(vals, space(template), indices=mask.idx)
+	fname <- paste(tempfile(), ".nii", sep="")
+	writeVolume(bv,fname)
+	bv2 <- loadVolume(fname)
+	
+	checkEquals(dim(bv2), dim(bv))
+	checkEquals(trans(bv2), trans(bv))
+	
+}
+
 test.SparseBrainVector.as.sparse <- function() {
 	dat <- array(rnorm(64*64*64*4), c(64,64,64,4))
 	spc <- BrainSpace(c(64,64,64,4))

@@ -12,6 +12,16 @@ test.DenseBrainVolume <- function() {
 	checkEquals(dim(bv), c(64,64,64))
 }
 
+test.DenseBrainVolume.indices <- function() {
+	dat <- rnorm(100)
+	spc <- BrainSpace(c(64,64,64))
+	
+	indices = seq(1,20000, length.out=100)
+	bv <- DenseBrainVolume(dat, spc, indices=indices)
+	checkTrue(!is.null(bv))
+	checkEquals(dim(bv), c(64,64,64))
+}
+
 test.DenseBrainVolume.concat <- function() {
 	dat <- array(0, c(64,64,64))
 	spc <- BrainSpace(c(64,64,64))
@@ -37,6 +47,13 @@ test.loadVolume <- function() {
 	checkException(loadVolume("data/global_mask.nii", index=5), silent=TRUE)
 	
 	checkEquals(dim(loadVolume("data/epivector.nii", index=3)), c(64,64,38))
+	
+}
+
+test.loadVolume.gz <- function() {
+	vol <- loadVolume("data/fixef_symbol2_diff_GLT#0_Tstat.nii.gz")
+	checkTrue(!is.null(vol))
+	checkEquals(dim(vol), c(64,64,25))
 	
 }
 
