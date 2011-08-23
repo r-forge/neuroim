@@ -43,7 +43,7 @@ RegionCube <- function(bvol, centroid, surround, mask=NULL) {
   
   vals <- bvol[grid]
 
-  new("BrainRegion3D", space=space(bvol), data=vals, coords=grid)
+  new("ROIVolume", space=space(bvol), data=vals, coords=grid)
   
 }
 
@@ -88,7 +88,7 @@ RegionSphere <- function (bvol, centroid, radius) {
     ## coercion to numeric is  ahack and needs to be fixed. subsetting of BrainVolume is broken?
     vals <- as.numeric(bvol[gsphere])
     volspace <- space(bvol)
-    new("BrainRegion3D", space = space(bvol), data = vals, coords = gsphere)
+    new("ROIVolume", space = space(bvol), data = vals, coords = gsphere)
 }
 
 #setMethod("indices", signature(x="BrainRegion3D"),

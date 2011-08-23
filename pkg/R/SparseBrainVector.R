@@ -86,6 +86,7 @@ SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 	D4 <- if (is.matrix(data)) {
 		Nind <- sum(mask == TRUE)
 		if (nrow(data) == Nind) {
+			data <- t(data)
 			ncol(data)	
 		} else if (ncol(data) == Nind) {
 			nrow(data)
@@ -362,7 +363,20 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
 			  }											
 		  })
 
-
+  
+#' @nord
+#' @export
+setAs(from="SparseBrainVector", to="matrix",
+		  function(from) {
+			  from@data			  
+		  })
+  
+#' @rdname as.matrix-methods
+#' @export 
+setMethod(f="as.matrix", signature=signature(x = "SparseBrainVector"), def=function(x) {
+			  as(x, "matrix")						
+		  })
+  
 
 
 #		setAs(from="BrainVector", to="matrix",

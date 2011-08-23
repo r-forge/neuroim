@@ -25,7 +25,26 @@
 	}
 }
 
-
+#' BrainVector
+#' 
+#' constructor function for virtual class \code{\linkS4class{BrainVector}}
+#' 
+#' @param data the image data
+#' @param space a \code{\linkS4class{BrainSpace}} object
+#' @param mask an optional \code{array} of type \code{logical}
+#' @param source an optional \code{\linkS4class{BrainSource}} object
+#' @param label a label of type \code{character} 
+#' @return a concrete instance of \code{\linkS4class{BrainVector}} class 
+#' @export 
+#' @rdname BrainVector-class
+BrainVector <- function(data, space, mask=NULL, source=NULL, label="") {
+	if (is.null(mask)) {
+		DenseBrainVector(data,space, source, label)
+	} else {
+		SparseBrainVector(data,space,mask,source, label)
+	}
+	
+}
 
 
 #' DenseBrainVector
