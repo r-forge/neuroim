@@ -83,21 +83,25 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 			stopifnot(length(meta@Dim) == 4)
 			
 			meta <- x@metaInfo
-			nels <- prod(meta@Dim[1:3]) 
+			#nels <- prod(meta@Dim[1:3]) 
+			nels <- prod(meta@Dim[1:4]) 
 			
-			datlist <- list()
+			#datlist <- list()
 			ind <- x@indices
 			
-			for (i in 1:length(ind)) {
-				offset <- prod(nels * (ind[i]-1)) * meta@bytesPerElement
-				reader <- dataReader(meta, offset)		
-				datlist[[i]] <- array(readElements(reader, nels), meta@Dim[1:3])
-				close(reader)				
-			}
+			#for (i in 1:length(ind)) {
+			#	offset <- prod(nels * (ind[i]-1)) * meta@bytesPerElement
+			#	reader <- dataReader(meta, offset)		
+			#	datlist[[i]] <- array(readElements(reader, nels), meta@Dim[1:3])
+			#	close(reader)				
+			#}
 			
-			arr <- abind(datlist, along=4)			
+			reader <- dataReader(meta, 0)	
+			arr <- array(readElements(reader, nels), c(meta@Dim[1:4]))
+			
+			#arr <- abind(datlist, along=4)			
 			bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)), meta@origin, meta@spacing, meta@spatialAxes)
-			DenseBrainVector(arr, bspace, x)
+			DenseBrainVector(arr[,,,ind], bspace, x)
 			
 		})
 
