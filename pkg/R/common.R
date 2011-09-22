@@ -138,6 +138,30 @@
 }
 
 #' @nord
+.getMMapMode <- function(code) {	
+	if (code == "UNKNOWN") {
+		stop(paste(".getMMapMode: no memory map mode for UNKNOWN data type: ", code))
+	} else if (code == "BINARY") {
+		int8()
+	} else if (code == "UBYTE") {
+		uint8()
+	} else if(code == "SHORT") {
+		int16()
+	} else if(code == "INT") {
+		int32()
+	} else if (code == "FLOAT") {
+		real32()
+	} else if (code == "DOUBLE") {
+		real64()
+	} else {
+		stop(paste(".getMMapMode: unsupported data type: ", code))
+	}
+}
+	
+
+
+
+#' @nord
 .getDataStorage <- function(code) {
   if (code == 0) {
     return("UNKNOWN")

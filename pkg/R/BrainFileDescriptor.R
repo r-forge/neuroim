@@ -135,6 +135,7 @@ setMethod(f="stripExtension",signature=signature(x= "BrainFileDescriptor", fileN
 
 #' @nord
 .readMetaInfo <- function(desc, fileName, readFunc, constructor) {
+	
 	hfile <- headerFile(desc, fileName)
 	header <- readFunc(hfile)		
 	header$fileName <- hfile

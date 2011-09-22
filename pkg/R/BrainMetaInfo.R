@@ -151,6 +151,13 @@ AFNIMetaInfo <- function(descriptor, afni_header) {
 			.Dim <- c(.Dim, afni_header$DATASET_RANK$content[2])			
 		}
 		
+		
+		labs <- if (is.null(afni_header$BRICK_LABS$content)) {
+			labs <- paste("#", seq(0, afni_header$DATASET_RANK$content[2]), sep="")
+		} else {
+			afni_header$BRICK_LABS$content
+		}
+		
 		new("AFNIMetaInfo",
 			headerFile=headerFile(descriptor, afni_header$fileName),
 			dataFile=dataFile(descriptor, afni_header$fileName),
@@ -164,7 +171,7 @@ AFNIMetaInfo <- function(descriptor, afni_header) {
 			additionalAxes=NullAxis,            # incorrect
 			spacing=abs(afni_header$DELTA$content),
 			origin=afni_header$ORIGIN$content,
-			label=afni_header$BRICK_LABS$content,
+			label=labs,
 			intercept=0,
 			slope=ifelse(afni_header$BRICK_FLOAT_FACS$content == 0, 1, afni_header$BRICK_FLOAT_FACS$content),
 			header=afni_header)

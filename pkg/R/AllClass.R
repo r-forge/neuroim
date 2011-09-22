@@ -382,6 +382,15 @@ setClass("BrainVector",
 setClass("DenseBrainVector", 
 		contains=c("BrainVector", "array"))
 
+#' DenseMMapBrainVector
+#' 
+#' Four-dimensional brain image, backed by a memory-mapped file
+#' @exportClass DenseMMapBrainVector  
+setClass("DenseMMapBrainVector",
+		representation=representation(data="mmap"),
+		contains=c("BrainVector"))
+
+
 #' SparseBrainVector
 #' 
 #' a sparse four-dimensional brain image, backed by a \code{matrix}, where each column represents 

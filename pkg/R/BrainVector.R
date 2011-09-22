@@ -73,16 +73,34 @@ DenseBrainVector <- function(data, space, source=NULL, label="") {
 }
 
 
+.makeMMap <- function(meta) {
+	mmap(meta@dataFile, mode=.getMMapMode(meta@dataType), off=meta@dataOffset)
+	
+}
+
+
 #' Load data from a \code{\linkS4class{BrainVectorSource}}
 #' @param x an instance of class \code{\linkS4class{BrainVectorSource}}
 #' @return an instance of class \code{\linkS4class{BrainVector}} 
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainVectorSource"), 
-		def=function(x) {		
+		def=function(x, mmap=FALSE) {		
+			
+			browser()
 			meta <- x@metaInfo
+			if (mmap && (.Platform$endian != meta@endian)) {
+				stop("cannot create memory mapped file when image endianness does not equal OS endianess: set mmap to FALSE")
+			}
+			
+			if (mmap && .isExtension(meta@dataFile, ".gz")) {
+				stop("cannot memory map to a gzipped file")		
+			}
+			
+			
+			
 			stopifnot(length(meta@Dim) == 4)
 			
-			meta <- x@metaInfo
+			
 			#nels <- prod(meta@Dim[1:3]) 
 			nels <- prod(meta@Dim[1:4]) 
 			
@@ -96,8 +114,12 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 			#	close(reader)				
 			#}
 			
+			
+			#mappedData <- .makeMMap(meta)
+			
 			reader <- dataReader(meta, 0)	
 			arr <- array(readElements(reader, nels), c(meta@Dim[1:4]))
+			close(reader)
 			
 			#arr <- abind(datlist, along=4)			
 			bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)), meta@origin, meta@spacing, meta@spatialAxes)

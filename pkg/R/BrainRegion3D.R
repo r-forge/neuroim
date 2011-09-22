@@ -59,7 +59,7 @@ RegionSphere <- function (bvol, centroid, radius) {
     vdim <- dim(bvol)
   
     mcentroid <- ((centroid-1) * vspacing + vspacing/2)
-    cubedim <- radius/vspacing
+    cubedim <- (radius/vspacing) + 1
 
     nsamples <- max(cubedim)* 2 + 1
     vmat <- apply(cbind(cubedim, centroid), 1, function(cdim) {
