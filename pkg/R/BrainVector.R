@@ -60,8 +60,19 @@ BrainVector <- function(data, space, mask=NULL, source=NULL, label="") {
 #' @rdname DenseBrainVector-class
 DenseBrainVector <- function(data, space, source=NULL, label="") {
 	if (ndim(space) != 4) {
-		stop("DenseBrainVector: data array must be 4-dimensional")
+		stop("DenseBrainVector: data space must be 4-dimensional")
 	} 
+	
+	if (is.matrix(data)) {
+		splen <- prod(dim(space)[1:3])
+		data <- if (ncol(data) == splen) {
+			t(data)
+		} else if (nrow(data) == splen) {
+			data
+		}
+
+		dim(data) <- dim(space)
+	}
 	
 	if (is.null(source)) {
 		meta <- BrainMetaInfo(dim(data), spacing(space), origin(space), "FLOAT", label)
@@ -274,6 +285,50 @@ loadBucket <- function(fileName, pattern=NULL, indices=NULL) {
 	D <- c(meta@Dim[1:3], length(idx))
 	bspace <- BrainSpace(D, meta@origin, meta@spacing, meta@spatialAxes)
 	buck <- new("BrainBucket", source=bsource, space=bspace, labels=labels[idx])
+}
+
+#' loadVolList
+#' 
+#' load a list of image volumes and return a \code{\linkS4class{BrainVector}} instance
+#' 
+#' @param fileNames a list of files to load
+#' @return an instance of class \code{\linkS4class{BrainVector}}
+#' @export loadVolList
+loadVolumeList <- function(fileNames, mask=NULL) {
+	stopifnot(all(sapply(fileNames, file.exists)))
+	metaInfo <- lapply(fileNames, readHeader)
+	
+	dims <- do.call(rbind, lapply(metaInfo, dim))
+	if (!all(sapply(1:nrow(dims), function(i) all.equal(dims[1,], dims[i,])))) {
+		stop("list of volumes must all have same dimensions")
+	}
+	
+	if (!all(apply(dims, 1, length) == 3)) {
+		stop("all volumes in list must have dim = 3")
+	}
+	
+	nvols <- length(fileNames)	
+	sourceList <- lapply(metaInfo, function(meta) {
+		new("BrainVolumeSource", metaInfo=meta)
+	})
+
+	vols <- lapply(sourceList, loadData)
+	if (is.null(mask)) {
+		mat <- do.call(cbind, vols)
+		dspace <- addDim(space(vols[[1]]), length(vols))	
+		DenseBrainVector(mat, dspace, label=sapply(metaInfo, function(m) m@label))
+	} else {
+		mat <- do.call(cbind, vols)
+		dspace <- addDim(space(vols[[1]]), length(vols))
+		if (is.vector(mask)) {
+			## mask supplied as index vector, convert to logical
+			M <- array(logical(prod(dim(dspace)[1:3])), dim(dspace)[1:3])
+			M[mask] <- TRUE
+			mask <- M
+		}
+		SparseBrainVector(mat[mask,], dspace, mask=mask, label=sapply(metaInfo, function(m) m@label))
+		
+	}
 }
 
 

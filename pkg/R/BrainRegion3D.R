@@ -59,9 +59,9 @@ RegionSphere <- function (bvol, centroid, radius) {
     vdim <- dim(bvol)
   
     mcentroid <- ((centroid-1) * vspacing + vspacing/2)
-    cubedim <- (radius/vspacing) + 1
+    cubedim <- ceiling(radius/vspacing)
 
-    nsamples <- max(cubedim)* 2 + 1
+    nsamples <- max(cubedim) * 2 + 1
     vmat <- apply(cbind(cubedim, centroid), 1, function(cdim) {
       round(seq(cdim[2] - cdim[1], cdim[2] + cdim[1], length.out=nsamples))
     })
@@ -79,7 +79,8 @@ RegionSphere <- function (bvol, centroid, radius) {
     
     grid <- as.matrix(expand.grid(x = vlist[[1]], y = vlist[[2]], z = vlist[[3]]))
     dvals <- apply(grid, 1, function(gvals) {
-        sqrt(sum((gvals * vspacing - mcentroid)^2))
+		coord <- (gvals-1) * vspacing + vspacing/2
+        sqrt(sum((coord - mcentroid)^2))
     })
     
     idx <- which(dvals <= radius)

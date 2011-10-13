@@ -29,6 +29,14 @@ setGeneric(name="dropDim", def=function(x) standardGeneric("dropDim"))
 #' @exportMethod space
 setGeneric(name="space", def=function(x, ...) standardGeneric("space"))
 
+#' Generic function to fill disjoint sets of values with the output of a function
+#' @param x the object to split
+#' @param fac the factor to split by
+#' @param FUN the function to summarize the the clusters
+#' @return a new object where the original values have been replaced by the function output
+#' @exportMethod splitFill
+setGeneric(name="splitFill", def=function(x, fac, FUN) standardGeneric("splitFill"))
+
 
 #' Generic function to extract the voxel dimensions of an image
 #' @param x the object

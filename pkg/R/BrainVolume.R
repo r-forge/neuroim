@@ -37,12 +37,21 @@ BrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 #' @export DenseBrainVolume
 #' @rdname DenseBrainVolume-class
 DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
+	
 	if (length(dim(space)) != 3) {
-		stop("DenseBrainVolume: data argument must have three dimensions")
+		stop("DenseBrainVolume: space argument must have three dimensions")
 	} 
+	
+	if (length(data) == prod(dim(space)) && is.vector(data)) {
+		dim(data) <- dim(space)
+	}
 	
 	if (ndim(space) != 3) {
 		stop("DenseBrainVolume: space argument must have three dimensions")
+	} 
+	
+	if (!all(dim(space) == dim(data))) {
+		stop("DenseBrainVolume: data and space argument must equal dimensions")
 	} 
 	
 	if (is.null(source)) {
@@ -207,6 +216,32 @@ loadVolume  <- function(fileName, index=1) {
 setMethod(f="concat", signature=signature(x="DenseBrainVolume", y="DenseBrainVolume"),
 		def=function(x,y,...) {
 			.concat4D(x,y,...)			
+		})
+
+
+#' split vxlues by factor apply function and then fill in new volume
+#' @param x the volume to operate on
+#' @param fac the factor used to split the volume
+#' @param FUN the function to apply to each split
+#' @note FUN can return one value per category or one value per voxel
+#' @export splitFill
+#' @rdname splitFill-methods
+setMethod(f="splitFill", signature=signature(x="BrainVolume", fac="factor", FUN="function"),
+		def=function(x,fac,FUN) {
+			S <- split(1:length(x), fac, drop=TRUE)
+			res <- sapply(S, function(ind) {
+						X <- FUN(x[ind])
+						if (length(X) == length(ind)) {
+							X
+						} else {
+							rep(X, length(ind))
+						}
+					}, simplify=FALSE)
+			
+			ovol <- x
+			ovol[1:length(x)] <- unsplit(res, fac)
+			ovol
+					
 		})
 
 #' @exportMethod eachSlice
