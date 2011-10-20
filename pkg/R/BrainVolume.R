@@ -219,7 +219,7 @@ setMethod(f="concat", signature=signature(x="DenseBrainVolume", y="DenseBrainVol
 		})
 
 
-#' split vxlues by factor apply function and then fill in new volume
+#' split values by factor apply function and then fill in new volume
 #' @param x the volume to operate on
 #' @param fac the factor used to split the volume
 #' @param FUN the function to apply to each split
@@ -228,6 +228,7 @@ setMethod(f="concat", signature=signature(x="DenseBrainVolume", y="DenseBrainVol
 #' @rdname splitFill-methods
 setMethod(f="splitFill", signature=signature(x="BrainVolume", fac="factor", FUN="function"),
 		def=function(x,fac,FUN) {
+			stopifnot(length(x) == length(fac))
 			S <- split(1:length(x), fac, drop=TRUE)
 			res <- sapply(S, function(ind) {
 						X <- FUN(x[ind])

@@ -97,7 +97,6 @@ DenseBrainVector <- function(data, space, source=NULL, label="") {
 setMethod(f="loadData", signature=c("BrainVectorSource"), 
 		def=function(x, mmap=FALSE) {		
 			
-			browser()
 			meta <- x@metaInfo
 			if (mmap && (.Platform$endian != meta@endian)) {
 				stop("cannot create memory mapped file when image endianness does not equal OS endianess: set mmap to FALSE")
