@@ -8,6 +8,8 @@
 \item{format}{file format string}
 \item{dataType}{output data type}
 }
+\alias{writeVector,BrainVector,character,missing,character-method}
+\alias{writeVector}
 \alias{writeVolume,BrainVolume,character,missing,missing-method}
 \alias{writeVolume}
 \alias{writeVolume,BrainVolume,character,character,missing-method}

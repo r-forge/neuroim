@@ -5,7 +5,7 @@
 \description{This class contains meta information for a NIfTI image file}
 \section{Slots}{\describe{\item{\code{nifti_header}:}{}}}
 \section{Extends}{\code{\linkS4class{FileMetaInfo}}}
-\section{Methods}{\describe{\item{\code{\link[=dataReader,NIfTIMetaInfo-method]{dataReader}}}{}}}
+\section{Methods}{\describe{\item{\code{\link[=dataReader,NIfTIMetaInfo-method]{dataReader}}}{}\item{\code{\link[=trans,NIfTIMetaInfo-method]{trans}}}{}}}
 \alias{NIfTIMetaInfo}
 \usage{NIfTIMetaInfo(descriptor, nifti_header)
 }
