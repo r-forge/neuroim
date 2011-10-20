@@ -292,7 +292,7 @@ loadBucket <- function(fileName, pattern=NULL, indices=NULL) {
 #' 
 #' @param fileNames a list of files to load
 #' @return an instance of class \code{\linkS4class{BrainVector}}
-#' @export loadVolList
+#' @export loadVolumeList
 loadVolumeList <- function(fileNames, mask=NULL) {
 	stopifnot(all(sapply(fileNames, file.exists)))
 	metaInfo <- lapply(fileNames, readHeader)
