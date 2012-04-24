@@ -37,6 +37,9 @@
 #' @return a concrete instance of \code{\linkS4class{BrainVector}} class 
 #' @export 
 #' @rdname BrainVector-class
+
+
+## TODO should fail if space implies m ore elemtns than data
 BrainVector <- function(data, space, mask=NULL, source=NULL, label="") {
 	if (is.null(mask)) {
 		DenseBrainVector(data,space, source, label)
@@ -412,11 +415,13 @@ setMethod("eachVolume", signature=signature(x="BrainVector", FUN="function", wit
 #' @rdname takeVolume-methods
 setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 		def=function(x, i, merge=FALSE) {
+			## this is VERY slow
 			
 			xs <- space(x)
 			bspace <- BrainSpace(dim(x)[1:3], origin=origin(xs), spacing=spacing(xs), axes(xs), trans(xs))
 			
 			makevol <- function(i) {
+				
 				bv <- BrainVolume(x@.Data[,,,i], bspace)
 			}
 			

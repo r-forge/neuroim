@@ -58,7 +58,7 @@ setMethod(f="initialize", signature=signature("BinaryReader"),
 			
 			## must be seekable connection, should enforce this
 			## 
-			seek(.Object@input, where=.Object@byteOffset, origin="start")		
+			readBin(.Object@input, what=.Object@dataType, size=.Object@bytesPerElement, endian=.Object@endian, n=.Object@byteOffset)
 			.Object
 		}) 
 
