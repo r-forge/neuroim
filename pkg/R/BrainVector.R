@@ -134,6 +134,8 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 			arr <- array(readElements(reader, nels), c(meta@Dim[1:4]))
 			close(reader)
 			
+		
+			
 			#arr <- abind(datlist, along=4)			
 			bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)), meta@origin, meta@spacing, meta@spatialAxes)
 			DenseBrainVector(arr[,,,ind], bspace, x)
