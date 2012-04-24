@@ -128,16 +128,26 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 			
 			meta <- x@metaInfo
 			nels <- prod(meta@Dim[1:3]) 		
-			datlist <- list()
-			ind <- x@indices
 			
+			ind <- x@indices
 			M <- x@mask > 0
-			for (i in 1:length(ind)) {
-				offset <- prod(nels * (ind[i]-1)) * meta@bytesPerElement
-				reader <- dataReader(meta, offset)		
-				datlist[[i]] <- readElements(reader, nels)[M]
-				close(reader)				
-			}
+			
+			reader <- dataReader(meta, offset=0)		
+			dat4D <- readElements(reader, prod(meta@Dim[1:4]))
+			datlist <- lapply(1:length(ind), function(i) {
+				offset <- (nels * (ind[i]-1))
+				dat4D[(offset+1):((offset+1) + nels)][M]
+			})
+	
+			close(reader)
+				
+			#datlist <- list()
+			#for (i in 1:length(ind)) {
+			#	offset <- (nels * (ind[i]-1)) * meta@bytesPerElement
+			#	reader <- dataReader(meta, offset)		
+			#	datlist[[i]] <- readElements(reader, nels)[M]
+			#	close(reader)				
+			#}
 			
 			arr <- do.call(rbind, datlist)		
 			bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)), meta@origin, meta@spacing, meta@spatialAxes)
