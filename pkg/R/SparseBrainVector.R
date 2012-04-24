@@ -82,12 +82,13 @@ SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 	}
 	
 	stopifnot(inherits(mask, "LogicalBrainVolume"))
-
+	
+	
 	D4 <- if (is.matrix(data)) {
 		Nind <- sum(mask == TRUE)
 		if (nrow(data) == Nind) {
 			data <- t(data)
-			ncol(data)	
+			nrow(data)	
 		} else if (ncol(data) == Nind) {
 			nrow(data)
 		} else {
@@ -95,7 +96,7 @@ SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 		}
 	} else if (length(dim(data)) == 4) {		
 		mat <- apply(data, 4, function(vals) vals)
-		data <- mat[mask==TRUE,]
+		data <- t(mat[mask==TRUE,])
 		dim(data)[4]
 	}
 	
@@ -136,7 +137,7 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 			dat4D <- readElements(reader, prod(meta@Dim[1:4]))
 			datlist <- lapply(1:length(ind), function(i) {
 				offset <- (nels * (ind[i]-1))
-				dat4D[(offset+1):((offset+1) + nels)][M]
+				dat4D[(offset+1):(offset + nels)][M]
 			})
 	
 			close(reader)
@@ -316,26 +317,36 @@ setMethod(f="lookup", signature=signature(x="SparseBrainVector", i="numeric"),
          def=function(x,i) {
             lookup(x@map, i)
           })
-                      
+
+  
+setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j = "missing"),
+		  def=function (x, i, j, k, m, ..., drop=TRUE) {  
+			  callGeneric(x, i, 1:(dim(x)[2]))
+		  }
+  )
 
 #' @nord
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j = "numeric"),
           def=function (x, i, j, k, m, ..., drop=TRUE) {
-		    
-            if (missing(k)) k = 1:dim(x)[3]
-            if (missing(m)) m = 1:dim(x)[4]
+			#if (missing(i)) m = 1:(dim(x)[1])
+			#if (missing(j)) m = 1:(dim(x)[2])
+            if (missing(k)) k = 1:(dim(x)[3])
+            if (missing(m)) m = 1:(dim(x)[4])
 			
 			vmat <- as.matrix(expand.grid(i,j,k,m))
-			ind <- .gridToIndex(dim(x)[1:3], vmat[,1:3])
+			ind <- .gridToIndex(dim(x)[1:3], vmat[,1:3,drop=FALSE])
 			
 			
 			mapped <- cbind(lookup(x, ind), m)
+			
+			
 			
 			vals <- unlist(apply(mapped, 1, function(i) {
 						if (i[1] == 0) { 
 							0
 						} else {
-							x@data[i[1],i[2]]
+							x@data[i[2], i[1]]
+							#x@data[i[1],i[2]]
 						}
 			}))
 			
@@ -386,8 +397,14 @@ setAs(from="SparseBrainVector", to="matrix",
 setMethod(f="as.matrix", signature=signature(x = "SparseBrainVector"), def=function(x) {
 			  as(x, "matrix")						
 		  })
-  
 
+#' @rdname as.list-methods
+#' @export  
+setMethod(f="as.list", signature=signature(x = "SparseBrainVector"), def=function(x) {
+			D4 <- dim(x)[4]
+			lapply(1:D4, function(i) takeVolume(x,i))
+			
+})
 
 #		setAs(from="BrainVector", to="matrix",
 #		      function(from) {

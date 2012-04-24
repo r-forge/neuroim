@@ -58,8 +58,16 @@ setMethod(f="initialize", signature=signature("BinaryReader"),
 			
 			## must be seekable connection, should enforce this
 			## 
-			readBin(.Object@input, what=.Object@dataType, size=.Object@bytesPerElement, endian=.Object@endian, n=.Object@byteOffset)
+			
+			if (attr(.Object@input, "class")[[1]] != "gzfile") {
+				seek(.Object@input, where=.Object@byteOffset, origin="start")	
+			} else {		
+				n <- as.integer(.Object@byteOffset/.Object@bytesPerElement)
+				readBin(.Object@input, what=.Object@dataType, size=.Object@bytesPerElement, endian=.Object@endian, n=n)
+			}
+			
 			.Object
+			
 		}) 
 
 ## code duplication, fix me

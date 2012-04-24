@@ -217,7 +217,7 @@ setMethod(f="loadData", signature=signature("BrainBucketSource"),
 					vol <- loadData(x@sourceList[[idx]])
 					assign(k, vol, envir=x@cache)
 				} else {
-					#print(paste("found cached volume for label ", k))
+					
 					vol <- get(k, envir=x@cache, inherits=FALSE)
 				}		
 				attr(vol, "label") <- k
@@ -398,7 +398,7 @@ setMethod("eachVolume", signature=signature(x="BrainBucket", FUN="function", wit
 		def=function(x, FUN, withIndex, ...) {
 			lapply(1:(dim(x)[4]), function(tt) {					
 						vol <- x[[tt]]
-						if (withIndex) FUN(vol,tt) else FUN(vol)
+						if (withIndex) FUN(vol,tt,...) else FUN(vol,...)
 					})
 		})
 

@@ -156,7 +156,9 @@ setMethod(f="loadData", signature=c("BrainVolumeSource"),
 			
 			meta <- x@metaInfo
 			nels <- prod(meta@Dim[1:3]) 
-			offset <- prod(nels * (x@index-1)) * meta@bytesPerElement
+			
+			### for brain buckets, this offset needs to be precomputed ....
+			offset <- (nels * (x@index-1)) * meta@bytesPerElement
 			
 			reader <- dataReader(meta, offset)
 			dat <- readElements(reader, nels)

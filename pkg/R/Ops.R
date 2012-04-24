@@ -28,8 +28,21 @@ setMethod(f="Arith", signature=signature(e1="BrainVector", e2="BrainVector"),
               stop("cannot perform operation on argument with different dimensions")
             }
             
-            ret <- callGeneric(e1@.Data,e2@.Data)
-            bv <- DenseBrainVector(ret, space(e1))
+			if (inherits(e1, "DenseBrainVector") && inherits(e2, "DenseBrainVector")) {
+            	ret <- callGeneric(e1@.Data,e2@.Data)
+            	DenseBrainVector(ret, space(e1))
+			} else {
+				D4 <- dim(e1)[4]		  
+				vols <- list()
+				for (i in 1:D4) {
+					vols[[i]] <- callGeneric(takeVolume(e1,i), takeVolume(e2,i))
+				}
+				
+				mat <- do.call(cbind, vols)
+				dspace <- addDim(space(vols[[1]]), length(vols))	
+				DenseBrainVector(mat, dspace)
+				
+			}
      
           })
  
@@ -40,10 +53,19 @@ setMethod(f="Arith", signature=signature(e1="BrainVector", e2="BrainVector"),
 				  stop("cannot perform operation on argument with different dimensions")
 			  }
 			  
-			  ret <- eachVolume(e1, function(vol) vol + e2)
-			  do.call("concat", ret)
+			  D4 <- dim(e1)[4]	
+			  vols <- list()
+			  for (i in 1:D4) {
+				  vols[[i]] <- callGeneric(takeVolume(e1,i), e2)
+			  }
+			  
+			  mat <- do.call(cbind, vols)
+			  dspace <- addDim(space(vols[[1]]), length(vols))	
+			  DenseBrainVector(mat, dspace)
+			  
 		  
 		  })
+  
 
 #setMethod("sum", signature()
           
