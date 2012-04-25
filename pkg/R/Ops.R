@@ -66,6 +66,12 @@ setMethod(f="Arith", signature=signature(e1="BrainVector", e2="BrainVector"),
 		  
 		  })
   
+#' @nord Arith-methods
+setMethod(f="Arith", signature=signature(e1="BrainVolume", e2="BrainVector"),
+		def=function(e1, e2) {
+			callGeneric(e2,e1)
+		})
+  
 
 #setMethod("sum", signature()
           

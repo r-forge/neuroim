@@ -335,7 +335,7 @@ readNIfTIHeader <- function(fname) {
 	header$quaternion <- readBin(conn, double(), n=3, size=4, endian=endian)
 	
 	header$qoffset <- readBin(conn, double(), n=3, size=4, endian=endian)
-	header$qform <- zapsmall(.quaternToMatrix(header$quaternion, header$qoffset, header$pixdim[2:4], header$qfac))
+	header$qform <- .quaternToMatrix(header$quaternion, header$qoffset, header$pixdim[2:4], header$qfac)
 	
 	sform  <- readBin(conn, double(), n=12, size=4, endian=endian)
 	header$sform <- rbind(matrix(sform,3,4, byrow=T), c(0,0,0,1))
