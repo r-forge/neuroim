@@ -312,8 +312,8 @@ loadVolumeList <- function(fileNames, mask=NULL) {
 	}
 	
 	nvols <- length(fileNames)	
-	sourceList <- lapply(metaInfo, function(meta) {
-		new("BrainVolumeSource", metaInfo=meta)
+	sourceList <- lapply(fileNames, function(fname) {
+		BrainVolumeSource(fname, 1)
 	})
 
 	vols <- lapply(sourceList, loadData)
