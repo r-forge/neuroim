@@ -1,6 +1,6 @@
 library(stringr)
 library(abind)
-library(mmap)
+
 
 wd <- getwd()
 
