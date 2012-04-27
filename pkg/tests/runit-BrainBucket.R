@@ -16,6 +16,6 @@ test.loadBucket <- function() {
 
 test.eachVolume <- function() {
 	buck <- loadBucket("data/statout+orig.HEAD")
-	mean.vol1 <- eachVolume(buck, mean)
+	mean.vol1 <- eachVolume(buck, mean, na.rm=TRUE)
 	checkEquals(length(mean.vol1), 25)
 }

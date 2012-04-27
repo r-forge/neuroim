@@ -71,11 +71,28 @@ test.SparseBrainVector.takeVolume <- function() {
 	checkTrue(inherits(vec2, "BrainVector"))
 	checkEquals(dim(vec2), c(64,64,64,2))
 	
+	
+	
 }
 
 
 
 test.BrainVector.eachVolume <- function() {
+	dat <- array(rnorm(64*64*64*4), c(64,64,64,4))
+	spc <- BrainSpace(c(64,64,64,4))
+	bv1 <- DenseBrainVector(dat, spc)
+	
+	mean.vol1 <- eachVolume(bv1, mean)
+	checkEquals(length(mean.vol1), 4)
+	
+	mean.vol2 <- eachVolume(bv1, withIndex=TRUE, FUN=function(slice, i) mean(slice))
+	checkEquals(length(mean.vol2), 4)
+	checkEquals(mean.vol1, mean.vol2)
+	
+	checkEquals(unlist(mean.vol1), apply(bv1, 4, mean))
+}
+
+test.SparseBrainVector.eachVolume <- function() {
 	dat <- array(rnorm(64*64*64*4), c(64,64,64,4))
 	spc <- BrainSpace(c(64,64,64,4))
 	bv1 <- DenseBrainVector(dat, spc)
@@ -133,7 +150,7 @@ test.BrainVector.roundtrip.io <- function() {
 	bv2 <- loadVolume(fname)
 	
 	checkEquals(dim(bv2), dim(bv))
-	checkEquals(trans(bv2), trans(bv))
+	checkEqualsNumeric(trans(bv2), trans(bv), tol=.0001)
 	
 }
 
@@ -145,6 +162,7 @@ test.SparseBrainVector.series <- function() {
 	voxmat <- rbind(c(10,10,10), c(20,20,10), c(30,30, 10), c(40,40,10), c(50,50,10))
 	
 	checkEquals(series(bvec, voxmat), series(spvec, voxmat))
+}
 	
 
 test.SparseBrainVector.roundtrip.io <- function() {
@@ -159,7 +177,7 @@ test.SparseBrainVector.roundtrip.io <- function() {
 	bv2 <- loadVolume(fname)
 	
 	checkEquals(dim(bv2), dim(bv))
-	checkEquals(trans(bv2), trans(bv))
+	checkEqualsNumeric(trans(bv2), trans(bv), tol=.0001)
 	
 }
 
@@ -177,11 +195,12 @@ test.SparseBrainVector <- function() {
 	dat <- array(rnorm(64*64*64*4), c(64,64,64,4))
 	spc <- BrainSpace(c(64,64,64,4))
 	tmp <- rnorm(64*64*64)
-	mask <- tmp > .8
+	mask <- tmp < 1000
 	mask <- LogicalBrainVolume(mask, dropDim(spc))
 	bvec <- SparseBrainVector(dat, spc, mask)
 	
 	checkEquals(dim(bvec), dim(dat))
+	checkEquals(dat[1,1,1,1], bvec[1,1,1,1])
 	checkEquals(dat[1,1,1,1], bvec[1,1,1,1])
 	
 }

@@ -53,9 +53,16 @@ test.loadVolume <- function() {
 test.loadVolume.gz <- function() {
 	vol <- loadVolume("data/fixef_symbol2_diff_GLT#0_Tstat.nii.gz")
 	checkTrue(!is.null(vol))
-	checkEquals(dim(vol), c(64,64,25))
+	checkEquals(dim(vol), c(96,96,26))
 	
 }
+
+test.loadVolume2.gz <- function() {
+	vol <- loadVolume("data/blade_zippedvol.nii.gz")
+	checkTrue(sum(vol) == 54866)
+	
+}
+
 
 
 test.vol.arith <- function() {
