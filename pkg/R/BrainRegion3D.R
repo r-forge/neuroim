@@ -96,23 +96,24 @@ RegionSphere <- function (bvol, centroid, radius) {
 #          function(x) {
 #            
 
-
+#' coords
+#' 
 #' @param x a BrainRegion3D object
 #' @rdname coords-methods
-setMethod(f="coords", signature=signature(x="BrainRegion3D"),
+setMethod(f="coords", signature=signature(x="ROIVolume"),
           function(x) {
             x@coords
           })
 
  
 #' @nord
-setMethod(f="length", signature=signature(x="BrainRegion3D"),
+setMethod(f="length", signature=signature(x="ROIVolume"),
           function(x) {
             length(x@data)
           })
 
 #' @nord
-setMethod(f="[", signature=signature(x = "BrainRegion3D", i = "numeric", j = "missing", drop = "ANY"),
+setMethod(f="[", signature=signature(x = "ROIVolume", i = "numeric", j = "missing", drop = "ANY"),
           function (x, i, j, drop) {
             x@data[i]
           })

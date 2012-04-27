@@ -183,6 +183,9 @@ setClass("AFNIMetaInfo",
 
 
 #' This is a base class to rpresent a data source
+#' 
+#' @slot metaInfo meta information for the data source
+#' @exportClass BaseSource
 setClass("BaseSource", representation=representation(metaInfo="BaseMetaInfo"))
 
 
@@ -382,13 +385,13 @@ setClass("BrainVector",
 setClass("DenseBrainVector", 
 		contains=c("BrainVector", "array"))
 
-#' DenseMMapBrainVector
-#' 
-#' Four-dimensional brain image, backed by a memory-mapped file
-#' @exportClass DenseMMapBrainVector  
-setClass("DenseMMapBrainVector",
-		representation=representation(data="mmap"),
-		contains=c("BrainVector"))
+# DenseMMapBrainVector
+# 
+# Four-dimensional brain image, backed by a memory-mapped file
+# @exportClass DenseMMapBrainVector  
+# setClass("DenseMMapBrainVector",
+# 		representation=representation(data="mmap"),
+#		contains=c("BrainVector"))
 
 
 #' SparseBrainVector

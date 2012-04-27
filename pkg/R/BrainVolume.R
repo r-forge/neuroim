@@ -9,6 +9,20 @@
 #' @include NIFTI_IO.R
 {}
 
+#' makeVolume
+#' 
+#' Construct a \code{\linkS4class{BrainVolume}} instance, using default (dense) implementation
+#' @param data a three-dimensional \code{array}
+#' @param refvol an instance of class \code{\linkS4class{BrainVolume}} containing the reference space for the new volume.
+#' @param label a \code{character} string
+#' @param source an instance of class \code{\linkS4class{BrainSource}}
+#' @param indices an optional 1-d index vector
+#' @return \code{\linkS4class{DenseBrainVolume}} instance 
+#' @export makeVolume
+makeVolume <- function(data, refvol, source=NULL, label="", indices=NULL) {
+	DenseBrainVolume(data,space(refvol),source, label,indices)
+	
+}
 
 #' BrainVolume
 #' 
@@ -117,20 +131,27 @@ LogicalBrainVolume <- function(data, space, source=NULL, label="", indices=NULL)
 	
 }
 
-#' conversion from DenseBrainVolume to array
+
+#' @nord
+# conversion from DenseBrainVolume to array
+# @rdname as-methods
 setAs(from="DenseBrainVolume", to="array", def=function(from) from@.Data)
 
-#' conversion from BrainVolume to LogicalBrainVolume
+# conversion from BrainVolume to LogicalBrainVolume
+#' @nord
 setAs(from="BrainVolume", to="LogicalBrainVolume", def=function(from) {
 	LogicalBrainVolume(as.array(from), space(from), from@source)
 })
 
-#' conversion from DenseBrainVolume to LogicalBrainVolume
+# conversion from DenseBrainVolume to LogicalBrainVolume
+#' @nord
 setAs(from="DenseBrainVolume", to="LogicalBrainVolume", def=function(from) {
 	LogicalBrainVolume(as.array(from), space(from), from@source)
 })
 
-#' conversion from BrainVolume to array
+# conversion from BrainVolume to array
+# @rdname as-methods
+#' @nord
 setAs(from="BrainVolume", to="array", def=function(from) from[,,])
 
 #' @nord
@@ -148,7 +169,10 @@ setMethod(f="show",
 			
 		})
 
-#' load BrainVolume
+#' load a BrainVolume
+#' 
+#' @name loadData
+#' @docType methods
 #' @exportMethod loadData
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainVolumeSource"), 
@@ -247,6 +271,9 @@ setMethod(f="splitFill", signature=signature(x="BrainVolume", fac="factor", FUN=
 					
 		})
 
+
+#' eachSlice
+#' 
 #' @exportMethod eachSlice
 #' @rdname eachSlice-methods
 setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", withIndex="missing"),
@@ -254,6 +281,9 @@ setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", wi
 			lapply(1:(dim(x)[3]), function(z) FUN(x[,,z]))				
 		})
 
+
+#' eachSlice
+#' 
 #' @exportMethod eachSlice
 #' @rdname eachSlice-methods
 setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", withIndex="logical"),
@@ -264,6 +294,8 @@ setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", wi
 			})
 		})
 
+#' indexToGrid
+#' 
 #' @exportMethod indexToGrid
 #' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
@@ -271,7 +303,9 @@ setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
             array.dim <- dim(x)          
             t(sapply(idx, .indexToGrid, array.dim))            
           })
-  
+
+#' indexToGrid
+#' 
 #' @exportMethod indexToGrid
 #' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x="BrainVector", idx="index"),
@@ -279,6 +313,8 @@ setMethod(f="indexToGrid", signature=signature(x="BrainVector", idx="index"),
 			  callGeneric(space(x), idx)
 		  })
 
+#' indexToGrid
+#' 
 #' @exportMethod indexToGrid
 #' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="index"),
@@ -286,6 +322,8 @@ setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="index"),
 			  callGeneric(space(x), idx)
 		  })
 
+#' gridToIndex
+#' 
 #' @exportMethod gridToIndex
 #' @rdname gridToIndex-methods
 setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix"),
@@ -328,8 +366,10 @@ setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix")
 	  
 }
 
+
 #' find connected components in BrainVolume
-#' @exportMethod connComp
+#' @name connComp
+#' @aliases connComp,BrainVolume,BrainVolume-method
 #' @rdname connComp-methods
 setMethod(f="connComp", signature=signature(x="BrainVolume"), 
 	def=function(x, threshold=0, coords=TRUE, clusterTable=TRUE, localMaxima=TRUE, localMaximaDistance=15) {
@@ -397,7 +437,8 @@ setMethod(f="connComp", signature=signature(x="BrainVolume"),
     
 
 
-
+#' writeVolume
+#' 
 #' @exportMethod writeVolume
 #' @rdname writeVolume-methods
 setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="missing", dataType="missing"),
@@ -405,6 +446,9 @@ setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="charact
 			write.nifti.volume(x, fileName)           
 		})
 
+
+#' writeVolume
+#' 
 #' @exportMethod writeVolume
 #' @rdname writeVolume-methods
 setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="character", dataType="missing"),
@@ -416,6 +460,8 @@ setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="charact
 			}      
 		})
 
+#' writeVolume
+#' 
 #' @exportMethod writeVolume
 #' @rdname writeVolume-methods
 setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="missing", dataType="character"),
@@ -424,8 +470,14 @@ setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="charact
 			
 		})
 
-
-
+#' as.logical
+#' 
+#' Convert BrainVolume to logical vector
+#' @rdname as.logical-methods
+#' @export 
+setMethod(f="as.logical", signature=signature(x = "BrainVolume"), def=function(x) {
+			as.logical(as.vector(x))			
+})
 
 
             

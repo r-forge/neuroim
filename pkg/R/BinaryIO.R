@@ -86,12 +86,16 @@ setMethod(f="initialize", signature=signature("BinaryWriter"),
 			.Object
 		})  
 
+#' readElements
+#' 
 #' @rdname readElements-methods
 setMethod(f="readElements", signature=signature(x= "BinaryReader", numElements="numeric"),
 		def=function(x, numElements) {
 			readBin(x@input, what=x@dataType, size=x@bytesPerElement, n=numElements, endian=x@endian)		
 		})
 
+#' writeElements
+#' 
 #' @rdname writeElements-methods
 setMethod(f="writeElements", signature=signature(x= "BinaryWriter", els="numeric"),
 		def=function(x, els) {
@@ -106,13 +110,17 @@ setMethod(f="writeElements", signature=signature(x= "BinaryWriter", els="numeric
 		})
 
 ## should there be a common superclass for Reader/Writer?
-#' @nord
+#' close
+#' 
+#' @rdname close-methods
 setMethod(f="close", signature=signature(con= "BinaryReader"),
 		def=function(con) {
 			base::close(con@input)				
 		})
 
-#' @nord
+#' close
+#' 
+#' @rdname close-methods
 setMethod(f="close", signature=signature(con= "BinaryWriter"),
 		def=function(con) {
 			base::close(con@output)				

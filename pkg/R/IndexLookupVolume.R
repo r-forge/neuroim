@@ -28,13 +28,17 @@ setMethod(f="initialize", signature=signature("IndexLookupVolume"),
             .Object
           })
 
+#' indices
+#' 
 #' @exportMethod indices
 #' @rdname indices-methods
 setMethod(f="indices", signature=signature(x="IndexLookupVolume"),
           def=function(x) {
             x@indices
           })
-  
+
+#' lookup
+#' 
 #' @exportMethod lookup
 #' @rdname lookup-methods
 setMethod(f="lookup", signature=signature(x="IndexLookupVolume", i="numeric"),
@@ -42,13 +46,17 @@ setMethod(f="lookup", signature=signature(x="IndexLookupVolume", i="numeric"),
             x@map[i]
           })
 
+#' space
+#' 
 #' @exportMethod space
 #' @rdname space-methods
 setMethod(f="space", signature=signature(x="IndexLookupVolume"),
           def=function(x) {
             x@space
           })
-        
+
+#' coords
+#' 
 #' @exportMethod coords   
 #' @rdname coords-methods       
 setMethod(f="coords", signature(x="IndexLookupVolume"),

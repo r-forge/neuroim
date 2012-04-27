@@ -60,6 +60,8 @@ setMethod(f="show", signature=signature("BrainSpace"),
 #' add dimension to \code{\linkS4class{BrainSpace}}
 #' 
 #' function is used to add a dimension to a \code{\linkS4class{BrainSpace}} object
+#' @name addDim
+#' @docType methods
 #' @param x an \code{\linkS4class{BrainSpace}} object
 #' @param n the size of the dimension to be added
 #' @rdname addDim-methods
@@ -68,6 +70,9 @@ setMethod(f="addDim", signature=signature(x = "BrainSpace", n="numeric"),
 			BrainSpace(c(dim(x), n), origin(x), spacing(x), axes(x), trans(x))
 		})
 
+
+#' dropDim
+#' 
 #' @rdname dropDim-methods
 setMethod(f="dropDim", signature=signature(x = "BrainSpace"),
 		def=function(x) {			
@@ -79,20 +84,26 @@ setMethod(f="dropDim", signature=signature(x = "BrainSpace"),
 			BrainSpace(D[Dind], origin(x)[Dind], spacing(x)[Dind], axes(x), trans(x))
 		})
 
-
-#' @nord
+#' dim
+#' 
+#' @rdname dim-methods
 setMethod(f="dim", signature=signature(x = "BrainSpace"),
 		def=function(x) x@Dim)
 
-
+#' ndim
+#' 
 #' @rdname ndim-methods
 setMethod(f="ndim", signature=signature(x = "BrainSpace"),
 		def=function(x) length(x@Dim))
 
+#' spacing
+#' 
 #' @rdname spacing-methods
 setMethod(f="spacing", signature=signature(x = "BrainSpace"),
 		def=function(x) x@spacing)
 
+#' bounds
+#' 
 #' @rdname bounds-methods
 setMethod(f="bounds", signature=signature(x = "BrainSpace"),
 		def=function(x) {
@@ -101,18 +112,28 @@ setMethod(f="bounds", signature=signature(x = "BrainSpace"),
 		}
 )
 
+
+#' origin
+#' 
 #' @rdname origin-methods
 setMethod(f="origin", signature=signature(x = "BrainSpace"),
 		def=function(x) x@origin)
 
+
+#' axes
+#' 
 #' @rdname axes-methods
 setMethod(f="axes", signature=signature(x = "BrainSpace"),
 		def=function(x) x@axes)
 
+#' trans
+#' 
 #' @rdname trans-methods
 setMethod(f="trans", signature=signature(x = "BrainSpace"),
 		def=function(x) x@trans)
 
+#' inverseTrans
+#' 
 #' @rdname inverseTrans-methods
 setMethod(f="inverseTrans", signature=signature(x = "BrainSpace"),
 		def=function(x) x@inverseTrans)
@@ -120,28 +141,39 @@ setMethod(f="inverseTrans", signature=signature(x = "BrainSpace"),
 
 ## delegate methods
 
+#' bounds
+#' 
 #' @rdname bounds-methods
 setMethod(f="bounds", signature=signature(x = "BrainData"),
 		def=function(x) {
 			bounds(space(x))
 		})
-
+#' axes
+#' 
 #' @rdname axes-methods
 setMethod(f="axes", signature=signature(x = "BrainData"),
 		def=function(x) {
 			axes(space(x))
 		})
 
+#' origin
+#' 
 #' @rdname origin-methods
 setMethod(f="origin", signature=signature(x = "BrainData"),
 		def=function(x) {
 			origin(space(x))
 		})
 
+
+#' trans
+#' 
 #' @rdname trans-methods
 setMethod(f="trans", signature=signature(x = "BrainData"),
 		def=function(x) trans(space(x)))
 
+
+#' inverseTrans
+#' 
 #' @rdname inverseTrans-methods
 setMethod(f="inverseTrans", signature=signature(x = "BrainData"),
 		def=function(x) inverseTrans(space(x)))

@@ -3,6 +3,8 @@
 #' @include AllGeneric.R
 {}
 
+
+
 BrainSlice <- function(data, space, indices=NULL) {
 	if (ndim(space) != 2) {
 		stop("incorrect dimension for BrainSlice")
@@ -20,6 +22,8 @@ BrainSlice <- function(data, space, indices=NULL) {
 	}
 }
 
+#' gridToIndex
+#' 
 #' @rdname gridToIndex-methods
 setMethod(f="gridToIndex", signature=signature(x = "BrainSlice", coords="matrix"),
 		def=function(x, coords) {            
@@ -30,6 +34,9 @@ setMethod(f="gridToIndex", signature=signature(x = "BrainSlice", coords="matrix"
 					})
 		})
 
+
+#' indexToGrid
+#' 
 #' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x = "BrainSlice", idx="index"),
 		def=function(x, idx) {            

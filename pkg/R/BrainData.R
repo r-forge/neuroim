@@ -3,18 +3,30 @@
 #' @include AllGeneric.R
 {}
 
+
+#' ndim
+#' 
 #' @rdname ndim-methods
 setMethod(f="ndim", signature=signature(x = "BrainData"),
           def=function(x) numdim(x@space))
 
+  
+#' dim
+#' 
 #' @nord
 setMethod(f="dim", signature=signature(x = "BrainData"),
           def=function(x) dim(x@space))
 
+  
+#' space
+#' 
 #' @rdname space-methods
 setMethod(f="space", signature=signature(x = "BrainData"),
           def=function(x) x@space)
 
+  
+#' spacing
+#' 
 #' @rdname spacing-methods
 setMethod(f="spacing",signature= signature(x = "BrainData"),
           def=function(x) {
