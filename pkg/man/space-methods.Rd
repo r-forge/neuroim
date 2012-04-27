@@ -1,15 +1,18 @@
-\name{space-methods}
-\alias{space-methods}
+\name{space}
 \alias{space}
-\title{Generic function to extract the space member variable...}
-\description{Generic function to extract the \code{space} member variable}
-\value{\code{space-methods}: an object representing the geometric space of the image
+\title{Generic function to extract the \code{space} member variable}
+\arguments{
+  \item{x}{the object to query}
+}
+\value{
+  an object representing the geometric space of the image
+}
+\description{
+  Generic function to extract the \code{space} member
+  variable
 
+  space
+
+  space
 }
-\arguments{\item{x}{the object to query}
-}
-\alias{space,BrainData-method}
-\alias{space}
-\alias{space,IndexLookupVolume-method}
-\alias{space}
 

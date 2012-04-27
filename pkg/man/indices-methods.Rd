@@ -1,12 +1,15 @@
-\name{indices-methods}
-\alias{indices-methods}
+\docType{methods}
+\name{indices}
 \alias{indices}
-\title{Extract indices...}
-\description{Extract indices}
-\arguments{\item{x}{the object to extract indices}
+\title{Extract indices}
+\arguments{
+  \item{x}{the object to extract indices}
 }
-\alias{indices,IndexLookupVolume-method}
-\alias{indices}
-\alias{indices,SparseBrainVector-method}
-\alias{indices}
+\description{
+  Extract indices
+
+  indices
+
+  indices
+}
 

@@ -1,13 +1,14 @@
-\name{dataReader-methods}
-\alias{dataReader-methods}
+\name{dataReader}
 \alias{dataReader}
-\title{Generic function to create data reader...}
-\description{Generic function to create data reader}
-\arguments{\item{x}{an object specifying the infromation required to produce the reader}
-\item{offset}{the byte offset (number of bytes to skip before reading)}
+\title{Generic function to create data reader}
+\arguments{
+  \item{x}{an object specifying the infromation required to
+  produce the reader}
+
+  \item{offset}{the byte offset (number of bytes to skip
+  before reading)}
 }
-\alias{dataReader,NIfTIMetaInfo-method}
-\alias{dataReader}
-\alias{dataReader,AFNIMetaInfo-method}
-\alias{dataReader}
+\description{
+  Generic function to create data reader
+}
 

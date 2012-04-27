@@ -1,16 +1,21 @@
-\name{gridToIndex-methods}
-\alias{gridToIndex-methods}
+\name{gridToIndex}
 \alias{gridToIndex}
-\title{Generic function to convert N-dimensional grid coordinate to 1D indices...}
-\description{Generic function to convert N-dimensional grid coordinate to 1D indices}
-\value{\code{gridToIndex-methods}: a vector of indices
+\title{Generic function to convert N-dimensional grid coordinate to 1D indices}
+\arguments{
+  \item{x}{the object}
 
+  \item{coords}{a matrix where each row is a corodinate or
+  a vector of length N}
 }
-\arguments{\item{x}{the object}
-\item{coords}{a matrix where each row is a corodinate or a vector of length N}
+\value{
+  a vector of indices
 }
-\alias{gridToIndex,BrainSlice,matrix-method}
-\alias{gridToIndex}
-\alias{gridToIndex,BrainVolume,matrix-method}
-\alias{gridToIndex}
+\description{
+  Generic function to convert N-dimensional grid coordinate
+  to 1D indices
+
+  gridToIndex
+
+  gridToIndex
+}
 

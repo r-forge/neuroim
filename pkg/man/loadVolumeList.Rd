@@ -1,11 +1,17 @@
 \name{loadVolumeList}
 \alias{loadVolumeList}
-\title{loadVolList...}
-\usage{loadVolumeList(fileNames, mask)
+\title{loadVolList}
+\usage{
+  loadVolumeList(fileNames, mask = NULL)
 }
-\description{loadVolList}
-\details{load a list of image volumes and return a \code{\linkS4class{BrainVector}} instance}
-\value{an instance of class \code{\linkS4class{BrainVector}}}
-\arguments{\item{fileNames}{a list of files to load}
+\arguments{
+  \item{fileNames}{a list of files to load}
+}
+\value{
+  an instance of class \code{\linkS4class{BrainVector}}
+}
+\description{
+  load a list of image volumes and return a
+  \code{\linkS4class{BrainVector}} instance
 }
 

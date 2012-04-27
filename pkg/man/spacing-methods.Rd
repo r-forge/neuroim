@@ -1,15 +1,18 @@
-\name{spacing-methods}
-\alias{spacing-methods}
+\name{spacing}
 \alias{spacing}
-\title{Generic function to extract the voxel dimensions of an image...}
-\description{Generic function to extract the voxel dimensions of an image}
-\value{\code{spacing-methods}: a numeric vector
+\title{Generic function to extract the voxel dimensions of an image}
+\arguments{
+  \item{x}{the object}
+}
+\value{
+  a numeric vector
+}
+\description{
+  Generic function to extract the voxel dimensions of an
+  image
 
+  spacing
+
+  spacing
 }
-\arguments{\item{x}{the object}
-}
-\alias{spacing,BrainData-method}
-\alias{spacing}
-\alias{spacing,BrainSpace-method}
-\alias{spacing}
 

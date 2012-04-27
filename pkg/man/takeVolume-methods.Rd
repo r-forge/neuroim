@@ -1,13 +1,17 @@
-\name{takeVolume-methods}
-\alias{takeVolume-methods}
+\name{takeVolume}
 \alias{takeVolume}
-\title{Generic function to extract a volume from a four-dimensional image...}
-\description{Generic function to extract a volume from a four-dimensional image}
-\arguments{\item{x}{four-dimensional image}
-\item{i}{the indices of the volume(s) to extract}
+\title{Generic function to extract a volume from a four-dimensional image}
+\arguments{
+  \item{x}{four-dimensional image}
+
+  \item{i}{the indices of the volume(s) to extract}
 }
-\alias{takeVolume,BrainVector,numeric-method}
-\alias{takeVolume}
-\alias{takeVolume,SparseBrainVector,numeric-method}
-\alias{takeVolume}
+\description{
+  Generic function to extract a volume from a
+  four-dimensional image
+
+  takeVolume extract volume from SparseBrainVector
+
+  takeVolume
+}
 

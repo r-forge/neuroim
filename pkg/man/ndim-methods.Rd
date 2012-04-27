@@ -1,14 +1,15 @@
-\name{ndim-methods}
-\alias{ndim-methods}
+\name{ndim}
 \alias{ndim}
-\title{Generic function to extract the number of dimensions of an object...}
-\description{Generic function to extract the number of dimensions of an object}
-\arguments{\item{x}{n-dimensional object}
+\title{Generic function to extract the number of dimensions of an object}
+\arguments{
+  \item{x}{n-dimensional object}
 }
-\alias{ndim,AxisSet-method}
-\alias{ndim}
-\alias{ndim,BrainData-method}
-\alias{ndim}
-\alias{ndim,BrainSpace-method}
-\alias{ndim}
+\description{
+  Generic function to extract the number of dimensions of
+  an object
+
+  ndim
+
+  ndim
+}
 

@@ -1,15 +1,18 @@
-\name{dataFileMatches-methods}
-\alias{dataFileMatches-methods}
+\name{dataFileMatches}
 \alias{dataFileMatches}
-\title{Generic function to test whether a file name conforms to the given a \linkS4class{BrainFileDescriptor} instance.}
-\description{Generic function to test whether a file name conforms to the given a \code{\linkS4class{BrainFileDescriptor}} instance.
+\title{Generic function to test whether a file name conforms to the given a \code{\linkS4class{BrainFileDescriptor}} instance.
 Will test for match to data file only}
-\value{\code{dataFileMatches-methods}: TRUE for match, FALSE otherwise
+\arguments{
+  \item{x}{object for which the file name is to matched to}
 
+  \item{fileName}{file name to be matched}
 }
-\arguments{\item{x}{object for which the file name is to matched to}
-\item{fileName}{file name to be matched}
+\value{
+  TRUE for match, FALSE otherwise
 }
-\alias{dataFileMatches,BrainFileDescriptor,character-method}
-\alias{dataFileMatches}
+\description{
+  Generic function to test whether a file name conforms to
+  the given a \code{\linkS4class{BrainFileDescriptor}}
+  instance. Will test for match to data file only
+}
 

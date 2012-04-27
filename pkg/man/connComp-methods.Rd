@@ -1,11 +1,16 @@
-\name{connComp-methods}
-\alias{connComp-methods}
+\docType{methods}
+\name{connComp}
 \alias{connComp}
-\title{Find connected components...}
-\description{Find connected components}
-\arguments{\item{x}{the image object}
-\item{...}{additonal arguments}
+\alias{connComp,BrainVolume,BrainVolume-method}
+\title{Find connected components}
+\arguments{
+  \item{x}{the image object}
+
+  \item{...}{additonal arguments}
 }
-\alias{connComp,BrainVolume-method}
-\alias{connComp}
+\description{
+  Find connected components
+
+  find connected components in BrainVolume
+}
 

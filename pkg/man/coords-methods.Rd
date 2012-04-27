@@ -1,16 +1,18 @@
-\name{coords-methods}
-\alias{coords-methods}
+\name{coords}
 \alias{coords}
-\title{Extract coordinates...}
-\description{Extract coordinates}
-\arguments{\item{x}{the object to extract coordinates from}
+\title{Extract coordinates}
+\arguments{
+  \item{x}{the object to extract coordinates from}
+
+  \item{x}{a BrainRegion3D object}
 }
-\alias{coords,BrainRegion3D-method}
-\alias{coords}
-\usage{\S4method{coords}{BrainRegion3D}(x)
+\description{
+  Extract coordinates
+
+  coords
+
+  coords
+
+  coords
 }
-\alias{coords,-method}
-\alias{coords}
-\alias{coords,SparseBrainVector-method}
-\alias{coords}
 

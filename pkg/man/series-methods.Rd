@@ -1,16 +1,18 @@
-\name{series-methods}
-\alias{series-methods}
+\name{series}
 \alias{series}
-\title{Extract vector series from object...}
-\description{Extract vector series from object}
-\arguments{\item{x}{the object}
+\title{Extract vector series from object}
+\arguments{
+  \item{x}{the object}
 }
-\alias{series,-method}
-\alias{series}
-\alias{series,-method}
-\alias{series}
-\alias{series,SparseBrainVector,matrix-method}
-\alias{series}
-\alias{series,-method}
-\alias{series}
+\description{
+  Extract vector series from object
+
+  series
+
+  series
+
+  series
+
+  series
+}
 

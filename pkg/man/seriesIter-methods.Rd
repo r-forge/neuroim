@@ -1,12 +1,14 @@
-\name{seriesIter-methods}
-\alias{seriesIter-methods}
+\name{seriesIter}
 \alias{seriesIter}
-\title{Construct a series iterator...}
-\description{Construct a series iterator}
-\arguments{\item{x}{the object to be iterated}
+\title{Construct a series iterator}
+\arguments{
+  \item{x}{the object to be iterated}
 }
-\alias{seriesIter,BrainVector-method}
-\alias{seriesIter}
-\alias{seriesIter,SparseBrainVector-method}
-\alias{seriesIter}
+\description{
+  Construct a series iterator
+
+  seriesIter
+
+  seriesIter
+}
 

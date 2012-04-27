@@ -1,14 +1,17 @@
-\name{stripExtension-methods}
-\alias{stripExtension-methods}
+\name{stripExtension}
 \alias{stripExtension}
-\title{Generic function to strip extension from file name, given a \linkS4class{BrainFileDescriptor} instance.}
-\description{Generic function to strip extension from file name, given a \code{\linkS4class{BrainFileDescriptor}} instance.}
-\value{\code{stripExtension-methods}: fileName without extension
+\title{Generic function to strip extension from file name, given a \code{\linkS4class{BrainFileDescriptor}} instance.}
+\arguments{
+  \item{x}{descriptor instance}
 
+  \item{fileName}{file name to be stripped of its
+  extension}
 }
-\arguments{\item{x}{descriptor instance}
-\item{fileName}{file name to be stripped of its extension}
+\value{
+  fileName without extension
 }
-\alias{stripExtension,BrainFileDescriptor,character-method}
-\alias{stripExtension}
+\description{
+  Generic function to strip extension from file name, given
+  a \code{\linkS4class{BrainFileDescriptor}} instance.
+}
 

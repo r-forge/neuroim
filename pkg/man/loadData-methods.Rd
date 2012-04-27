@@ -1,23 +1,30 @@
-\name{loadData-methods}
-\alias{loadData-methods}
-\alias{loadData}
-\title{Generic function to load data from a data source...}
-\description{Generic function to load data from a data source}
-\arguments{\item{x}{a data source}
-}
-\alias{loadData,BrainVectorSource-method}
-\alias{loadData}
-\value{\code{loadData,BrainVectorSource-method}: an instance of class \code{\linkS4class{BrainVector}}
-
-\code{loadData,BrainBucketSource-method}: an instance of class \code{\linkS4class{BrainVolume}}
-
-
-}
-\alias{loadData,BrainBucketSource-method}
-\alias{loadData}
 \docType{methods}
-\alias{loadData,BrainVolumeSource-method}
+\name{loadData}
 \alias{loadData}
-\alias{loadData,SparseBrainVectorSource-method}
-\alias{loadData}
+\title{Generic function to load data from a data source}
+\arguments{
+  \item{x}{a data source}
+
+  \item{x}{an instance of class
+  \code{\linkS4class{BrainVectorSource}}}
+
+  \item{x}{an instance of class
+  \code{\linkS4class{BrainBucketSource}}}
+}
+\value{
+  an instance of class \code{\linkS4class{BrainVector}}
+
+  an instance of class \code{\linkS4class{BrainVolume}}
+}
+\description{
+  Generic function to load data from a data source
+
+  loadData
+
+  Load data from a \code{\linkS4class{BrainVectorSource}}
+
+  Load data from a \code{\linkS4class{BrainBucketSource}}
+
+  load a BrainVolume
+}
 

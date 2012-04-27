@@ -1,11 +1,15 @@
-\name{writeElements-methods}
-\alias{writeElements-methods}
+\name{writeElements}
 \alias{writeElements}
-\title{Generic function to write a sequence of elements from an input source...}
-\description{Generic function to write a sequence of elements from an input source}
-\arguments{\item{x}{the output channel}
-\item{els}{the elements to write}
+\title{Generic function to write a sequence of elements from an input source}
+\arguments{
+  \item{x}{the output channel}
+
+  \item{els}{the elements to write}
 }
-\alias{writeElements,BinaryWriter,numeric-method}
-\alias{writeElements}
+\description{
+  Generic function to write a sequence of elements from an
+  input source
+
+  writeElements
+}
 

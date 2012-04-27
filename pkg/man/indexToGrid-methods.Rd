@@ -1,20 +1,24 @@
-\name{indexToGrid-methods}
-\alias{indexToGrid-methods}
+\name{indexToGrid}
 \alias{indexToGrid}
-\title{Generic function to convert a 1D index to N-dimensional grid coordinate...}
-\description{Generic function to convert a 1D index to N-dimensional grid coordinate}
-\value{\code{indexToGrid-methods}: a matrix of grid coordinates
+\title{Generic function to convert a 1D index to N-dimensional grid coordinate}
+\arguments{
+  \item{x}{the object}
 
+  \item{idx}{the 1D indices}
 }
-\arguments{\item{x}{the object}
-\item{idx}{the 1D indices}
+\value{
+  a matrix of grid coordinates
 }
-\alias{indexToGrid,BrainSlice,index-method}
-\alias{indexToGrid}
-\alias{indexToGrid,BrainSpace,index-method}
-\alias{indexToGrid}
-\alias{indexToGrid,BrainVector,index-method}
-\alias{indexToGrid}
-\alias{indexToGrid,BrainVolume,index-method}
-\alias{indexToGrid}
+\description{
+  Generic function to convert a 1D index to N-dimensional
+  grid coordinate
+
+  indexToGrid
+
+  indexToGrid
+
+  indexToGrid
+
+  indexToGrid
+}
 
