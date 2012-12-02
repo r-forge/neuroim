@@ -154,6 +154,7 @@ setAs(from="DenseBrainVolume", to="LogicalBrainVolume", def=function(from) {
 #' @nord
 setAs(from="BrainVolume", to="array", def=function(from) from[,,])
 
+#' @export
 #' @nord
 setMethod(f="show",
 		signature=signature(object="BrainVolume"),
@@ -173,7 +174,7 @@ setMethod(f="show",
 #' 
 #' @name loadData
 #' @docType methods
-#' @exportMethod loadData
+#' @export loadData
 #' @rdname loadData-methods
 setMethod(f="loadData", signature=c("BrainVolumeSource"), 
 		def=function(x) {
@@ -274,7 +275,7 @@ setMethod(f="splitFill", signature=signature(x="BrainVolume", fac="factor", FUN=
 
 #' eachSlice
 #' 
-#' @exportMethod eachSlice
+#' @export eachSlice
 #' @rdname eachSlice-methods
 setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", withIndex="missing"),
 		def=function(x, FUN) {
@@ -284,7 +285,7 @@ setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", wi
 
 #' eachSlice
 #' 
-#' @exportMethod eachSlice
+#' @export eachSlice
 #' @rdname eachSlice-methods
 setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", withIndex="logical"),
 		def=function(x, FUN, withIndex) {
@@ -296,7 +297,7 @@ setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", wi
 
 #' indexToGrid
 #' 
-#' @exportMethod indexToGrid
+#' @export indexToGrid
 #' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
           def=function(x, idx) {
@@ -306,7 +307,7 @@ setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
 
 #' indexToGrid
 #' 
-#' @exportMethod indexToGrid
+#' @export indexToGrid
 #' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x="BrainVector", idx="index"),
 		  def=function(x, idx) {
@@ -315,7 +316,7 @@ setMethod(f="indexToGrid", signature=signature(x="BrainVector", idx="index"),
 
 #' indexToGrid
 #' 
-#' @exportMethod indexToGrid
+#' @export indexToGrid
 #' @rdname indexToGrid-methods
 setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="index"),
 		  def=function(x, idx) {
@@ -324,13 +325,24 @@ setMethod(f="indexToGrid", signature=signature(x="BrainVolume", idx="index"),
 
 #' gridToIndex
 #' 
-#' @exportMethod gridToIndex
+#' @export gridToIndex
 #' @rdname gridToIndex-methods
 setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix"),
           def=function(x, coords) {
             array.dim <- dim(x)
             .gridToIndex(dim(x), coords)
           })
+  
+#' gridToIndex
+#' 
+#' @export 
+#' @rdname gridToIndex-methods
+  setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="numeric"),
+		  def=function(x, coords) {
+			  array.dim <- dim(x)
+			  .gridToIndex(dim(x), matrix(coords, nrow=1, byrow=TRUE))
+		  })
+  
 
 #' @nord
 .pruneCoords <- function(coord.set,  vals,  mindist=10) {
@@ -435,11 +447,14 @@ setMethod(f="connComp", signature=signature(x="BrainVolume"),
 	
 	
     
-
+### TODO when the source voulme is an AFNI BRIK the output file does not preserve orientation
+### e.g. writeVolume(x, space(BRIK), ...)
+### if BRIK was RAI, output NIFTI file reverts to LPI
 
 #' writeVolume
 #' 
-#' @exportMethod writeVolume
+#' @export
+#' @docType methods
 #' @rdname writeVolume-methods
 setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="missing", dataType="missing"),
 		def=function(x, fileName) {
@@ -449,7 +464,8 @@ setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="charact
 
 #' writeVolume
 #' 
-#' @exportMethod writeVolume
+#' @export
+#' @docType methods
 #' @rdname writeVolume-methods
 setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="character", dataType="missing"),
 		def=function(x, fileName, format) {
@@ -462,7 +478,8 @@ setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="charact
 
 #' writeVolume
 #' 
-#' @exportMethod writeVolume
+#' @export writeVolume
+#' @docType methods
 #' @rdname writeVolume-methods
 setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="missing", dataType="character"),
 		def=function(x, fileName, dataType) {

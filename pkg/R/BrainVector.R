@@ -703,7 +703,7 @@ setMethod(f="as.sparse", signature=signature(x="DenseBrainVector", mask="numeric
 			
 		})
 
-# @exportMethod gridToIndex
+# @export gridToIndex
 # @rdname gridToIndex-methods
 # setMethod(f="gridToIndex", signature=signature(x="BrainVector", coords="matrix"),
 #		def=function(x, coords) {
@@ -741,7 +741,7 @@ setMethod(f="as.sparse", signature=signature(x="DenseBrainVector", mask="numeric
 
 #' writeVector
 #' 
-#' @exportMethod writeVector
+#' @export writeVector
 #' @rdname writeVector-methods
 setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character", format="missing", dataType="missing"),
 		def=function(x, fileName) {
@@ -750,7 +750,7 @@ setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="charact
 
 #' writeVector
 #' 
-#' @exportMethod writeVector
+#' @export writeVector
 #' @rdname writeVector-methods
 setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character", format="character", dataType="missing"),
 		def=function(x, fileName, format) {
@@ -763,8 +763,10 @@ setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="charact
 
 #' writeVector
 #' 
-#' @exportMethod writeVector
+#' @export writeVector
 #' @rdname writeVolume-methods
+
+### THIS FAILS WHEN THE SUPPLIED SPACE IS COPIED FROM A BRAINVECTOR INSTANCE -- FIX ?????
 setMethod(f="writeVector",signature=signature(x="BrainVector", fileName="character", format="missing", dataType="character"),
 		def=function(x, fileName, dataType) {
 			write.nifti.vector(x, fileName, dataType)   

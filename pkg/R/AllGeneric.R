@@ -4,33 +4,33 @@ roxygen <- function() NULL
 
 #' Generic function to load data from a data source
 #' @param x a data source
-#' @exportMethod loadData
+#' @export loadData
 #' @rdname loadData-methods
 setGeneric(name="loadData", def=function(x, ...) standardGeneric("loadData"))
 
 #' Generic function to extract the number of dimensions of an object
 #' @param x n-dimensional object
-#' @exportMethod ndim
+#' @export ndim
 #' @rdname ndim-methods
 setGeneric(name="ndim", def=function(x, ...) standardGeneric("ndim"))
 
 #' Generic function to add a dimension to an object
 #' @param x a dimensioned object
 #' @param n the size of the dimension to add
-#' @exportMethod addDim
+#' @export addDim
 #' @rdname addDim-methods
 setGeneric(name="addDim", def=function(x, n) standardGeneric("addDim"))
 
 #' Generic function to drop a dimension from an object
 #' @param x a dimensioned object
-#' @exportMethod dropDim
+#' @export dropDim
 #' @rdname dropDim-methods
 setGeneric(name="dropDim", def=function(x) standardGeneric("dropDim"))
 
 #' Generic function to extract the \code{space} member variable
 #' @param x the object to query
 #' @return an object representing the geometric space of the image
-#' @exportMethod space
+#' @export space
 #' @rdname space-methods
 setGeneric(name="space", def=function(x, ...) standardGeneric("space"))
 
@@ -39,7 +39,7 @@ setGeneric(name="space", def=function(x, ...) standardGeneric("space"))
 #' @param fac the factor to split by
 #' @param FUN the function to summarize the the clusters
 #' @return a new object where the original values have been replaced by the function output
-#' @exportMethod splitFill
+#' @export splitFill
 #' @rdname splitFill-methods
 setGeneric(name="splitFill", def=function(x, fac, FUN) standardGeneric("splitFill"))
 
@@ -47,38 +47,38 @@ setGeneric(name="splitFill", def=function(x, fac, FUN) standardGeneric("splitFil
 #' Generic function to extract the voxel dimensions of an image
 #' @param x the object
 #' @return a numeric vector
-#' @exportMethod spacing 
+#' @export spacing 
 #' @rdname spacing-methods
 setGeneric(name="spacing", def=function(x) standardGeneric("spacing"))
 
 #' Generic function to extract the spatial bounds (origin + dim * spacing) of an image
 #' param x the object
-#' @exportMethod bounds
+#' @export bounds
 #' @rdname bounds-methods
 setGeneric(name="bounds",     def=function(x) standardGeneric("bounds"))
 
 
 #' Generic getter function to extract image axes
 #' @param x an object with a set of axes
-#' @exportMethod axes
+#' @export axes
 #' @rdname axes-methods
 setGeneric(name="axes",  def=function(x) standardGeneric("axes"))
 
 #' Generic getter to extract image origin
 #' @param x an object with an origin
-#' @exportMethod origin
+#' @export origin
 #' @rdname origin-methods
 setGeneric(name="origin", def=function(x) standardGeneric("origin"))
 
 #' Generic getter to extract image coordinate transformation
 #' @param x an object with a transformation
-#' @exportMethod trans
+#' @export trans
 #' @rdname trans-methods
 setGeneric(name="trans",  def=function(x) standardGeneric("trans"))
 
 #' Generic getter to extract inverse image coordinate transformation
 #' @param x an object
-#' @exportMethod inverseTrans
+#' @export inverseTrans
 #' @rdname inverseTrans-methods
 setGeneric(name="inverseTrans", def=function(x) standardGeneric("inverseTrans"))
 
@@ -86,7 +86,7 @@ setGeneric(name="inverseTrans", def=function(x) standardGeneric("inverseTrans"))
 #' @param x the input channel
 #' @param numElements the number of elements to read
 #' @return the elements as a vector
-#' @exportMethod readElements
+#' @export readElements
 #' @rdname readElements-methods
 setGeneric(name="readElements", def=function(x, numElements) standardGeneric("readElements"))
 
@@ -94,7 +94,7 @@ setGeneric(name="readElements", def=function(x, numElements) standardGeneric("re
 #' Generic function to write a sequence of elements from an input source
 #' @param x the output channel
 #' @param els the elements to write
-#' @exportMethod writeElements
+#' @export writeElements
 #' @rdname writeElements-methods
 setGeneric(name="writeElements", def=function(x, els) standardGeneric("writeElements"))
 
@@ -104,14 +104,14 @@ setGeneric(name="writeElements", def=function(x, els) standardGeneric("writeElem
 #' @param fileName a file name
 #' @param format file format string
 #' @param dataType output data type
-#' @exportMethod writeVolume
+#' @export writeVolume
 #' @rdname writeVolume-methods
 setGeneric(name="writeVolume",  def=function(x, fileName, format, dataType) standardGeneric("writeVolume"))
 
 
 #' Generic function to write an image vector to disk
 #' @param x the image to write
-#' @exportMethod writeVector 
+#' @export writeVector 
 #' @rdname writeVector-methods
 setGeneric(name="writeVector",  def=function(x, fileName, format, dataType) standardGeneric("writeVector"))
 
@@ -122,7 +122,7 @@ setGeneric(name="value",       def=function(object, x,y, ...) standardGeneric("v
 #' @param x the object
 #' @param idx the 1D indices
 #' @return a matrix of grid coordinates
-#' @exportMethod indexToGrid
+#' @export indexToGrid
 #' @rdname indexToGrid-methods
 setGeneric(name="indexToGrid",   def=function(x, idx) standardGeneric("indexToGrid"))
 
@@ -131,7 +131,7 @@ setGeneric(name="indexToGrid",   def=function(x, idx) standardGeneric("indexToGr
 #' @param x the object
 #' @param coords a matrix where each row is a corodinate or a vector of length N
 #' @return a vector of indices
-#' @exportMethod gridToIndex
+#' @export gridToIndex
 #' @rdname gridToIndex-methods
 setGeneric(name="gridToIndex",   def=function(x, coords) standardGeneric("gridToIndex"))
 
@@ -140,14 +140,14 @@ setGeneric(name="gridToIndex",   def=function(x, coords) standardGeneric("gridTo
 #' @param x four-dimensional image
 #' @param FUN a \code{function} taking one or two arguments (depending on the value of \code{withIndex}
 #' @param withIndex whether the index of the volume supplied as the second argument to the function
-#' @exportMethod eachVolume
+#' @export eachVolume
 #' @rdname eachVolume-methods
 setGeneric(name="eachVolume", def=function(x, FUN, withIndex, ...) standardGeneric("eachVolume"))
 
 #' Generic function to extract a volume from a four-dimensional image
 #' @param x four-dimensional image
 #' @param i the indices of the volume(s) to extract
-#' @exportMethod takeVolume
+#' @export takeVolume
 #' @rdname takeVolume-methods
 setGeneric(name="takeVolume", def=function(x, i, ...) standardGeneric("takeVolume"))
 
@@ -156,7 +156,7 @@ setGeneric(name="takeVolume", def=function(x, i, ...) standardGeneric("takeVolum
 #' @param x the object
 #' @param FUN a \code{function} taking one or two arguments (depending on the value of \code{withIndex}
 #' @param withIndex whether the index of the slice is supplied as the second argument to the function
-#' @exportMethod eachSlice
+#' @export eachSlice
 #' @rdname eachSlice-methods
 setGeneric(name="eachSlice", def=function(x, FUN, withIndex, ...) standardGeneric("eachSlice"))
 
@@ -165,7 +165,7 @@ setGeneric(name="eachSlice", def=function(x, FUN, withIndex, ...) standardGeneri
 #' @param x a four dimensional image
 #' @param FUN a \code{function} taking one or two arguments (depending on the value of \code{withIndex}
 #' @param withIndex whether the index of the series is supplied as the second argument to the function
-#' @exportMethod eachSeries
+#' @export eachSeries
 #' @rdname eachSeries-methods
 setGeneric(name="eachSeries", def=function(x, FUN, withIndex, ...) standardGeneric("eachSeries"))
 
@@ -173,7 +173,7 @@ setGeneric(name="eachSeries", def=function(x, FUN, withIndex, ...) standardGener
 #' Generic function to extract a set of series from a 4D image
 #' @param x a four dimensional image
 #' @param i the indices of the series' to extract
-#' @exportMethod takeSeries
+#' @export takeSeries
 #' @rdname takeSeries-methods
 setGeneric(name="takeSeries", def=function(x, indices, ...) standardGeneric("takeSeries"))
 
@@ -181,7 +181,7 @@ setGeneric(name="takeSeries", def=function(x, indices, ...) standardGeneric("tak
 #' Convert to sparse representation
 #' @param x the object to sparsify
 #' @param mask the elements to retain
-#' @exportMethod as.sparse
+#' @export as.sparse
 #' @rdname as.sparse-methods
 setGeneric(name="as.sparse", def=function(x, mask, ...) standardGeneric("as.sparse"))
 
@@ -190,27 +190,27 @@ setGeneric(name="pick", def=function(x, mask, ...) standardGeneric("pick"))
 
 #' Extract coordinates
 #' @param x the object to extract coordinates from
-#' @exportMethod coords
+#' @export coords
 #' @rdname coords-methods
 setGeneric(name="coords", def=function(x, ...) standardGeneric("coords"))
 
 #' Extract indices
 #' @param x the object to extract indices
-#' @exportMethod indices
+#' @export indices
 #' @docType methods
 #' @rdname indices-methods
 setGeneric(name="indices", def=function(x) standardGeneric("indices"))
 
 #' Index Lookup operation
 #' @param x the object to query
-#' @exportMethod lookup
+#' @export lookup
 #' @docType methods
 #' @rdname lookup-methods
 setGeneric(name="lookup", def=function(x, i, ...) standardGeneric("lookup"))
 
 #' Extract vector series from object
 #' @param x the object
-#' @exportMethod series
+#' @export series
 #' @rdname series-methods
 setGeneric(name="series", def=function(x, i, ...) standardGeneric("series"))   
 
@@ -233,7 +233,7 @@ setGeneric(name="connComp", def=function(x, ...) standardGeneric("connComp"))
 
 #' Construct a series iterator
 #' @param x the object to be iterated
-#' @exportMethod seriesIter
+#' @export seriesIter
 #' @rdname seriesIter-methods
 setGeneric(name="seriesIter", def=function(x) standardGeneric("seriesIter"))
 

@@ -30,6 +30,7 @@
 #' @param metaInfo an object of class \code{\linkS4class{BrainMetaInfo}}
 #' @param indices a vector of 1D indices
 #' @param mask a 3D \code{array} of type \code{logical} 
+#' @export
 #' @rdname SparseBrainVectorSource-class 	  
 SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 	
@@ -120,6 +121,7 @@ SparseBrainVector <- function(data, space, mask, source=NULL, label="") {
 
 #' loadData
 #' 
+#' @export
 #' @rdname loadData-methods 
 setMethod(f="loadData", signature=c("SparseBrainVectorSource"), 
 		def=function(x) {		
@@ -158,7 +160,7 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 		})
 
 #' indices
-#' 
+#' @export
 #' @rdname indices-methods           
 setMethod(f="indices", signature=signature(x="SparseBrainVector"),
           def=function(x) {
@@ -183,7 +185,8 @@ setMethod(f="indices", signature=signature(x="SparseBrainVector"),
 #          })
             
 #' coords
-#'             
+#'            
+#' @export 
 #' @rdname coords-methods             
 setMethod(f="coords", signature=signature(x="SparseBrainVector"),
           def=function(x,i) {           
@@ -195,6 +198,7 @@ setMethod(f="coords", signature=signature(x="SparseBrainVector"),
 
 #' eachVolume
 #' 
+#' @export
 #' @rdname eachVolume-methods
 setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function", withIndex="logical"),
 		def=function(x, FUN, withIndex=FALSE, ...) {
@@ -210,6 +214,7 @@ setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function
 
 #' eachVolume
 #' 
+#' @export
 #' @rdname eachVolume-methods
 setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function", withIndex="missing"),
 		def=function(x, FUN, ...) {
@@ -218,7 +223,8 @@ setMethod("eachVolume", signature=signature(x="SparseBrainVector", FUN="function
 
   
 #' eachSeries
-#'   
+#' 
+#' @export  
 #' @rdname eachSeries-methods 
 setMethod(f="eachSeries", signature=signature(x="SparseBrainVector", FUN="function"),
           def=function(x, FUN, withIndex=FALSE) {
@@ -239,7 +245,8 @@ setMethod(f="eachSeries", signature=signature(x="SparseBrainVector", FUN="functi
 
 
 #' seriesIter
-#'   
+#' 
+#' @export  
 #' @rdname seriesIter-methods 
 setMethod(f="seriesIter", signature=signature(x="SparseBrainVector"), 
 	def=function(x) {
@@ -283,6 +290,7 @@ setMethod(f="seriesIter", signature=signature(x="SparseBrainVector"),
   
 #' series
 #' 
+#' @export
 #' @rdname series-methods 
 setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
          def=function(x,i) {
@@ -292,6 +300,7 @@ setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
  
  #' series
  #' 
+ #' @export
  #' @rdname series-methods 
  setMethod("series", signature(x="SparseBrainVector", i="numeric"),
 		 def=function(x,i, j, k) {	
@@ -316,7 +325,8 @@ setMethod(f="series", signature=signature(x="SparseBrainVector", i="matrix"),
 		 })
  
 #' concat
-#'            
+#' 
+#' @export           
 #' @rdname concat-methods 
 setMethod(f="concat", signature=signature(x="SparseBrainVector", y="SparseBrainVector"),
           def=function(x,y,...) {
@@ -344,13 +354,15 @@ setMethod(f="concat", signature=signature(x="SparseBrainVector", y="SparseBrainV
           })
           
 #'lookup
-#'           
+#' 
+#' @export          
 #' @rdname lookup-methods          
 setMethod(f="lookup", signature=signature(x="SparseBrainVector", i="numeric"),
          def=function(x,i) {
             lookup(x@map, i)
           })
 
+  
 #' @nord  
 setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j = "missing"),
 		  def=function (x, i, j, k, m, ..., drop=TRUE) {  
@@ -409,6 +421,7 @@ setMethod(f="[", signature=signature(x = "SparseBrainVector", i = "numeric", j =
 #' takeVolume
 #' extract volume from SparseBrainVector
 #' 
+#' @export
 #' @rdname takeVolume-methods
  setMethod(f="takeVolume", signature=signature(x="SparseBrainVector", i="numeric"),
 		  def=function(x, i, merge=FALSE) {

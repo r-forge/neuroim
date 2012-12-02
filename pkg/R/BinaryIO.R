@@ -88,6 +88,7 @@ setMethod(f="initialize", signature=signature("BinaryWriter"),
 
 #' readElements
 #' 
+#' @export
 #' @rdname readElements-methods
 setMethod(f="readElements", signature=signature(x= "BinaryReader", numElements="numeric"),
 		def=function(x, numElements) {

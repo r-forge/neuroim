@@ -28,21 +28,25 @@ AxisSet3D <- function(i, j, k) {
 
 
 #' @rdname ndim-methods
+#' @export
 setMethod(f="ndim",signature=signature(x= "AxisSet"), def=function(x) { x@ndim })
 
 #' @nord
+#' @export
 setMethod(f="show", signature=signature("NamedAxis"), 
 		def=function(object) {
 			cat(object@axis)
 		})
 
 #' @nord
+#' @export
 setMethod(f="print", signature=signature("NamedAxis"), 
 		def=function(x, ...) {
 			x@axis
 		})
 
 #' @nord
+#' @export
 setMethod(f="show", signature=signature("AxisSet1D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
@@ -50,12 +54,14 @@ setMethod(f="show", signature=signature("AxisSet1D"),
 		})
 
 #' @nord
+#' @export
 setMethod(f="print", signature=signature("AxisSet2D"), 
 		def=function(x, ...) {
 			paste(print(x@i), "-", print(x@j))
 		})
 
 #' @nord
+#' @export
 setMethod(f="show", signature=signature("AxisSet2D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
@@ -63,7 +69,8 @@ setMethod(f="show", signature=signature("AxisSet2D"),
 			cat("Axis 2:", print(object@j), "\n")
 		})
 
-#' #' @nord
+#' @nord
+#' @export
 setMethod(f="print", signature=signature("AxisSet3D"), 
 		def=function(x, ...) {
 			paste(print(x@i), "-", print(x@j), "-", print(x@k))

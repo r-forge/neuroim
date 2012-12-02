@@ -12,7 +12,7 @@ roxygen()
 #' @param x object for which the file name is to matched to
 #' @param fileName file name to be matched
 #' @return TRUE for match, FALSE otherwise
-#' @exportMethod fileMatches
+#' @export fileMatches
 #' @rdname fileMatches-methods
 setGeneric(name="fileMatches", def=function(x, fileName) standardGeneric("fileMatches"))
 
@@ -22,7 +22,7 @@ setGeneric(name="fileMatches", def=function(x, fileName) standardGeneric("fileMa
 #' @param x object for which the file name is to matched to
 #' @param fileName file name to be matched
 #' @return TRUE for match, FALSE otherwise
-#' @exportMethod headerFileMatches
+#' @export headerFileMatches
 #' @rdname headerFileMatches-methods
 setGeneric(name="headerFileMatches", def=function(x, fileName) standardGeneric("headerFileMatches"))
 
@@ -31,7 +31,7 @@ setGeneric(name="headerFileMatches", def=function(x, fileName) standardGeneric("
 #' @param x object for which the file name is to matched to
 #' @param fileName file name to be matched
 #' @return TRUE for match, FALSE otherwise
-#' @exportMethod dataFileMatches
+#' @export dataFileMatches
 #' @rdname dataFileMatches-methods
 setGeneric(name="dataFileMatches", def=function(x, fileName) standardGeneric("dataFileMatches"))
 
@@ -39,7 +39,7 @@ setGeneric(name="dataFileMatches", def=function(x, fileName) standardGeneric("da
 #' @param x descriptor instance
 #' @param fileName file name to be stripped of its extension
 #' @return the correct header name
-#' @exportMethod headerFile
+#' @export headerFile
 #' @rdname headerFile-methods
 setGeneric(name="headerFile", def=function(x, fileName) standardGeneric("headerFile"))
 
@@ -47,7 +47,7 @@ setGeneric(name="headerFile", def=function(x, fileName) standardGeneric("headerF
 #' @param x descriptor instance
 #' @param fileName file name to be stripped of its extension
 #' @return the correct header name
-#' @exportMethod dataFile
+#' @export dataFile
 #' @rdname dataFile-methods
 setGeneric(name="dataFile", def=function(x, fileName) standardGeneric("dataFile"))
 
@@ -55,14 +55,14 @@ setGeneric(name="dataFile", def=function(x, fileName) standardGeneric("dataFile"
 #' @param x descriptor instance
 #' @param fileName file name to be stripped of its extension
 #' @return fileName without extension
-#' @exportMethod stripExtension
+#' @export stripExtension
 #' @rdname stripExtension-methods
 setGeneric(name="stripExtension", def=function(x, fileName) standardGeneric("stripExtension"))
 
 #' Generic function to read image meta info given a file and a \code{\linkS4class{BrainFileDescriptor}} instance.
 #' @param x descriptor instance
 #' @param fileName file name contianing meta information
-#' @exportMethod readMetaInfo
+#' @export readMetaInfo
 #' @rdname readMetaInfo-methods
 setGeneric(name="readMetaInfo", def=function(x, fileName) standardGeneric("readMetaInfo"))
 

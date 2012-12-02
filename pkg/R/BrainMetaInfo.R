@@ -14,7 +14,7 @@ roxygen()
 #' Generic function to create data reader
 #' @param x an object specifying the infromation required to produce the reader
 #' @param offset the byte offset (number of bytes to skip before reading)
-#' @exportMethod dataReader
+#' @export dataReader
 #' @rdname dataReader-methods
 setGeneric(name="dataReader", def=function(x, offset) standardGeneric("dataReader"))
 

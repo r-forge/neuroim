@@ -30,7 +30,7 @@ setMethod(f="initialize", signature=signature("IndexLookupVolume"),
 
 #' indices
 #' 
-#' @exportMethod indices
+#' @export indices
 #' @rdname indices-methods
 setMethod(f="indices", signature=signature(x="IndexLookupVolume"),
           def=function(x) {
@@ -39,7 +39,7 @@ setMethod(f="indices", signature=signature(x="IndexLookupVolume"),
 
 #' lookup
 #' 
-#' @exportMethod lookup
+#' @export lookup
 #' @rdname lookup-methods
 setMethod(f="lookup", signature=signature(x="IndexLookupVolume", i="numeric"),
           def=function(x,i) {
@@ -48,7 +48,7 @@ setMethod(f="lookup", signature=signature(x="IndexLookupVolume", i="numeric"),
 
 #' space
 #' 
-#' @exportMethod space
+#' @export space
 #' @rdname space-methods
 setMethod(f="space", signature=signature(x="IndexLookupVolume"),
           def=function(x) {
@@ -57,7 +57,7 @@ setMethod(f="space", signature=signature(x="IndexLookupVolume"),
 
 #' coords
 #' 
-#' @exportMethod coords   
+#' @export coords   
 #' @rdname coords-methods       
 setMethod(f="coords", signature(x="IndexLookupVolume"),
           def=function(x,i) {

@@ -6,6 +6,7 @@
 
 #' ndim
 #' 
+#' @export
 #' @rdname ndim-methods
 setMethod(f="ndim", signature=signature(x = "BrainData"),
           def=function(x) numdim(x@space))
@@ -13,6 +14,7 @@ setMethod(f="ndim", signature=signature(x = "BrainData"),
   
 #' dim
 #' 
+#' @export
 #' @nord
 setMethod(f="dim", signature=signature(x = "BrainData"),
           def=function(x) dim(x@space))
@@ -20,6 +22,7 @@ setMethod(f="dim", signature=signature(x = "BrainData"),
   
 #' space
 #' 
+#' @export
 #' @rdname space-methods
 setMethod(f="space", signature=signature(x = "BrainData"),
           def=function(x) x@space)
@@ -27,6 +30,7 @@ setMethod(f="space", signature=signature(x = "BrainData"),
   
 #' spacing
 #' 
+#' @export
 #' @rdname spacing-methods
 setMethod(f="spacing",signature= signature(x = "BrainData"),
           def=function(x) {
@@ -35,9 +39,11 @@ setMethod(f="spacing",signature= signature(x = "BrainData"),
           })
 
 #' @nord 
+#' @export
 setMethod(f="as.matrix", signature=signature(x = "BrainData"), def=function(x) as(x, "matrix"))
 
 #' @nord 
+#' @export
 setMethod(f="as.array", signature=signature(x = "BrainData"), def=function(x) as(x, "array"))
 
 #' @nord 

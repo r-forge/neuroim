@@ -3,7 +3,7 @@
 #' @include AllGeneric.R
 {}
 
-#' Create A Spherical Region of interest
+#' Create A Cuboid Region of interest
 #' @param bvol an image volume
 #' @param centroid the center of the cube in voxel space
 #' @param surround the number of voxels on either side of the central voxel
@@ -84,39 +84,74 @@ RegionSphere <- function (bvol, centroid, radius) {
     })
     
     idx <- which(dvals <= radius)
-    gsphere <- grid[idx, ]
-
-    ## coercion to numeric is  ahack and needs to be fixed. subsetting of BrainVolume is broken?
-    vals <- as.numeric(bvol[gsphere])
-    volspace <- space(bvol)
-    new("ROIVolume", space = space(bvol), data = vals, coords = gsphere)
+    ## coercion to numeric is  a hack and needs to be fixed. subsetting of BrainVolume is broken?
+    vals <- as.numeric(bvol[idx])
+    new("ROIVolume", space = space(bvol), data = vals, coords = grid[idx, ])
 }
 
-#setMethod("indices", signature(x="BrainRegion3D"),
-#          function(x) {
-#            
+Searchlight <- function(mask, radius) {
+	grid <- indexToGrid(mask, which(mask != 0))
+
+	index <- 0
+	
+	nextEl <- function() {
+		if (index < nrow(grid)) { 
+			 index <<- index + 1
+		 	 RegionSphere(mask, grid[index,], radius) 
+		} else {
+			stop('StopIteration')
+		}
+	}
+	
+	obj <- list(nextElem=nextEl)
+    class(obj) <- c("SearchLight", 'abstractiter', 'iter')
+	obj
+			
+}
+
+#' indices
+#' @param x an ROIVolume
+#' 
+#' @export 
+setMethod("indices", signature(x="ROIVolume"),
+          function(x) {
+			  gridToIndex(x@space, x@coords)
+		  })
+            
 
 #' coords
 #' 
 #' @param x a BrainRegion3D object
+#' @export
 #' @rdname coords-methods
 setMethod(f="coords", signature=signature(x="ROIVolume"),
           function(x) {
             x@coords
           })
 
- 
+#' length
+#' @export 
 #' @nord
 setMethod(f="length", signature=signature(x="ROIVolume"),
           function(x) {
             length(x@data)
-          })
+		})
 
+#' @export 
 #' @nord
 setMethod(f="[", signature=signature(x = "ROIVolume", i = "numeric", j = "missing", drop = "ANY"),
           function (x, i, j, drop) {
             x@data[i]
           })
+  
+#' @nord
+ setMethod(f="show", signature=signature(object = "ROIVolume"),
+		  function (object) {
+			  cat("\n\n\tROIVolume", "\n")
+			  cat("\tsize: ", length(object), "\n")
+			  cat("\tparent dim:", dim(object), "\n")
+			  cat("\tvoxel center of mass: ", colMeans(coords(object)), "\n")
+		  })
   
 #' @nord          
 .distance <- function(p1, p2) {
