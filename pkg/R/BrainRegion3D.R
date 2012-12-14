@@ -156,29 +156,45 @@ setMethod(f="[", signature=signature(x = "ROIVolume", i = "numeric", j = "missin
 #' @nord          
 .distance <- function(p1, p2) {
   diffs = (p1 - p2)
-  return(sqrt(sum(diffs*diffs)))
+  sqrt(sum(diffs*diffs))
 }
 
-#' @nord
-makeKernel <- function(kerndim, pdim, FUN=dnorm) {
+
+#' Create a Kernel object
+#' @param kerndim the dimensions in voxels of the kernel
+#' @param vdim the dimensions of the voxels in real units
+#' @param FUN the kernel function taking as its first argument representing the distance from the center of the kernel
+#' @param ... addiitonal parameters to the kernel FUN
+#' @export
+Kernel <- function(kerndim, vdim, FUN=dnorm, ...) {
   if (length(kerndim) < 2) {
     stop("kernel dim length must be greater than 1")
   }
   
   kern <- array(0, kerndim)
-  svec <- sapply(kerndim, function(d) ceiling(d/2 -1))
-  dlist <- lapply(svec, function(sv) seq(-sv, sv))
-
-  indmat <- do.call("expand.grid", dlist)
-  cmat <- t(apply(indmat, 1, function(vals) sign(vals)* ifelse(vals == 0, 0, abs(vals)-.5)))
-  cmat2 <- t(apply(cmat, 1, function(v) (v * pdim)))
   
-  dvals <- apply(cmat2, 1, .distance, c(0,0,0))
-  wts <- FUN(dvals)
+  ## the half-width for each dimensions
+  hwidth <- sapply(kerndim, function(d) ceiling(d/2 -1))
+  grid.vec <- lapply(hwidth, function(sv) seq(-sv, sv))
+
+  # compute relative voxel locations (i.e. centered at 0,0,0)
+  voxel.ind <- do.call("expand.grid", grid.vec)
+  
+  # fractional voxel locations so that the location of a voxel coordinate is centered within the voxel
+  cvoxel.ind <- t(apply(voxel.ind, 1, function(vals) sign(vals)* ifelse(vals == 0, 0, abs(vals)-.5)))
+  
+  ## the coordinates ofthe voxels (i.e. after multiplying by pixel dims)
+  coords <- t(apply(cvoxel.ind, 1, function(v) (v * vdim)))
+  
+  ## distance of coordinate from kernel center
+  coord.dist <- apply(coords, 1, .distance, c(0,0,0))
+  
+  wts <- FUN(coord.dist, ...)
   wts <- wts/sum(wts)
 
-  wt.arr <- array(wts, kerndim)
-  ret <- list(kern=kern, wts=wt.arr, indmat=indmat, coordmat=cmat2)
+  kern.weights <- array(wts, kerndim)
+  
+  ret <- list(kern=kern, wts=kern.weights, indmat=voxel.ind, coordmat=coords)
 
 
 }
