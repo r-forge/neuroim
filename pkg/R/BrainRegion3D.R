@@ -107,7 +107,7 @@ Searchlight <- function(mask, radius) {
 	}
 	
 	obj <- list(nextElem=nextEl)
-    class(obj) <- c("SearchLight", 'abstractiter', 'iter')
+  class(obj) <- c("SearchLight", 'abstractiter', 'iter')
 	obj
 			
 }
@@ -133,7 +133,7 @@ setMethod("indices", signature(x="ROIVolume"),
 
 #' coords
 #' 
-#' @param x a BrainRegion3D object
+#' @param x an ROIVolume object
 #' @export
 #' @rdname coords-methods
 setMethod(f="coords", signature=signature(x="ROIVolume"),

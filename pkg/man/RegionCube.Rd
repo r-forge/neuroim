@@ -1,6 +1,6 @@
 \name{RegionCube}
 \alias{RegionCube}
-\title{Create A Spherical Region of interest}
+\title{Create A Cuboid Region of interest}
 \usage{
   RegionCube(bvol, centroid, surround, mask = NULL)
 }
@@ -16,6 +16,6 @@
   the ROI cube.}
 }
 \description{
-  Create A Spherical Region of interest
+  Create A Cuboid Region of interest
 }
 

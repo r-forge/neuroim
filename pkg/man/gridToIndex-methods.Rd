@@ -17,5 +17,11 @@
   gridToIndex
 
   gridToIndex
+
+  gridToIndex
+
+  gridToIndex
+
+  gridToIndex
 }
 

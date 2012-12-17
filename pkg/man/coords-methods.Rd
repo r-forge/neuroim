@@ -4,7 +4,7 @@
 \arguments{
   \item{x}{the object to extract coordinates from}
 
-  \item{x}{a BrainRegion3D object}
+  \item{x}{an ROIVolume object}
 }
 \description{
   Extract coordinates

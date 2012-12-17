@@ -1,3 +1,4 @@
+\docType{methods}
 \name{writeVolume}
 \alias{writeVector}
 \alias{writeVolume}

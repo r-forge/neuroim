@@ -2,8 +2,8 @@
 \alias{makeVolume}
 \title{makeVolume}
 \usage{
-  makeVolume(data, refvol, source = NULL, label = "",
-    indices = NULL)
+  makeVolume(data = NULL, refvol, source = NULL,
+    label = "", indices = NULL)
 }
 \arguments{
   \item{data}{a three-dimensional \code{array}}

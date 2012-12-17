@@ -427,7 +427,7 @@ setClass("TiledBrainVector",
 #' A class that is used to produce a \code{\linkS4class{SparseBrainVector}} instance
 #' @slot data the data stored in the ROI
 #' @slot coords the coordinates of the ROI
-#' @export ROIVolume
+#' @exportClass ROIVolume
 setClass("ROIVolume", 
 		representation=representation(data="numeric", coords="matrix"),
 		contains=c("BrainData"))
@@ -439,7 +439,7 @@ setClass("ROIVolume",
 #' @slot weights the kernel weights
 #' @slot voxmat the relative voxel coordinates of the kernel
 #' @slot coordmat the relative real coordinates of the kernel
-#' @export Kernel
+#' @exportClass Kernel
 setClass("Kernel", 
          representation=representation(width="numeric", weights="numeric", voxels="matrix", coords="matrix"))
          

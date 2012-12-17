@@ -2,7 +2,7 @@
 \alias{RegionSphere}
 \title{Create A Spherical Region of interest}
 \usage{
-  RegionSphere(bvol, centroid, radius)
+  RegionSphere(bvol, centroid, radius, fill = NULL)
 }
 \arguments{
   \item{bvol}{an image volume}
