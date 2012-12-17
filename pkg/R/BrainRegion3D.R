@@ -176,7 +176,7 @@ setMethod(f="[", signature=signature(x = "ROIVolume", i = "numeric", j = "missin
 #' @param kerndim the dimensions in voxels of the kernel
 #' @param vdim the dimensions of the voxels in real units
 #' @param FUN the kernel function taking as its first argument representing the distance from the center of the kernel
-#' @param ... addiitonal parameters to the kernel FUN
+#' @param ... additional parameters to the kernel FUN
 #' @export
 Kernel <- function(kerndim, vdim, FUN=dnorm, ...) {
   if (length(kerndim) < 2) {
@@ -209,16 +209,23 @@ Kernel <- function(kerndim, vdim, FUN=dnorm, ...) {
   
   kern.weights <- wts
   
-  new("Kernel", width=kerndim, weights=kern.weights, voxmat=voxel.ind, coordmat=coords)
+  new("Kernel", width=kerndim, weights=kern.weights, voxels=voxel.ind, coords=coords)
 
 }
 
+
+#' extract voxels from a \code{Kernel} object
+#' @param kerndim the dimensions in voxels of the kernel
+#' @param vdim the dimensions of the voxels in real units
+#' @param FUN the kernel function taking as its first argument representing the distance from the center of the kernel
+#' @param ... additional parameters to the kernel FUN
+#' @export
 setMethod(f="voxels", signature=signature(x="Kernel"),
           function(x, centerVoxel=NULL) {
             if (is.null(centerVoxel)) {
-              x@voxmat
+              x@voxels
             } else {
-              sweep(x@voxmat, 2, centerVoxel, "+")
+              sweep(x@voxels, 2, centerVoxel, "+")
             }
           })
 

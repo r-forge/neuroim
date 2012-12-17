@@ -441,7 +441,7 @@ setClass("ROIVolume",
 #' @slot coordmat the relative real coordinates of the kernel
 #' @export Kernel
 setClass("Kernel", 
-         representation=representation(width="numeric", weights="numeric", voxmat="matrix", coordmat="matrix"))
+         representation=representation(width="numeric", weights="numeric", voxels="matrix", coords="matrix"))
          
 
 
