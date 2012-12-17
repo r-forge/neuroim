@@ -411,7 +411,7 @@ setClass("SparseBrainVector",
 #' 
 #' A class that is used to produce a \code{\linkS4class{SparseBrainVector}} instance
 #' @slot mask the subset of voxels that will be stored in memory
-#' @exportClass BrainVectorSource
+#' @export
 setClass("SparseBrainVectorSource", representation=
 				representation(mask="LogicalBrainVolume"),
 		contains=c("BrainVectorSource"))
@@ -422,10 +422,29 @@ setClass("TiledBrainVector",
 		representation=representation(cache="list", filename="character", indexList="list", mask="BrainVolume",capacity="numeric"),		
 	    contains=c("BrainVector"))
 
-
+#' ROIVolume
+#' 
+#' A class that is used to produce a \code{\linkS4class{SparseBrainVector}} instance
+#' @slot data the data stored in the ROI
+#' @slot coords the coordinates of the ROI
+#' @export ROIVolume
 setClass("ROIVolume", 
 		representation=representation(data="numeric", coords="matrix"),
 		contains=c("BrainData"))
+
+#' Kernel
+#' 
+#' A class representing an image kernel
+#' @slot width the width in voxels of the kernel
+#' @slot weights the kernel weights
+#' @slot voxmat the relative voxel coordinates of the kernel
+#' @slot coordmat the relative real coordinates of the kernel
+#' @export Kernel
+setClass("Kernel", 
+         representation=representation(width="numeric", weights="numeric", voxmat="matrix", coordmat="matrix"))
+         
+
+
 #' BrainBucket
 #' 
 #' a four-dimensional image this conists of a sequence of labelled image volumes backed by a list

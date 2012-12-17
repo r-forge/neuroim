@@ -19,9 +19,12 @@
 #' @param indices an optional 1-d index vector
 #' @return \code{\linkS4class{DenseBrainVolume}} instance 
 #' @export makeVolume
-makeVolume <- function(data, refvol, source=NULL, label="", indices=NULL) {
-	DenseBrainVolume(data,space(refvol),source, label,indices)
-	
+makeVolume <- function(data=NULL, refvol, source=NULL, label="", indices=NULL) {
+  if (is.null(data)) {
+	  DenseBrainVolume(array(0, dim(refvol)),space(refvol),source, label,indices)	
+  } else {
+    DenseBrainVolume(data,space(refvol),source, label,indices)  
+  }
 }
 
 #' BrainVolume
@@ -295,15 +298,24 @@ setMethod(f="eachSlice", signature=signature(x="BrainVolume", FUN="function", wi
 			})
 		})
 
-#' indexToGrid
+#' indexToCoord
 #' 
-#' @export indexToGrid
-#' @rdname indexToGrid-methods
-setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
+#' @export 
+#' @rdname indexToCoord-methods
+setMethod(f="indexToCoord", signature=signature(x="BrainVolume", idx="index"),
           def=function(x, idx) {
-            array.dim <- dim(x)          
-            t(sapply(idx, .indexToGrid, array.dim))            
+            callGeneric(space(x),idx)
           })
+
+#' coordToIndex
+#' 
+#' @export 
+#' @rdname coordToIndex-methods
+setMethod(f="coordToIndex", signature=signature(x="BrainVolume", coords="matrix"),
+          def=function(x, coords) {
+            callGeneric(space(x), coords)
+          })
+
 
 #' indexToGrid
 #' 
@@ -378,6 +390,35 @@ setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix")
 	  
 }
 
+
+
+setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
+          def=function(x, m, mask=NULL) {          
+            ovol <- array(0, dim(x))
+            hwidth <- sapply(m@width, function(d) ceiling(d/2 -1)) + 1
+            xdim <- dim(x)[1]
+            ydim <- dim(x)[2]
+            zdim <- dim(x)[3]
+            
+            if (!is.null(mask)) {
+              grid <- indexToGrid(mask, which(mask != 0))
+            } else {
+              grid <- as.matrix(expand.grid(i=hwidth[1]:(xdim - hwidth[1]), j=hwidth[2]:(ydim - hwidth[2]), k=hwidth[3]:(zdim - hwidth[3])))
+            }
+                      
+            res <- apply(grid, 1, function(vox) {
+              loc <- sweep(m@voxmat, 2, vox, "+")
+              ivals <- x[loc]
+              if (all(ivals == 0)) {
+                0
+              } else {
+                sum(ivals * m@weights)
+              }
+            })
+            ovol[grid] <- res                  
+      
+            BrainVolume(ovol, space(x))
+          })
 
 #' find connected components in BrainVolume
 #' @name connComp

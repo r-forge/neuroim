@@ -117,6 +117,47 @@ setMethod(f="bounds", signature=signature(x = "BrainSpace"),
 		}
 )
 
+#' indexToGrid
+#' 
+#' @export indexToGrid
+#' @rdname indexToGrid-methods
+setMethod(f="indexToGrid", signature=signature(x="BrainSpace", idx="index"),
+          def=function(x, idx) {
+            array.dim <- dim(x)          
+            t(sapply(idx, .indexToGrid, array.dim))            
+          })
+
+#' indexToCoord
+#' 
+#' @export 
+#' @rdname indexToCoord-methods
+setMethod(f="indexToCoord", signature=signature(x="BrainSpace", idx="index"),
+          def=function(x, idx) {
+            grid <- indexToGrid(x, idx) - .5
+            res <- trans(x) %*% t(cbind(grid, rep(1,nrow(grid))))
+            t(res[1:3,])
+          })
+
+#' coordToIndex
+#' 
+#' @export 
+#' @rdname coordToIndex-methods
+setMethod(f="coordToIndex", signature=signature(x="BrainSpace", coords="matrix"),
+          def=function(x, coords) {
+            grid = t(inverseTrans(x) %*% t(cbind(coords, rep(1, nrow(coords)))))
+            gridToIndex(x, grid[,1:3] + 1)
+          })
+
+#' coordToGrid
+#' 
+#' @export 
+#' @rdname coordToGrid-methods
+setMethod(f="coordToGrid", signature=signature(x="BrainSpace", coords="matrix"),
+          def=function(x, coords) {
+            grid = t(inverseTrans(x) %*% t(cbind(coords, rep(1, nrow(coords)))))
+            grid[,1:3]+ 1
+          })
+
 #' gridToIndex
 #' 
 #' @export 

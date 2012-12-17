@@ -8,6 +8,15 @@ roxygen <- function() NULL
 #' @rdname loadData-methods
 setGeneric(name="loadData", def=function(x, ...) standardGeneric("loadData"))
 
+#' Generic function to apply a function to an object
+#' @param x the object that is mapped
+#' @param m the mapping object
+#' @export map
+#' @rdname map-methods
+setGeneric(name="map", def=function(x, m, ...) standardGeneric("map"))
+
+
+
 #' Generic function to extract the number of dimensions of an object
 #' @param x n-dimensional object
 #' @export ndim
@@ -118,13 +127,37 @@ setGeneric(name="writeVector",  def=function(x, fileName, format, dataType) stan
 #' Generic function to extract a value
 setGeneric(name="value",       def=function(object, x,y, ...) standardGeneric("value"))
 
-#' Generic function to convert a 1D index to N-dimensional grid coordinate
+#' Generic function to convert 1D indices to N-dimensional grid coordinates
 #' @param x the object
 #' @param idx the 1D indices
 #' @return a matrix of grid coordinates
 #' @export indexToGrid
 #' @rdname indexToGrid-methods
 setGeneric(name="indexToGrid",   def=function(x, idx) standardGeneric("indexToGrid"))
+
+#' Generic function to convert 1D indices to N-dimensional real world coordinates
+#' @param x the object
+#' @param idx the 1D indices
+#' @return a matrix of real coordinates
+#' @export indexToCoord
+#' @rdname indexToCoord-methods
+setGeneric(name="indexToCoord",   def=function(x, idx) standardGeneric("indexToCoord"))
+
+#' Generic function to convert N-dimensional real world coordinates to 1D indices
+#' @param x the object
+#' @param coords a matrix of real world coordinates
+#' @return a vector of indices
+#' @export coordToIndex
+#' @rdname coordToIndex-methods
+setGeneric(name="coordToIndex",   def=function(x, coords) standardGeneric("coordToIndex"))
+
+#' Generic function to convert N-dimensional real world coordinates to grid coordinates
+#' @param x the object
+#' @param coords a matrix of real world coordinates
+#' @return a matrix of grid coordinates
+#' @export coordToGrid
+#' @rdname coordToGrid-methods
+setGeneric(name="coordToGrid",   def=function(x, coords) standardGeneric("coordToGrid"))
 
 
 #' Generic function to convert N-dimensional grid coordinate to 1D indices
@@ -236,4 +269,11 @@ setGeneric(name="connComp", def=function(x, ...) standardGeneric("connComp"))
 #' @export seriesIter
 #' @rdname seriesIter-methods
 setGeneric(name="seriesIter", def=function(x) standardGeneric("seriesIter"))
+
+
+#' extract voxel coordinates
+#' @param x the object to extract voxels from
+#' @export voxels
+#' @rdname voxels-methods
+setGeneric(name="voxels", def=function(x, ...) standardGeneric("voxels"))
 

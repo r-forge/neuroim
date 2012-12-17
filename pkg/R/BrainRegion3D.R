@@ -38,11 +38,8 @@ RegionCube <- function(bvol, centroid, surround, mask=NULL) {
       grid <- grid[-idx,]
     }
   }
-  
-
-  
+   
   vals <- bvol[grid]
-
   new("ROIVolume", space=space(bvol), data=vals, coords=grid)
   
 }
@@ -53,7 +50,7 @@ RegionCube <- function(bvol, centroid, surround, mask=NULL) {
 #' @param centroid the center of the sphere in voxel space
 #' @param radius the radius of the spherical ROI
 #' @export
-RegionSphere <- function (bvol, centroid, radius) {
+RegionSphere <- function (bvol, centroid, radius, fill=NULL) {
     bspace <- space(bvol)
     vspacing <- spacing(bvol)
     vdim <- dim(bvol)
@@ -85,7 +82,13 @@ RegionSphere <- function (bvol, centroid, radius) {
     
     idx <- which(dvals <= radius)
     ## coercion to numeric is  a hack and needs to be fixed. subsetting of BrainVolume is broken?
-    vals <- as.numeric(bvol[idx])
+    
+    vals <- if (!is.null(fill)) {
+      rep(fill, length(idx))
+    } else {
+      as.numeric(bvol[idx])
+    }   
+    
     new("ROIVolume", space = space(bvol), data = vals, coords = grid[idx, ])
 }
 
@@ -108,6 +111,15 @@ Searchlight <- function(mask, radius) {
 	obj
 			
 }
+
+#' @nord
+# conversion from ROIVolume to DenseBrainVolume
+# @rdname as-methods
+setAs(from="ROIVolume", to="DenseBrainVolume", def=function(from) {
+  dat <- array(0, dim(from@space))
+  dat[from@coords] <- from@data
+  ovol <- DenseBrainVolume(dat, from@space, from@source)
+})
 
 #' indices
 #' @param x an ROIVolume
@@ -171,14 +183,16 @@ Kernel <- function(kerndim, vdim, FUN=dnorm, ...) {
     stop("kernel dim length must be greater than 1")
   }
   
-  kern <- array(0, kerndim)
+  #kern <- array(0, kerndim)
   
   ## the half-width for each dimensions
   hwidth <- sapply(kerndim, function(d) ceiling(d/2 -1))
+  
+  ## note, if a kernel dim is even, this will force it to be odd numbered
   grid.vec <- lapply(hwidth, function(sv) seq(-sv, sv))
 
   # compute relative voxel locations (i.e. centered at 0,0,0)
-  voxel.ind <- do.call("expand.grid", grid.vec)
+  voxel.ind <- as.matrix(do.call("expand.grid", grid.vec))
   
   # fractional voxel locations so that the location of a voxel coordinate is centered within the voxel
   cvoxel.ind <- t(apply(voxel.ind, 1, function(vals) sign(vals)* ifelse(vals == 0, 0, abs(vals)-.5)))
@@ -192,12 +206,23 @@ Kernel <- function(kerndim, vdim, FUN=dnorm, ...) {
   wts <- FUN(coord.dist, ...)
   wts <- wts/sum(wts)
 
-  kern.weights <- array(wts, kerndim)
   
-  ret <- list(kern=kern, wts=kern.weights, indmat=voxel.ind, coordmat=coords)
-
+  kern.weights <- wts
+  
+  new("Kernel", width=kerndim, weights=kern.weights, voxmat=voxel.ind, coordmat=coords)
 
 }
+
+setMethod(f="voxels", signature=signature(x="Kernel"),
+          function(x, centerVoxel=NULL) {
+            if (is.null(centerVoxel)) {
+              x@voxmat
+            } else {
+              sweep(x@voxmat, 2, centerVoxel, "+")
+            }
+          })
+
+
   
 
   
