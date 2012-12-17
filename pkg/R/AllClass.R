@@ -11,8 +11,6 @@ setOldClass(c("gzfile", "connection"))
 
 setClass("Base", contains=c("VIRTUAL"))
 
-
-
 #' This class represents an axis with a name attribute
 #'
 #' @slot axis the name of the axis
