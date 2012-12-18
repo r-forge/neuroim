@@ -427,8 +427,12 @@ setClass("TiledBrainVector",
 #' @slot coords the coordinates of the ROI
 #' @exportClass ROIVolume
 setClass("ROIVolume", 
-		representation=representation(data="numeric", coords="matrix"),
-		contains=c("BrainData"))
+		representation=representation(data="numeric", coords="matrix"), contains=c("BrainData"),
+         validity = function(object) {
+           if (ncol(object@coords) != 3) {
+             stop("coords slot must be a matrix with 3 columns")
+           }
+         })
 
 #' Kernel
 #' 

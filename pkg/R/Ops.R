@@ -7,6 +7,31 @@ roxygen()
 #' @include BrainVolume.R
 roxygen()
 
+setMethod(f="Arith", signature=signature(e1="ROIVolume", e2="ROIVolume"),
+          def=function(e1, e2) {
+            if (!all(dim(e1) == dim(e2))) {
+              stop("cannot perform arithmetic operation on arguments with different dimensions")
+            }
+            
+            if (!all(spacing(e1) == spacing(e2))) {
+              stop("arguments have different voxel dimensions")
+            }
+            
+            idx1 <- gridToIndex(e1@space, e1@coords)
+            idx2 <- gridToIndex(e2@space, e2@coords)
+            
+            indices <- sort(union(idx1, idx2))   
+            v1 <- numeric(length(indices))
+            v2 <- numeric(length(indices))
+            v1[indices %in% idx1] <- e1@data
+            v2[indices %in% idx2] <- e2@data
+            res <- callGeneric(v1,v2)   
+          
+            new("ROIVolume", space=space(e1), data=res, coords = indexToGrid(space(e1), indices))
+            
+          })
+
+
 
 
 #' @nord Arith-methods

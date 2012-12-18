@@ -3,6 +3,17 @@
 #' @include AllGeneric.R
 {}
 
+
+#' Create an instance of class ROIVolume
+#' @param vspace the volume space
+#' @param indices the ROI 1D indices
+#' @param data the data values
+#' @export
+ROIVolume <- function(vspace, coords, data=rep(length(indices),1)) {
+  new("ROIVolume", space=vspace, data=data, coords=coords)
+}
+  
+
 #' Create A Cuboid Region of interest
 #' @param bvol an image volume
 #' @param centroid the center of the cube in voxel space

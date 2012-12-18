@@ -354,7 +354,16 @@ setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix")
 			  array.dim <- dim(x)
 			  .gridToIndex(dim(x), matrix(coords, nrow=1, byrow=TRUE))
 		  })
-  
+
+
+#' coordToGrid
+#' 
+#' @export 
+#' @rdname coordToGrid-methods
+setMethod(f="coordToGrid", signature=signature(x="BrainVolume", coords="matrix"),
+          def=function(x, coords) {
+            callGeneric(space(x), coords)            
+          })  
 
 #' @nord
 .pruneCoords <- function(coord.set,  vals,  mindist=10) {
