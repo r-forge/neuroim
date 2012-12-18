@@ -7,6 +7,22 @@ roxygen()
 #' @include BrainVolume.R
 roxygen()
 
+setMethod(f="Arith", signature=signature(e1="SparseBrainVolume", e2="SparseBrainVolume"),
+          def=function(e1, e2) {
+            if (!all(dim(e1) == dim(e2))) {
+              stop("cannot perform arithmetic operation on arguments with different dimensions")
+            }
+            
+            if (!all(spacing(e1) == spacing(e2))) {
+              stop("arguments have different voxel dimensions")
+            }
+            
+            res <- callGeneric(e1@data,e2@data)   
+            new("SparseBrainVolume", data=res, source=e1@source, space=space(e1))
+             
+          })
+
+
 setMethod(f="Arith", signature=signature(e1="ROIVolume", e2="ROIVolume"),
           def=function(e1, e2) {
             if (!all(dim(e1) == dim(e2))) {

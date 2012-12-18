@@ -87,6 +87,33 @@ DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 
 }
 
+#' SparseBrainVolume
+#' 
+#' Construct a \code{\linkS4class{SparseBrainVolume}} instance
+#' @param data a numeric vector 
+#' @param space an instance of class \code{\linkS4class{BrainSpace}}
+#' @param source an instance of class \code{\linkS4class{BrainSource}}
+#' @param label a \code{character} string
+#' @param indices a 1-d index vector
+#' @return \code{\linkS4class{DenseBrainVolume}} instance 
+#' @export SparseBrainVolume
+#' @rdname SparseBrainVolume-class
+SparseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
+  if (length(indices) != length(data)) {
+    stop(paste("length of 'data' must equal length of 'indices'"))
+  }
+  
+  sv <- sparseVector(x=data, i=indices, length=prod(dim(space)))
+  if (is.null(source)) {
+    meta <- BrainMetaInfo(dim(space), spacing(space), origin(space), "FLOAT", label)
+    source <- new("BrainSource", metaInfo=meta)
+  }
+  
+  new("SparseBrainVolume", data=sv, source=source, space=space)
+}
+  
+  
+
 #' LogicalBrainVolume
 #' 
 #' Construct a \code{\linkS4class{LogicalBrainVolume}} instance

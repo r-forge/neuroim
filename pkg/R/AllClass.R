@@ -351,6 +351,15 @@ setClass("DenseBrainVolume",
 		contains=c("BrainVolume", "array"))
 
 
+#' SparseBrainVolume
+#' 
+#' Three-dimensional brain image, backed by an \code{sparseVector}     
+#' @exportClass SparseBrainVolume  
+setClass("SparseBrainVolume",   
+         representation=representation(data="sparseVector"),
+         contains=c("BrainVolume"))
+
+
 #' LogicalBrainVolume
 #' 
 #' Three-dimensional brain image where all values are either TRUE or FALSE	   
@@ -369,8 +378,7 @@ setClass("IndexLookupVolume",
 		contains=c("BrainVolume"))
 
 
-#setClass("SparseBrainVolume", 	
-#		contains=c("BrainVolume", "numeric"))
+
 
 #' Four-dimensional brain image	   
 #' @exportClass BrainVector  
