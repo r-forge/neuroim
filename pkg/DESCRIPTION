@@ -20,7 +20,8 @@ Depends:
     methods,
     stringr,
     yaImpute,
-    abind
+    abind,
+    Matrix
 Collate:
     'AFNI_IO.R'
     'AllGeneric.R'

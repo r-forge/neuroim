@@ -86,9 +86,7 @@
 	
 	apply(vmat, 1, function(vox) {
 				(slicedim*(vox[3]-1)) + (vox[2]-1)*dimensions[1] + vox[1]   
-			})
-	
-	
+			})	
 }
 
 

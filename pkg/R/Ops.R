@@ -118,6 +118,12 @@ setMethod(f="Summary", signature=signature(x="SparseBrainVector"),
 		def=function(x) {
 			callGeneric(x@data)
 		})
+#' @nord Summary-methods
+setMethod(f="max", signature=signature(x="SparseBrainVolume", na.rm="ANY"),
+          def=function(x, ..., na.rm) {
+            browser()
+            callGeneric(x@data)
+          })
   
 
 #setMethod("sum", signature()

@@ -165,7 +165,7 @@ setMethod(f="coordToGrid", signature=signature(x="BrainSpace", coords="matrix"),
 setMethod(f="gridToIndex", signature=signature(x="BrainSpace", coords="matrix"),
 		def=function(x, coords) {
 			array.dim <- dim(x)
-			.gridToIndex(dim(x), coords)
+			.gridToIndex3D(dim(x), coords)
 		})
 
 #' gridToIndex
@@ -175,7 +175,7 @@ setMethod(f="gridToIndex", signature=signature(x="BrainSpace", coords="matrix"),
 setMethod(f="gridToIndex", signature=signature(x="BrainSpace", coords="numeric"),
 		def=function(x, coords) {
 			array.dim <- dim(x)
-			.gridToIndex(dim(x), matrix(coords, nrow=1, byrow=TRUE))
+			.gridToIndex3D(dim(x), matrix(coords, nrow=1, byrow=TRUE))
 		})
 
 
