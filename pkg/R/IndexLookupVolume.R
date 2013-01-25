@@ -64,10 +64,10 @@ setMethod(f="coords", signature(x="IndexLookupVolume"),
             idx <- lookup(x,i)
             idx <- idx[idx!=0]
             if (length(idx) == 0) {
-              return(NA)
+              NA
+            } else {
+              indexToGrid(space(x), idx)
             }
-            
-            indexToGrid(space(x), idx)
             
           })            
 

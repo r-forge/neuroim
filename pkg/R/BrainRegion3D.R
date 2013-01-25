@@ -97,7 +97,7 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL) {
     vals <- if (!is.null(fill)) {
       rep(fill, length(idx))
     } else {
-      as.numeric(bvol[idx])
+      as.numeric(bvol[grid[idx,]])
     }   
     
     new("ROIVolume", space = space(bvol), data = vals, coords = grid[idx, ])

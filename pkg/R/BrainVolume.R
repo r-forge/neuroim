@@ -87,6 +87,55 @@ DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 
 }
 
+#' ClusteredBrainVolume
+#' 
+#' Construct a \code{\linkS4class{ClusteredBrainVolume}} instance
+#' @param space an instance of class \code{\linkS4class{BrainSpace}}
+#' @param mask an instance of class \code{\linkS4class{LogicalBrainVolume}}
+#' @param clusters a vector of clusters ids
+#' @param labelMap as \code{list} that maps from cluster id to a cluster label
+#' @return \code{\linkS4class{ClusteredBrainVolume}} instance 
+#' @export ClusteredBrainVolume
+#' @rdname ClusteredBrainVolume-class
+ClusteredBrainVolume <- function(mask, clusters, labelMap=NULL, source=NULL, label="") {
+  space <- space(mask)
+  ids <- sort(unique(clusters)) 
+  
+  stopifnot(length(clusters) == sum(mask))
+  
+  if (length(ids) == 1) {
+    warning("clustered volume only contains 1 partition")
+  }
+  
+  if (is.null(labelMap)) {   
+    labs <- paste("Clus_", ids, sep="")
+    labelMap <- as.list(ids)
+    names(labelMap) <- labs    
+  } else {
+    stopifnot(length(labelMap) == length(ids))
+    stopifnot(all(unlist(labelMap) %in% ids))
+  }
+  
+  if (is.null(source)) {
+    meta <- BrainMetaInfo(dim(space), spacing(space), origin(space), "FLOAT", label)
+    source <- new("BrainSource", metaInfo=meta)
+  }
+  
+
+  clus.idx <- which(mask == TRUE)
+  clus.split <- split(clus.idx, clusters)
+  clus.names <- names(clus.split)
+  clusterMap <- hash()
+  for (i in 1:length(clus.split)) {
+    clusterMap[[clus.names[[i]]]] <- clus.split[[clus.names[[i]]]]
+    
+  }
+  new("ClusteredBrainVolume", mask=mask, clusters=clusters, labelMap=labelMap, clusterMap=clusterMap, source=source, space=space)
+}
+  
+  
+  
+
 #' SparseBrainVolume
 #' 
 #' Construct a \code{\linkS4class{SparseBrainVolume}} instance
@@ -167,6 +216,32 @@ LogicalBrainVolume <- function(data, space, source=NULL, label="", indices=NULL)
 # @rdname as-methods
 setAs(from="DenseBrainVolume", to="array", def=function(from) from@.Data)
 
+
+#' @nord
+# conversion from SparseBrainVolume to array
+# @rdname as-methods
+setAs(from="SparseBrainVolume", to="array", def=function(from) {
+  vals <- as.numeric(from@data)
+  array(vals, dim(from))
+})
+
+#' @nord
+# conversion from SparseBrainVolume to numeric
+# @rdname as-methods
+setAs(from="SparseBrainVolume", to="numeric", def=function(from) {
+  as.numeric(from@data)
+})
+
+#' as.numeric
+#' 
+#' Convert SparseBrainVolume to numeric
+#' @rdname as.numeric-methods
+#' @export 
+setMethod(f="as.numeric", signature=signature(x = "SparseBrainVolume"), def=function(x) {
+  as(x, "numeric")			
+})
+
+
 # conversion from BrainVolume to LogicalBrainVolume
 #' @nord
 setAs(from="BrainVolume", to="LogicalBrainVolume", def=function(from) {
@@ -177,6 +252,14 @@ setAs(from="BrainVolume", to="LogicalBrainVolume", def=function(from) {
 #' @nord
 setAs(from="DenseBrainVolume", to="LogicalBrainVolume", def=function(from) {
 	LogicalBrainVolume(as.array(from), space(from), from@source)
+})
+
+# conversion from ClusteredBrainVolume to LogicalBrainVolume
+#' @nord
+setAs(from="ClusteredBrainVolume", to="DenseBrainVolume", def=function(from) {
+  data = from@clusters
+  indices <- which(from@mask == TRUE)
+  DenseBrainVolume(data, space(from), from@source, indices=indices)
 })
 
 # conversion from BrainVolume to array
@@ -382,6 +465,24 @@ setMethod(f="gridToIndex", signature=signature(x="BrainVolume", coords="matrix")
 			  .gridToIndex(dim(x), matrix(coords, nrow=1, byrow=TRUE))
 		  })
 
+#' as.mask
+#' 
+#' @export 
+#' @rdname as.mask-methods
+setMethod(f="as.mask", signature=signature(x="BrainVolume", indices="missing"),
+          def=function(x) {
+            LogicalBrainVolume(x > 0, space(x))
+          })
+#' as.mask
+#' 
+#' @export 
+#' @rdname as.mask-methods
+setMethod(f="as.mask", signature=signature(x="BrainVolume", indices="numeric"),
+          def=function(x, indices) {
+            M <- array(0, dim(x))
+            M[indices] <- 1
+            LogicalBrainVolume(M, space(x))
+          })
 
 #' coordToGrid
 #' 
@@ -456,6 +557,109 @@ setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
             BrainVolume(ovol, space(x))
           })
 
+#' tesselate a LogicalBrainVolume into K spatial disjoint components
+#' @name tesselate
+#' @aliases tesselate,LogicalBrainVolume,LogicalBrainVolume-method
+#' @rdname tesselate-methods
+setMethod(f="tesselate", signature=signature(x="LogicalBrainVolume", K="numeric"), 
+          def=function(x, K, features=NULL, spatialWeight=4) {
+            voxgrid <- indexToGrid(x, which(x == TRUE))
+            voxgrid <- sweep(voxgrid, 2, spacing(x), "*")
+            
+            if (!is.null(features)) {
+              if (nrow(features) == length(x)) {
+                features <- features[which(x == TRUE),]
+              }
+              
+        
+              features <- apply(features,2, scale)
+              avg.sd <- sum(apply(voxgrid,2, sd))/ncol(features)
+              sfeatures <- (features*avg.sd)/spatialWeight
+              voxgrid <- cbind(voxgrid, sfeatures)
+            }
+    
+            kgrid <- kmeans(voxgrid, centers=K, iter.max=100)
+            ClusteredBrainVolume(x, kgrid$cluster)
+          })
+
+
+
+#' get number of clusters in a ClusteredBrainVolume
+#' @name numClusters
+#' @rdname numClusters-methods
+setMethod(f="numClusters", signature=signature(x="ClusteredBrainVolume"), 
+          def=function(x) {
+            length(x@clusterMap)
+          })
+
+#' extract cluster centers in a ClusteredBrainVolume
+#' @name clusterCenters
+#' @rdname clusterCenters-methods
+setMethod(f="clusterCenters", signature=signature(x="ClusteredBrainVolume", features="matrix", FUN="missing"), 
+          def=function(x, features) {
+            cmap <- x@clusterMap
+            res <- mclapply(sort(as.integer(names(cmap))), function(cnum) {
+              idx <- cmap[[as.character(cnum)]]
+              mat <- features[idx,]
+              colMeans(mat)
+            })
+            
+            
+            mat <- t(do.call(cbind, res))
+            row.names(mat) <- as.character(sort(as.integer(names(cmap))))
+            mat
+          })
+
+
+#' merge partititons in a ClusteredBrainVolume
+#' @name mergePartitions
+#' @rdname mergePartitions-methods
+setMethod(f="mergePartitions", signature=signature(x="ClusteredBrainVolume", K="numeric", features="matrix"), 
+          def=function(x, K, features) {
+            centers <- clusterCenters(x, features)
+            kres <- kmeans(centers, centers=48)
+            oclusters <- numeric(prod(dim(x)))
+            for (cnum in 1:nrow(centers)) {
+              idx <- x@clusterMap[[as.character(cnum)]]
+              oclusters[idx] <- kres$cluster[cnum]
+            }
+            
+            oclusters <- oclusters[x@mask == TRUE]
+            ClusteredBrainVolume(x@mask, as.integer(oclusters))
+            
+          })
+          
+
+#' partition a ClusteredBrainVolume into K spatial disjoint components for every existing partition in the volume
+#' @name partition
+#' @aliases partition,ClusteredBrainVolume,ClusteredBrainVolume-method
+#' @rdname partition-methods
+setMethod(f="partition", signature=signature(x="ClusteredBrainVolume", K="numeric", features="matrix"), 
+          def=function(x, K, features, method="kmeans") {
+            cmap <- x@clusterMap
+            cnums <- sort(as.integer(names(cmap)))
+            
+            kres <- mclapply(cnums, function(cnum) {
+              idx <- cmap[[as.character(cnum)]]
+              fmat <- features[idx,]
+              kmeans(fmat, centers=K)
+            })
+            
+            oclusters <- numeric(prod(dim(x@mask)))
+  
+            for (id in 1:length(kres)) {
+              idx <- cmap[[as.character(id)]]
+              clus <- kres[[id]]$cluster
+              new.clus <- (id-1)*(K) + clus
+              oclusters[idx] <- new.clus
+            }
+            oclusters <- oclusters[x@mask == TRUE]
+            perm.clusters <- sample(unique(oclusters[oclusters!= 0]))
+            oclusters <- perm.clusters[oclusters]
+            ClusteredBrainVolume(x@mask, as.integer(oclusters))
+            
+          })            
+            
 #' find connected components in BrainVolume
 #' @name connComp
 #' @aliases connComp,BrainVolume,BrainVolume-method
@@ -537,6 +741,17 @@ setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="charact
 		def=function(x, fileName) {
 			write.nifti.volume(x, fileName)           
 		})
+
+#' writeVolume
+#' 
+#' @export
+#' @docType methods
+#' @rdname writeVolume-methods
+setMethod(f="writeVolume",signature=signature(x="ClusteredBrainVolume", fileName="character", format="missing", dataType="missing"),
+          def=function(x, fileName) {
+            callGeneric(as(x, "DenseBrainVolume"), fileName)        
+          })
+
 
 
 #' writeVolume

@@ -678,7 +678,7 @@ setAs(from="DenseBrainVector", to="matrix",
 			
 		})
 
-#' convert a DEnseBrainVector to a matrix
+#' convert a DenseBrainVector to a matrix
 #' 
 #' @rdname as.matrix-methods
 #' @export 

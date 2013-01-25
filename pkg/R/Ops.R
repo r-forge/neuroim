@@ -113,15 +113,16 @@ setMethod(f="Arith", signature=signature(e1="BrainVolume", e2="BrainVector"),
 			callGeneric(e2,e1)
 		})
 
+
+
 #' @nord Summary-methods
 setMethod(f="Summary", signature=signature(x="SparseBrainVector"),
 		def=function(x) {
 			callGeneric(x@data)
 		})
 #' @nord Summary-methods
-setMethod(f="max", signature=signature(x="SparseBrainVolume", na.rm="ANY"),
+setMethod(f="Summary", signature=signature(x="SparseBrainVolume", na.rm="ANY"),
           def=function(x, ..., na.rm) {
-            browser()
             callGeneric(x@data)
           })
   

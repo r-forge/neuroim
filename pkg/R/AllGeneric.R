@@ -218,6 +218,51 @@ setGeneric(name="takeSeries", def=function(x, indices, ...) standardGeneric("tak
 #' @rdname as.sparse-methods
 setGeneric(name="as.sparse", def=function(x, mask, ...) standardGeneric("as.sparse"))
 
+#' Convert to a LogicalBrainVolume
+#' @param x the object to binarize
+#' @param indices the indices to set to TRUE
+#' @export as.mask
+#' @rdname as.mask-methods
+setGeneric(name="as.mask", def=function(x, indices) standardGeneric("as.mask"))
+
+
+#' tesselate
+#' @param x the object to tesselate
+#' @param K the number of partitions
+#' @export tesselate
+#' @rdname tesselate-methods
+setGeneric(name="tesselate", def=function(x, K, ...) standardGeneric("tesselate"))
+
+#' partition
+#' @param x the object to partition
+#' @param K the number of partitions
+#' @param features the features used to define the partition
+#' @export partition
+#' @rdname partition-methods
+setGeneric(name="partition", def=function(x, K, features, ...) standardGeneric("partition"))
+
+#' mergePartitions
+#' @param x the object to merge
+#' @param K the number of merged partitions
+#' @param features the features used to define the partition
+#' @export mergePartitions
+#' @rdname mergePartitions-methods
+setGeneric(name="mergePartitions", def=function(x, K, features, ...) standardGeneric("mergePartitions"))
+
+#' numClusters
+#' @param x the object to extract number of clusters 
+#' @export numClusters
+#' @rdname numClusters-methods
+setGeneric(name="numClusters", def=function(x) standardGeneric("numClusters"))
+
+#' clusterCenters
+#' @param x the object to extract cluster centers from
+#' @export clusterCenters
+#' @rdname clusterCenters-methods
+setGeneric(name="clusterCenters", def=function(x, features, FUN) standardGeneric("clusterCenters"))
+
+
+
 setGeneric(name="pick", def=function(x, mask, ...) standardGeneric("pick"))
 
 

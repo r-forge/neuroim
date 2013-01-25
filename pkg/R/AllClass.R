@@ -343,6 +343,7 @@ setClass("BrainVolume",
 	    contains=c("BrainData"))
 
 
+
 #' DenseBrainVolume
 #' 
 #' Three-dimensional brain image, backed by an \code{array}	   
@@ -366,6 +367,15 @@ setClass("SparseBrainVolume",
 #' @exportClass LogicalBrainVolume    
 setClass("LogicalBrainVolume", 	
 		contains=c("DenseBrainVolume"))
+
+#' ClusteredBrainVolume
+#' 
+#' Three-dimensional brain image that is divided into N disjoint partitions    
+#' @exportClass ClusteredBrainVolume  
+setClass("ClusteredBrainVolume",   
+         representation=representation(mask="LogicalBrainVolume", clusters="integer", labelMap="list", clusterMap="hash"),
+         contains=c("BrainVolume"))
+
 
 #' IndexLookupVolume
 #' 
