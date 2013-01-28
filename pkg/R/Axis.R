@@ -8,15 +8,37 @@ None <- new("NamedAxis", axis="None")
 
 NullAxis <- new("AxisSet", ndim=as.integer(0))
 
-LEFT_RIGHT <- new("NamedAxis", axis="Left-to-Right")
-RIGHT_LEFT <- new("NamedAxis", axis="Right-to-Left")
-ANT_POST   <- new("NamedAxis", axis="Anterior-to-Posterior")
-POST_ANT   <- new("NamedAxis", axis="Posterior-to-Anterior")
-INF_SUP    <- new("NamedAxis", axis="Inferior-to-Superior")
-SUP_INF    <- new("NamedAxis", axis="Superior-to-Inferior")
+## add permutation vector for each NamedAxis
+
+LEFT_RIGHT <- new("NamedAxis", axis="Left-to-Right", direction=c(1,0,0))
+RIGHT_LEFT <- new("NamedAxis", axis="Right-to-Left", direction=c(-1,0,0))
+ANT_POST   <- new("NamedAxis", axis="Anterior-to-Posterior", direction=c(0,-1,0))
+POST_ANT   <- new("NamedAxis", axis="Posterior-to-Anterior", direction=c(0,1,0))
+INF_SUP    <- new("NamedAxis", axis="Inferior-to-Superior", direction=c(0,0,1))
+SUP_INF    <- new("NamedAxis", axis="Superior-to-Inferior", direction=c(0,0,-1))
+
+
+
+
+
+matchAxis <- function(firstAxis) {
+  switch(toupper(firstAxis),
+         "LEFT"=LEFT_RIGHT,
+         "RIGHT"=RIGHT_LEFT,
+         "ANTERIOR"=ANT_POST,
+         "POSTERIOR"=POST_ANT,
+         "INFERIOR"=INF_SUP,
+         "SUPERIOR"=SUP_INF)
+         
+}
 
 TIME <- new("NamedAxis", axis="Time")
+
 TimeAxis <- new("AxisSet1D", ndim=as.integer(1), i=TIME)
+
+AxisSet1D <- function(i) {
+  new("AxisSet1D", ndim=as.integer(1), i=i)	
+}
 
 AxisSet2D <- function(i, j) {
 	new("AxisSet2D", ndim=as.integer(2), i=i, j=j)	
@@ -26,6 +48,53 @@ AxisSet3D <- function(i, j, k) {
 	new("AxisSet3D", ndim=as.integer(3), i=i, j=j, k=k)	
 }
 
+#' permMat
+#' @export
+#' @rdname permMat-methods
+setMethod(f="permMat", signature=signature(x = "AxisSet2D"),
+          def=function(x) { 
+            cbind(x@i@direction, x@j@direction)
+          })
+
+#' permMat
+#' @export
+#' @rdname permMat-methods
+setMethod(f="permMat", signature=signature(x = "AxisSet3D"),
+          def=function(x) { 
+            cbind(x@i@direction, x@j@direction, x@k@direction)
+          })
+
+#' dropDim
+#' @export
+#' @rdname dropDim-methods
+setMethod(f="dropDim", signature=signature(x = "AxisSet2D", dimnum="numeric"),
+          def=function(x, dimnum) {  	
+            stopifnot(length(dimnum) == 1)
+            if (dimnum == 1) {
+              AxisSet1D(x@j) 
+            } else if (dimnum == 2) {
+              AxisSet1D(x@i)
+            } else {
+              stop(paste("illegal dimnum: ",dimnum, "for axis with 2 dimensions"))
+            }
+          })
+
+#' dropDim
+#' @export
+#' @rdname dropDim-methods
+setMethod(f="dropDim", signature=signature(x = "AxisSet3D", dimnum="numeric"),
+          def=function(x, dimnum) {    
+            stopifnot(length(dimnum) == 1)
+            if (dimnum == 1) {
+              AxisSet2D(x@j, x@k) 
+            } else if (dimnum == 2) {
+              AxisSet2D(x@i, x@k)
+            } else if (dimnum == 3) {
+              AxisSet2D(x@i, x@j)
+            } else {
+              stop(paste("illegal dimnum: ",dimnum, "for axis with 2 dimensions"))
+            }
+          })
 
 #' @rdname ndim-methods
 #' @export
@@ -59,6 +128,8 @@ setMethod(f="print", signature=signature("AxisSet2D"),
 		def=function(x, ...) {
 			paste(print(x@i), "-", print(x@j))
 		})
+
+
 
 #' @nord
 #' @export

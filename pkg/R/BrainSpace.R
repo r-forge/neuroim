@@ -75,14 +75,14 @@ setMethod(f="addDim", signature=signature(x = "BrainSpace", n="numeric"),
 #' dropDim
 #' @export
 #' @rdname dropDim-methods
-setMethod(f="dropDim", signature=signature(x = "BrainSpace"),
+setMethod(f="dropDim", signature=signature(x = "BrainSpace", dimnum="missing"),
 		def=function(x) {			
 			D <- dim(x)		
 			stopifnot(length(D) > 2)
 			Dind <- 1:(length(D)-1)		
 			
 			### doesn't drop dimension in transformation matrix...
-			BrainSpace(D[Dind], origin(x)[Dind], spacing(x)[Dind], axes(x), trans(x))
+			BrainSpace(D[Dind], origin(x)[Dind], spacing(x)[Dind], axes(x)[Dind], trans(x))
 		})
 
 #' dim

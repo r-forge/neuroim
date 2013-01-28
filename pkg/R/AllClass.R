@@ -16,7 +16,7 @@ setClass("Base", contains=c("VIRTUAL"))
 #' @slot axis the name of the axis
 #' @exportClass NamedAxis		 
 setClass("NamedAxis", representation=
-				representation(axis="character"))
+				representation(axis="character", direction="numeric"))
 
 
 #' Virtual base class representing an ordered set of named axes.

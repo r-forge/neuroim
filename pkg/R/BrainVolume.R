@@ -385,6 +385,20 @@ setMethod(f="splitFill", signature=signature(x="BrainVolume", fac="factor", FUN=
 					
 		})
 
+#' slice
+#' 
+#' @export slice
+#' @rdname slice-methods
+setMethod(f="slice", signature=signature(x="BrainVolume", zlevel="numeric", along="numeric", orientation="character"),
+          def=function(x, zlevel, along, orientation) {
+            imslice <- switch(as.character(along),
+                              "1"=x[zlevel,,],
+                              "2"=x[,zlevel,],
+                              "3"=x[,,zlevel])
+            
+            
+          })
+
 
 #' eachSlice
 #' 

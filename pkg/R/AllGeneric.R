@@ -34,7 +34,7 @@ setGeneric(name="addDim", def=function(x, n) standardGeneric("addDim"))
 #' @param x a dimensioned object
 #' @export dropDim
 #' @rdname dropDim-methods
-setGeneric(name="dropDim", def=function(x) standardGeneric("dropDim"))
+setGeneric(name="dropDim", def=function(x, dimnum) standardGeneric("dropDim"))
 
 #' Generic function to extract the \code{space} member variable
 #' @param x the object to query
@@ -292,6 +292,22 @@ setGeneric(name="lookup", def=function(x, i, ...) standardGeneric("lookup"))
 #' @rdname series-methods
 setGeneric(name="series", def=function(x, i, ...) standardGeneric("series"))   
 
+#' extract a 2D slice from an image volume
+#' @param x the object
+#' @param zlevel coordinate (in voxel units) along the sliced axis
+#' @param along the axis along which to slice
+#' @param orientation the target orientation of the 2D slice
+#' @export slice
+#' @rdname slice-methods
+setGeneric(name="slice", def=function(x, zlevel, along, orientation, ...) standardGeneric("slice"))   
+
+
+#' extract permutation matrix
+#' @param x the object
+#' @export permMat
+#' @rdname permMat-methods
+setGeneric(name="permMat", def=function(x, ...) standardGeneric("permMat"))   
+
 #' Concatenate two objects
 #' @param x the first object
 #' @param y the second object
@@ -321,4 +337,8 @@ setGeneric(name="seriesIter", def=function(x) standardGeneric("seriesIter"))
 #' @export voxels
 #' @rdname voxels-methods
 setGeneric(name="voxels", def=function(x, ...) standardGeneric("voxels"))
+
+
+if (!isGeneric("image"))
+  setGeneric("image", function(x, ...) standardGeneric("image"))
 
