@@ -16,7 +16,7 @@ connComp3D <- function(mask) {
 	
 	local.mask <- as.matrix(expand.grid(x=c(-1,0,1), y=c(-1,0,1), z=c(-1,0,1)))
 	dimnames(local.mask) <- NULL
-	local.mask <- local.mask[-14,]
+	local.mask <- local.mask[-(ceiling(nrow(local.mask)/2)),]
 	
 	neighbors <- function(vox) {
 		vox.hood <- sweep(local.mask, 2, vox, "+", check.margin=FALSE)
@@ -37,18 +37,11 @@ connComp3D <- function(mask) {
 		nodes[i]
 	}
 	
-	#find <- function(i) {
-	#	if (nodes[i] == i) {
-	#		i
-	#	} else {
-	#		Recall(nodes[i])
-    #
-	#	}
-	# }
 	
 	nextlabel <- 1
 	
 	grid <-  t(sapply(which(mask>0), .indexToGrid, dim(mask)))
+  
 	for (i in 1:NROW(grid)) {
 		vox <- grid[i,]
 		nabes <- neighbors(vox)
