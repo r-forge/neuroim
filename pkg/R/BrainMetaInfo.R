@@ -107,7 +107,7 @@ NIfTIMetaInfo <- function(descriptor, nifti_header) {
 			dataType=nifti_header$dataStorage,
 			bytesPerElement=as.integer(.getDataSize(nifti_header$dataStorage)),
 			Dim=niftiDim(nifti_header),
-			spatialAxes=OrientationList3D$AXIAL_LPI,
+			spatialAxes=.nearestAnatomy(nifti_header$qform),
 			additionalAxes=NullAxis,
 			spacing=nifti_header$pixdim[2:4],
 			origin=nifti_header$qoffset,

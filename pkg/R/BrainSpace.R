@@ -22,14 +22,14 @@ BrainSpace <- function(Dim, origin=NULL, spacing=NULL, axes=NULL, trans=NULL) {
 		origin <- rep(0, min(length(Dim), 3))
 	}
 	
-	if (is.null(axes)) {
-		axes <- OrientationList3D$AXIAL_LPI
-	}
-	
 	if (is.null(trans)) {
 		D <- min(length(Dim), 3)
 		trans <- diag(c(spacing,1))
 		trans[1:D,D+1] <- origin
+	}
+  
+	if (is.null(axes)) {
+	  axes <- .nearestAnatomy(trans)
 	}
 	
 	new("BrainSpace", Dim=as.integer(Dim),

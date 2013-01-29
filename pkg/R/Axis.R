@@ -291,3 +291,110 @@ matchAnatomy2D <- function(axis1, axis2) {
 	
 }
 
+
+.nearestAnatomy <- function(mat44) {
+  mat33 <- mat44[1:3, 1:3]
+  #mat33 <- sweep(mat33, 2, sqrt(apply(mat33 * mat33, 2, sum)), "/")
+  icol <- mat33[,1]
+  jcol <- mat33[,2]
+  kcol <- mat33[,3]
+  
+  ## normalize icol
+  icol <- icol / sqrt(sum(icol^2))
+  
+  ## normalize jcol
+  jcol <- jcol / sqrt(sum(jcol^2))
+  
+  orthogonalize <- function(col1, col2) {
+    dotp <- sum(col1*col2)
+    if (abs(dotp > 1.e-4)) {
+      col2 <- col2 - (dotp * col1)
+      norm <- sqrt(sum(col2^2))
+      col2 <- col2 / norm
+    }
+    col2
+  }
+  
+  jcol <- orthogonalize(icol, jcol)
+   
+  knorm <- sqrt(sum(kcol^2))
+  if (knorm == 0.0) {
+    kcol[1] <- icol[2] * jcol[3] - icol[3] * jcol[2]
+    kcol[2] <- icol[3] * jcol[1] - jcol[3] * icol[1]
+    kcol[3] <- icol[1] * jcol[2] - icol[2] * jcol[1]     
+  } else {
+    kcol <- kcol / knorm
+  }
+  
+  ## orthogonalize k to i
+  kcol <- orthogonalize(icol, kcol)
+  kcol <- orthogonalize(jcol, kcol)
+  
+  Q <- cbind(icol, jcol, kcol)
+  P <- matrix(0,3,3)
+  detQ <- det(Q)
+  if (detQ == 0.0) {
+    stop("invalid matrix input, determinant is 0")
+  }
+  
+  vbest = -666
+  ibest = 1
+  pbest = 1
+  qbest = 1
+  rbest = 1
+  
+  jbest = 2
+  kbest = 3
+  for (i in 1:3) {     
+    for (j in 1:3) {
+      if (i == j) next
+      for (k in 1:3) {
+        if (i == k || j == k) next
+          P <- matrix(0,3,3)
+          for (p in c(-1,1)) {
+            for (q in c(-1,1)) {
+              for (r in c(-1,1)) {
+                P[1, i] <- p
+                P[2, j] <- q
+                P[3, k] <- r
+                detP <- det(P)
+                if (detP * detQ <= 0.0) next
+                M <- P %*% Q
+                crit <- sum(diag(M))
+                if (crit > vbest) {
+                  vbest = crit
+                  ibest = i
+                  jbest = j
+                  kbest = k
+                  pbest = p
+                  qbest = q
+                  rbest = r
+                }                         
+              }
+            }
+          }
+      }
+    }
+  }
+  
+  .getAxis <- function(num) {
+    switch(as.character(as.integer(num)),
+                "1"=LEFT_RIGHT,
+                "-1"=RIGHT_LEFT,
+                "2"=POST_ANT,
+                "-2"=ANT_POST,
+                "3"=INF_SUP,
+                "-3"=SUP_INF)
+  }
+  
+  ax1 <- .getAxis(ibest*pbest)
+  ax2 <- .getAxis(jbest*qbest)
+  ax3 <- .getAxis(kbest*rbest)
+  
+  AxisSet3D(ax1,ax2,ax3)
+  
+  
+                
+  
+}
+
