@@ -162,9 +162,9 @@ AFNIMetaInfo <- function(descriptor, afni_header) {
     
     ## AFNI contains a transform from IJK to dicom (RAI) space.
     ## We want the transform to go from IJK to nifti (LPI) space
-		#Tdicom <- matrix(afni_header$IJK_TO_DICOM$content, 3,4, byrow=TRUE)
-    #Tdicom <- rbind(Tdicom, c(0,0,0,1))
-    
+		Tdicom <- matrix(afni_header$IJK_TO_DICOM$content, 3,4, byrow=TRUE)
+    Tdicom <- rbind(Tdicom, c(0,0,0,1))
+		TLPI <- diag(c(-1,-1,1,1)) %*% Tdicom
 		
 		new("AFNIMetaInfo",
 			headerFile=headerFile(descriptor, afni_header$fileName),

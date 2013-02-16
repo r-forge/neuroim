@@ -267,21 +267,23 @@ setAs(from="ClusteredBrainVolume", to="DenseBrainVolume", def=function(from) {
 #' @nord
 setAs(from="BrainVolume", to="array", def=function(from) from[,,])
 
-#' @export
 #' @nord
-setMethod(f="show",
-		signature=signature(object="BrainVolume"),
-			def=function(object) {
-				
-				cat("an instance of class",  class(object), "\n\n")
-				cat("   dimensions: ",       dim(object), "\n")
-				cat("   voxel spacing: ",    spacing(object), "\n")
-				if (!is.null(attr(object, "label"))) {
-					cat("   label: ", attr(object, "label"))
-				}
-				cat("\n\n")
-			
-		})
+setMethod(f="show", signature=signature("BrainVolume"),
+          def=function(object) {
+            sp <- space(object)
+            cat("BrainVolume\n")
+            cat("  Type           :", class(object), "\n")
+            cat("  Dimension      :", dim(object), "\n")
+            cat("  Spacing        :", paste(paste(sp@spacing[1:(length(sp@spacing)-1)], " X ", collapse=" "), 
+                                            sp@spacing[length(sp@spacing)], "\n"))
+            cat("  Origin         :", paste(paste(sp@origin[1:(length(sp@origin)-1)], " X ", collapse=" "), 
+                                            sp@origin[length(sp@origin)], "\n"))
+            cat("  Axes           :", print(sp@axes), "\n")
+            cat("  Coordinate Transform :", sp@trans, "\n")
+                       
+          }
+)
+
 
 #' load a BrainVolume
 #' 
