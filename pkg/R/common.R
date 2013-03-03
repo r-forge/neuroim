@@ -1,3 +1,28 @@
+#' splitScale
+#' 
+#' @export
+#' @rdname splitScale-methods
+setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="logical", scale="logical"),
+          def=function(x, f, center=TRUE, scale=TRUE) {
+            if (length(f) != nrow(x)) {
+              stop(paste("x must be same length as split variable"))
+            }
+            
+            out <- matrix(0, nrow(x), ncol(x))
+            for (lev in levels(f)) {
+              keep <- f == lev
+              xs <- scale(x[keep,,drop=FALSE], center=center, scale=scale)
+              out[keep,] <- xs         
+            }
+            
+            out
+          })
+
+setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="missing", scale="missing"),
+          def=function(x, f) {
+            callGeneric(x,f, TRUE, TRUE)
+          })
+
 #' @nord
 .isExtension <- function(fname, extension) {
   last <- substr(fname, nchar(fname)+1 - nchar(extension), nchar(fname))

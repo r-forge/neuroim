@@ -52,6 +52,15 @@ setGeneric(name="space", def=function(x, ...) standardGeneric("space"))
 #' @rdname splitFill-methods
 setGeneric(name="splitFill", def=function(x, fac, FUN) standardGeneric("splitFill"))
 
+#' Generic function to center/scale subsets of an object
+#' @param x a numeric matrix(like) object
+#' @param f the conditioning expression (usually a factor)
+#' @return a new matrix(like) object where the original values have been scaled
+#' @export splitScale
+#' @rdname splitScale-methods
+setGeneric(name="splitScale", def=function(x, f, center, scale) standardGeneric("splitScale"))
+
+
 
 #' Generic function to extract the voxel dimensions of an image
 #' @param x the object
