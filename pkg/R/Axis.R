@@ -48,6 +48,8 @@ AxisSet3D <- function(i, j, k) {
 	new("AxisSet3D", ndim=as.integer(3), i=i, j=j, k=k)	
 }
 
+
+
 #' permMat
 #' @export
 #' @rdname permMat-methods
@@ -82,6 +84,14 @@ setMethod(f="dropDim", signature=signature(x = "AxisSet2D", dimnum="numeric"),
 #' dropDim
 #' @export
 #' @rdname dropDim-methods
+setMethod(f="dropDim", signature=signature(x = "AxisSet2D", dimnum="missing"),
+          def=function(x) {
+            AxisSet1D(x@i)
+          })
+
+#' dropDim
+#' @export
+#' @rdname dropDim-methods
 setMethod(f="dropDim", signature=signature(x = "AxisSet3D", dimnum="numeric"),
           def=function(x, dimnum) {    
             stopifnot(length(dimnum) == 1)
@@ -96,6 +106,16 @@ setMethod(f="dropDim", signature=signature(x = "AxisSet3D", dimnum="numeric"),
             }
           })
 
+#' dropDim
+#' @export
+#' @rdname dropDim-methods
+setMethod(f="dropDim", signature=signature(x = "AxisSet3D", dimnum="missing"),
+          def=function(x) {
+            AxisSet2D(x@i, x@j)
+          })
+          
+          
+          
 #' @rdname ndim-methods
 #' @export
 setMethod(f="ndim",signature=signature(x= "AxisSet"), def=function(x) { x@ndim })
