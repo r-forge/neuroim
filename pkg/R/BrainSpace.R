@@ -82,7 +82,7 @@ setMethod(f="dropDim", signature=signature(x = "BrainSpace", dimnum="missing"),
 			Dind <- 1:(length(D)-1)		
 			
 			### doesn't drop dimension in transformation matrix...
-			BrainSpace(D[Dind], origin(x)[Dind], spacing(x)[Dind], axes(x)[Dind], trans(x))
+			BrainSpace(D[Dind], origin(x)[Dind], spacing(x)[Dind], dropDim(axes(x)), trans(x))
 		})
 
 #' dim

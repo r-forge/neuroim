@@ -460,9 +460,8 @@ setMethod(f="takeVolume", signature=signature(x="BrainVector", i="numeric"),
 			xs <- space(x)
 			bspace <- BrainSpace(dim(x)[1:3], origin=origin(xs), spacing=spacing(xs), axes(xs), trans(xs))
 			
-			makevol <- function(i) {
-				
-				bv <- BrainVolume(x@.Data[,,,i], bspace)
+			makevol <- function(i) {				
+				BrainVolume(x@.Data[,,,i], bspace)
 			}
 			
 			res <- lapply(i, makevol)
