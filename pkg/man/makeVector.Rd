@@ -16,8 +16,6 @@
 
   \item{source}{an instance of class
   \code{\linkS4class{BrainSource}}}
-
-  \item{indices}{an optional 1-d index vector}
 }
 \value{
   \code{\linkS4class{DenseBrainVector}} instance

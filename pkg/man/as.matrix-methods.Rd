@@ -4,6 +4,6 @@
 \description{
   convert SparseBrainVector to matrix
 
-  convert a DEnseBrainVector to a matrix
+  convert a DenseBrainVector to a matrix
 }
 

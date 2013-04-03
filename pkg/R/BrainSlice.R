@@ -5,7 +5,9 @@
 
 
 #' BrainSlice constructor
-#' 
+#' @param data data vector or matrix
+#' @param space an instance of class BrainSpace
+#' @param indices linear indices corresponding to data elements
 #' @export
 BrainSlice <- function(data, space, indices=NULL) {
 	if (ndim(space) != 2) {

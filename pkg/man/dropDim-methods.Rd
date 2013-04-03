@@ -8,5 +8,13 @@
   Generic function to drop a dimension from an object
 
   dropDim
+
+  dropDim
+
+  dropDim
+
+  dropDim
+
+  dropDim
 }
 

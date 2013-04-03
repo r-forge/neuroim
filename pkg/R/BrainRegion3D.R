@@ -6,7 +6,7 @@
 
 #' Create an instance of class ROIVolume
 #' @param vspace the volume space
-#' @param indices the ROI 1D indices
+#' @param coords matrix of coordinates
 #' @param data the data values
 #' @export
 ROIVolume <- function(vspace, coords, data=rep(length(indices),1)) {
@@ -60,6 +60,7 @@ RegionCube <- function(bvol, centroid, surround, mask=NULL) {
 #' @param bvol an image volume
 #' @param centroid the center of the sphere in voxel space
 #' @param radius the radius of the spherical ROI
+#' @param fill optional value to assign to data slot
 #' @export
 RegionSphere <- function (bvol, centroid, radius, fill=NULL) {
     bspace <- space(bvol)

@@ -90,10 +90,11 @@ DenseBrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
 #' ClusteredBrainVolume
 #' 
 #' Construct a \code{\linkS4class{ClusteredBrainVolume}} instance
-#' @param space an instance of class \code{\linkS4class{BrainSpace}}
 #' @param mask an instance of class \code{\linkS4class{LogicalBrainVolume}}
 #' @param clusters a vector of clusters ids
 #' @param labelMap as \code{list} that maps from cluster id to a cluster label
+#' @param source an instance of class \code{\linkS4class{BrainSource}}
+#' @param label a \code{character} string
 #' @return \code{\linkS4class{ClusteredBrainVolume}} instance 
 #' @export ClusteredBrainVolume
 #' @rdname ClusteredBrainVolume-class

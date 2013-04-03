@@ -32,7 +32,6 @@
 #' @param refdata an instance of class \code{\linkS4class{BrainVector}} or \code{\linkS4class{BrainVolume}} containing the reference space for the new vector.
 #' @param label a \code{character} string
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
-#' @param indices an optional 1-d index vector
 #' @return \code{\linkS4class{DenseBrainVector}} instance 
 #' @export makeVector
 makeVector <- function(data, refdata, source=NULL, label="") {	
@@ -323,6 +322,7 @@ loadBucket <- function(fileName, pattern=NULL, indices=NULL) {
 #' load a list of image volumes and return a \code{\linkS4class{BrainVector}} instance
 #' 
 #' @param fileNames a list of files to load
+#' @param mask an optional mask indicating subset of voxels to load
 #' @return an instance of class \code{\linkS4class{BrainVector}}
 #' @export loadVolumeList
 loadVolumeList <- function(fileNames, mask=NULL) {
