@@ -33,14 +33,17 @@
 #' @export
 #' @rdname SparseBrainVectorSource-class 	  
 SparseBrainVectorSource <- function(metaInfo, indices, mask) {
+  browser()
 	
 	stopifnot(length(dim(metaInfo)) == 4)
 	stopifnot(all(indices >= 1 & indices <= dim(metaInfo)[4]))
 	
 	D <- dim(metaInfo)[1:3]
 	
+  
 	if (is.vector(mask) && length(mask) < prod(D)) {
-		m <- array(TRUE, D)
+    ### this is a vector of indices
+		m <- array(FALSE, D)
 		m[mask] <- TRUE
 		mask <- m
 	} else if (identical(dim(mask), as.integer(D))) {
@@ -51,10 +54,10 @@ SparseBrainVectorSource <- function(metaInfo, indices, mask) {
 		stop("illegal mask argument with dim: ", paste(dim(mask), collapse=", "))
 	}
 	
-	if (!inherits(mask, "LogicalBrainVolume")) {
-		mspace <- BrainSpace(dim(mask), metaInfo@origin, metaInfo@spacing, metaInfo@spatialAxes)
-		mask <- LogicalBrainVolume(mask, mspace)		
-	}
+  if (!inherits(mask, "LogicalBrainVolume")) {
+    mspace <- BrainSpace(dim(mask), metaInfo@origin, metaInfo@spacing, metaInfo@spatialAxes)
+    mask <- LogicalBrainVolume(mask, mspace)  	
+  }
 	
 	stopifnot(all(dim(mask) == D))
 	
@@ -473,6 +476,18 @@ setMethod(f="as.list", signature=signature(x = "SparseBrainVector"), def=functio
 			lapply(1:D4, function(i) takeVolume(x,i))
 			
 })
+
+#' @nord
+setMethod("show",
+          signature=signature(object="SparseBrainVector"),
+          def=function(object) {
+            cat("an instance of class",  class(object), "\n\n")
+            cat("   dimensions: ", dim(object), "\n")
+            cat("   voxel spacing: ", spacing(object))
+            cat("\n\n")
+            
+          })
+
 
 #		setAs(from="BrainVector", to="matrix",
 #		      function(from) {
