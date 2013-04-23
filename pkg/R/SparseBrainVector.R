@@ -33,7 +33,7 @@
 #' @export
 #' @rdname SparseBrainVectorSource-class 	  
 SparseBrainVectorSource <- function(metaInfo, indices, mask) {
-  browser()
+  
 	
 	stopifnot(length(dim(metaInfo)) == 4)
 	stopifnot(all(indices >= 1 & indices <= dim(metaInfo)[4]))
