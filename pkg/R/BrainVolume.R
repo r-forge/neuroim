@@ -8,6 +8,8 @@
 {}
 #' @include NIFTI_IO.R
 {}
+#' @include Axis.R
+{}
 
 #' makeVolume
 #' 
@@ -279,7 +281,7 @@ setMethod(f="show", signature=signature("BrainVolume"),
                                             sp@spacing[length(sp@spacing)], "\n"))
             cat("  Origin         :", paste(paste(sp@origin[1:(length(sp@origin)-1)], " X ", collapse=" "), 
                                             sp@origin[length(sp@origin)], "\n"))
-            cat("  Axes           :", print(sp@axes), "\n")
+            cat("  Axes           :", paste(print(sp@axes@i), print(sp@axes@j), print(sp@axes@k)), "\n")
             cat("  Coordinate Transform :", sp@trans, "\n")
                        
           }

@@ -124,7 +124,7 @@ setMethod(f="ndim",signature=signature(x= "AxisSet"), def=function(x) { x@ndim }
 #' @export
 setMethod(f="show", signature=signature("NamedAxis"), 
 		def=function(object) {
-			cat(object@axis)
+			cat(print(object@axis))
 		})
 
 #' @nord
