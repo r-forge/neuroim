@@ -164,7 +164,7 @@ setMethod(f="show", signature=signature("AxisSet2D"),
 #' @export
 setMethod(f="print", signature=signature("AxisSet3D"), 
 		def=function(x, ...) {
-			paste(print(x@i), "-", print(x@j), "-", print(x@k))
+			paste(print(x@i), " -- ", print(x@j), " -- ", print(x@k))
 		})
 
 

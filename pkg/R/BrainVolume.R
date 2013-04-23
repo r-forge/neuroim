@@ -544,8 +544,10 @@ setMethod(f="coordToGrid", signature=signature(x="BrainVolume", coords="matrix")
 	  
 }
 
-
-
+#' apply a kernel function to a BrainVolume
+#' @name map
+#' @aliases map, BrainVolume, Kernel, BrainVolume-method
+#' @rdname map-methods
 setMethod(f="map", signature=signature(x="BrainVolume", m="Kernel"),
           def=function(x, m, mask=NULL) {          
             ovol <- array(0, dim(x))
