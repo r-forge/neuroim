@@ -58,7 +58,7 @@ setGeneric(name="splitFill", def=function(x, fac, FUN) standardGeneric("splitFil
 #' @return a new object where the original values have been filled in with the values in the lookup table
 #' @export fill
 #' @rdname fill-methods
-setGeneric(name="fillWith", def=function(x, lookup) standardGeneric("fill"))
+setGeneric(name="fill", def=function(x, lookup) standardGeneric("fill"))
 
 
 
