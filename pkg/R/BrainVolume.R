@@ -368,7 +368,7 @@ setMethod(f="fill", signature=signature(x="BrainVolume", lookup="numeric"),
           def=function(x,lookup) {
             out <- DenseBrainVolume(array(0, dim(x)), space(x))
             for (i in 1:length(lookup)) {
-              idx <- which(vol == i)
+              idx <- which(x == i)
               out[idx] <- lookup[i]             
             }
             
