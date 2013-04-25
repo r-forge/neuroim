@@ -281,7 +281,7 @@ setMethod(f="show", signature=signature("BrainVolume"),
                                             sp@spacing[length(sp@spacing)], "\n"))
             cat("  Origin         :", paste(paste(sp@origin[1:(length(sp@origin)-1)], " X ", collapse=" "), 
                                             sp@origin[length(sp@origin)], "\n"))
-            cat("  Axes           :", paste(print(sp@axes@i), print(sp@axes@j), print(sp@axes@k)), "\n")
+            cat("  Axes           :", paste(sp@axes@i@axis, sp@axes@j@axis,sp@axes@k@axis), "\n")
             cat("  Coordinate Transform :", sp@trans, "\n")
                        
           }
@@ -363,6 +363,17 @@ setMethod(f="concat", signature=signature(x="DenseBrainVolume", y="DenseBrainVol
 			.concat4D(x,y,...)			
 		})
 
+
+setMethod(f="fill", signature=signature(x="BrainVolume", lookup="numeric"),
+          def=function(x,lookup) {
+            out <- DenseBrainVolume(array(0, dim(x)), space(x))
+            for (i in 1:length(lookup)) {
+              idx <- which(vol == i)
+              out[idx] <- lookup[i]             
+            }
+            
+            out
+          })
 
 #' split values by factor apply function and then fill in new volume
 #' @param x the volume to operate on

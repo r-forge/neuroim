@@ -52,6 +52,16 @@ setGeneric(name="space", def=function(x, ...) standardGeneric("space"))
 #' @rdname splitFill-methods
 setGeneric(name="splitFill", def=function(x, fac, FUN) standardGeneric("splitFill"))
 
+#' Generic function to map values from one set to another using a user-supplied lookup table
+#' @param x the object to map values from
+#' @param lookup the lookup table
+#' @return a new object where the original values have been filled in with the values in the lookup table
+#' @export fill
+#' @rdname fill-methods
+setGeneric(name="fillWith", def=function(x, lookup) standardGeneric("fill"))
+
+
+
 #' Generic function to center/scale subsets of an object
 #' @param x a numeric matrix(like) object
 #' @param f the conditioning expression (usually a factor)
