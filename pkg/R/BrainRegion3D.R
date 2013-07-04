@@ -114,6 +114,10 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=TRUE) {
 
 .resample <- function(x, ...) x[sample.int(length(x), ...)]
 
+#' Create an Random Searchlight iterator
+#' @param mask an image volume containing valid central voxels for roving searchlight
+#' @param the radius in mm of spherical searchlight
+#' @export
 RandomSearchlight <- function(mask, radius) {
   done <- array(FALSE, dim(mask))
   mask.idx <- which(mask != 0)
@@ -138,6 +142,10 @@ RandomSearchlight <- function(mask, radius) {
   obj
 }
 
+#' Create an exhaustive searchlight iterator
+#' @param mask an image volume containing valid central voxels for roving searchlight
+#' @param the radius in mm of spherical searchlight
+#' @export
 Searchlight <- function(mask, radius) {
 	grid <- indexToGrid(mask, which(mask != 0))
 	index <- 0
