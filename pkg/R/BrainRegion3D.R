@@ -122,15 +122,17 @@ RandomSearchlight <- function(mask, radius) {
   done <- array(FALSE, dim(mask))
   mask.idx <- which(mask != 0)
   grid <- indexToGrid(mask, mask.idx)
+
   
   nextEl <- function() {
+    print(sum(done))
     if (!all(done[mask.idx])) {
       center <- .resample(which(!done[mask.idx]), 1)
       done[center] <<- TRUE
       search <- RegionSphere(mask, grid[center,], radius, nonzero=TRUE) 
       vox <- coords(search)
       vox <- vox[!done[vox],,drop=FALSE]
-      done[vox] <- TRUE
+      done[vox] <<- TRUE
       vox
       
     } else {
@@ -138,7 +140,7 @@ RandomSearchlight <- function(mask, radius) {
     }
   }
   obj <- list(nextElem=nextEl)
-  class(obj) <- c("RandomSearchLight", 'abstractiter', 'iter')
+  class(obj) <- c("RandomSearchlight", 'abstractiter', 'iter')
   obj
 }
 
@@ -161,7 +163,7 @@ Searchlight <- function(mask, radius) {
 	}
 	
 	obj <- list(nextElem=nextEl)
-  class(obj) <- c("SearchLight", 'abstractiter', 'iter')
+  class(obj) <- c("Searchlight", 'abstractiter', 'iter')
 	obj
 			
 }
