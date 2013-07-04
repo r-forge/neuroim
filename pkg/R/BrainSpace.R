@@ -50,7 +50,7 @@ setMethod(f="show", signature=signature("BrainSpace"),
 							object@spacing[length(object@spacing)], "\n"))
 			cat("  Origin         :", paste(paste(object@origin[1:(length(object@origin)-1)], " X ", collapse=" "), 
 							object@origin[length(object@origin)], "\n"))
-			cat("  Axes           :", paste(print(object@axes@i), print(object@axes@j), print(object@axes@k)), "\n")
+			cat("  Axes           :", paste(object@axes@i@axis, object@axes@j@axis, object@axes@k@axis, "\n"))
 			cat("  Coordinate Transform :", object@trans, "\n")
 			
 			

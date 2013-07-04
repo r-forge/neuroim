@@ -1,4 +1,21 @@
 #' splitScale
+
+#' 
+#' @export
+#' @rdname splitReduce-methods
+setMethod(f="splitReduce", signature=signature(x = "matrix", fac="factor", FUN="function"),
+          def=function(x, fac, FUN) {
+            if (length(f) != nrow(x)) {
+              stop(paste("x must be same length as split variable"))
+            }
+            
+            out <- do.call(rbind, lapply(levels(fac), function(lev) {
+              keep <- fac == lev
+              apply(x[keep,], 2, FUN)
+            }))
+            row.names(out) <- levels(fac)           
+          })
+
 #' 
 #' @export
 #' @rdname splitScale-methods
@@ -18,6 +35,7 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
             out
           })
 
+#' nord
 setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="missing", scale="missing"),
           def=function(x, f) {
             callGeneric(x,f, TRUE, TRUE)

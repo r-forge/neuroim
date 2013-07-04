@@ -61,8 +61,10 @@ RegionCube <- function(bvol, centroid, surround, mask=NULL) {
 #' @param centroid the center of the sphere in voxel space
 #' @param radius the radius of the spherical ROI
 #' @param fill optional value to assign to data slot
+#' @param keep only nonzero elements from 'bvol' mask
 #' @export
-RegionSphere <- function (bvol, centroid, radius, fill=NULL) {
+RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=TRUE) {
+    ### TODO centroid doesn't work with matrix of one row
     bspace <- space(bvol)
     vspacing <- spacing(bvol)
     vdim <- dim(bvol)
@@ -101,18 +103,50 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL) {
       as.numeric(bvol[grid[idx,]])
     }   
     
-    new("ROIVolume", space = space(bvol), data = vals, coords = grid[idx, ])
+    keep <- if (nonzero) {
+      which(vals != 0)    
+    } else {
+      seq_along(vals)
+    }
+    
+    new("ROIVolume", space = space(bvol), data = vals[keep], coords = grid[idx[keep], ])
+}
+
+.resample <- function(x, ...) x[sample.int(length(x), ...)]
+
+RandomSearchlight <- function(mask, radius) {
+  done <- array(FALSE, dim(mask))
+  mask.idx <- which(mask != 0)
+  grid <- indexToGrid(mask, mask.idx)
+  
+  nextEl <- function() {
+    if (!all(done[mask.idx])) {
+      center <- .resample(which(!done[mask.idx]), 1)
+      done[center] <<- TRUE
+      search <- RegionSphere(mask, grid[center,], radius, nonzero=TRUE) 
+      vox <- coords(search)
+      vox <- vox[!done[vox],,drop=FALSE]
+      done[vox] <- TRUE
+      vox
+      
+    } else {
+      stop('StopIteration')
+    }
+  }
+  obj <- list(nextElem=nextEl)
+  class(obj) <- c("RandomSearchLight", 'abstractiter', 'iter')
+  obj
 }
 
 Searchlight <- function(mask, radius) {
 	grid <- indexToGrid(mask, which(mask != 0))
-
 	index <- 0
-	
+  
 	nextEl <- function() {
 		if (index < nrow(grid)) { 
 			 index <<- index + 1
-		 	 RegionSphere(mask, grid[index,], radius) 
+		 	 search <- RegionSphere(mask, grid[index,], radius, nonzero=TRUE) 
+       search@coords
 		} else {
 			stop('StopIteration')
 		}
