@@ -132,18 +132,14 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 			if (mmap && .isExtension(meta@dataFile, ".gz")) {
 				stop("cannot memory map to a gzipped file")		
 			}
-			
-			
-			
+						
 			stopifnot(length(meta@Dim) == 4)
-			
-			
-			#nels <- prod(meta@Dim[1:3]) 
-			nels <- prod(meta@Dim[1:4]) 
-			
-			#datlist <- list()
+						
+			nels <- prod(meta@Dim[1:4]) 		
 			ind <- x@indices
 			
+			#nels <- prod(meta@Dim[1:3]) 
+      #datlist <- list()
 			#for (i in 1:length(ind)) {
 			#	offset <- prod(nels * (ind[i]-1)) * meta@bytesPerElement
 			#	reader <- dataReader(meta, offset)		
@@ -156,12 +152,15 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 			
 			reader <- dataReader(meta, 0)	
 			arr <- array(readElements(reader, nels), c(meta@Dim[1:4]))
+			if (.hasSlot(meta, "slope")) {
+			  ## bit of a hack to deal with scale factors
+			  arr <- arr*meta@slope
+			}
 			close(reader)
-			
-		
-			
+				
 			#arr <- abind(datlist, along=4)			
-			bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)), meta@origin, meta@spacing, meta@spatialAxes)
+			
+      bspace <- BrainSpace(c(meta@Dim[1:3], length(ind)), meta@origin, meta@spacing, meta@spatialAxes)
 			DenseBrainVector(arr[,,,ind], bspace, x)
 			
 		})

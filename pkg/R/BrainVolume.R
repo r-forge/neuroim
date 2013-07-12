@@ -305,6 +305,12 @@ setMethod(f="loadData", signature=c("BrainVolumeSource"),
 			
 			reader <- dataReader(meta, offset)
 			dat <- readElements(reader, nels)
+      
+      if (.hasSlot(meta, "slope")) {
+        ## bit of a hack to deal with scale factors
+        dat <- dat*meta@slope
+      }
+      
 			close(reader)
 			arr <- array(dat, meta@Dim[1:3])
 			
