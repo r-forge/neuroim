@@ -13,7 +13,6 @@
 #' @rdname BrainSpace-class
 BrainSpace <- function(Dim, origin=NULL, spacing=NULL, axes=NULL, trans=NULL) {
 	
-	
 	if (is.null(spacing)) {
 		spacing <- rep(1, min(length(Dim), 3))
 	}    
@@ -112,7 +111,9 @@ setMethod(f="spacing", signature=signature(x = "BrainSpace"),
 #' @rdname bounds-methods
 setMethod(f="bounds", signature=signature(x = "BrainSpace"),
 		def=function(x) {
-			mat <- cbind(origin(x), origin(x)+(spacing(x)*dim(x)))
+      direc <- diag(trans(x))
+      direc <- direc[1:(length(direc)-1)]
+			mat <- cbind(origin(x), origin(x)+(spacing(x)*dim(x)*direc))
 			return(mat)
 		}
 )
@@ -146,6 +147,18 @@ setMethod(f="coordToIndex", signature=signature(x="BrainSpace", coords="matrix")
           def=function(x, coords) {
             grid = t(inverseTrans(x) %*% t(cbind(coords, rep(1, nrow(coords)))))
             gridToIndex(x, grid[,1:3] + 1)
+          })
+
+#' axisToIndex
+#' 
+#' @export 
+#' @rdname axisToIndex-methods
+setMethod(f="axisToIndex", signature=signature(x="BrainSpace", real="numeric", dimNum="numeric"),
+          def=function(x, real, dimNum) {
+            # todo check tat real is within bounds
+            bds <- bounds(x)[dimNum,]           
+            floor(abs(real - bds[1])/(spacing(x)[dimNum]) + 1)
+            
           })
 
 #' coordToGrid

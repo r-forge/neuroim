@@ -22,7 +22,8 @@ Depends:
     yaImpute,
     abind,
     Matrix,
-    hash
+    hash,
+    iterators
 Collate:
     'AFNI_IO.R'
     'AllGeneric.R'

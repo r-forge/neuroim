@@ -479,3 +479,10 @@ setClass("BrainBucket",
 
 setClassUnion(name="index", members =  c("numeric", "logical", "character"))
 
+setClass("Layer",
+         representation=representation(vol="BrainVolume", colorMap="vector", thresh="numeric"))
+
+setClass("Overlay",
+                  representation(layers="list"))
+                  
+

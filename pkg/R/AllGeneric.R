@@ -186,6 +186,14 @@ setGeneric(name="coordToIndex",   def=function(x, coords) standardGeneric("coord
 #' @rdname coordToGrid-methods
 setGeneric(name="coordToGrid",   def=function(x, coords) standardGeneric("coordToGrid"))
 
+#' Generic function to convert 1-dimensional real axis coordinates along a single axis dimension to an 1D index along the same axis
+#' @param x the object
+#' @param real the axis coordinates
+#' @param dimNum the dimension number of the axis (e.g.  1, 2, 3)
+#' @return a vector of axis indices
+#' @export axisToIndex
+#' @rdname axisToIndex-methods
+setGeneric(name="axisToIndex",   def=function(x, real, dimNum) standardGeneric("axisToIndex"))
 
 #' Generic function to convert N-dimensional grid coordinate to 1D indices
 #' @param x the object
@@ -368,4 +376,10 @@ setGeneric(name="voxels", def=function(x, ...) standardGeneric("voxels"))
 
 if (!isGeneric("image"))
   setGeneric("image", function(x, ...) standardGeneric("image"))
+
+if (!isGeneric("as.raster"))
+  setGeneric("as.raster", function(x, ...) standardGeneric("as.raster"))
+
+if (!isGeneric("overlay"))
+  setGeneric("overlay", function(x, y, ...) standardGeneric("overlay"))
 

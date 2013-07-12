@@ -597,6 +597,14 @@ setMethod(f="concat", signature=signature(x="BrainVector", y="BrainVolume"),
 #' concat
 #' 
 #' @rdname concat-methods
+setMethod(f="concat", signature=signature(x="BrainVolume", y="BrainVector"),
+  def=function(x,y, ...) {
+    .concat4D(x,y,...)			
+  })
+
+#' concat
+#' 
+#' @rdname concat-methods
 setMethod(f="concat", signature=signature(x="BrainVector", y="BrainVector"),
 		def=function(x,y,...) {
 			.concat4D(x,y,...)
