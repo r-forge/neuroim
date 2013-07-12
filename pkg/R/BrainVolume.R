@@ -305,10 +305,11 @@ setMethod(f="loadData", signature=c("BrainVolumeSource"),
 			
 			reader <- dataReader(meta, offset)
 			dat <- readElements(reader, nels)
-      
+			## bit of a hack to deal with scale factors
       if (.hasSlot(meta, "slope")) {
-        ## bit of a hack to deal with scale factors
-        dat <- dat*meta@slope
+        if (meta@slope != 0) {  	  
+          dat <- dat*meta@slope
+        }
       }
       
 			close(reader)

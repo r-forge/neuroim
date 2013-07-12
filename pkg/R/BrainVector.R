@@ -152,9 +152,12 @@ setMethod(f="loadData", signature=c("BrainVectorSource"),
 			
 			reader <- dataReader(meta, 0)	
 			arr <- array(readElements(reader, nels), c(meta@Dim[1:4]))
+			## bit of a hack to deal with scale factors
 			if (.hasSlot(meta, "slope")) {
-			  ## bit of a hack to deal with scale factors
-			  arr <- arr*meta@slope
+        
+        if (meta@slope != 0) {		  
+			    arr <- arr*meta@slope
+        }
 			}
 			close(reader)
 				
