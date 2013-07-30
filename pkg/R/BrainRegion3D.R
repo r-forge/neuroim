@@ -27,6 +27,7 @@ RegionCube <- function(bvol, centroid, surround, mask=NULL) {
   vdim <- dim(bvol)
   
   #mcentroid <- (centroid * vspacing)
+  centroid <- as.integer(centroid)
 
   x <- round(seq(centroid[1]-surround, centroid[1]+surround))
   y <- round(seq(centroid[2]-surround, centroid[2]+surround))
@@ -68,6 +69,7 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=TRUE) {
     bspace <- space(bvol)
     vspacing <- spacing(bvol)
     vdim <- dim(bvol)
+    centroid <- as.integer(centroid)
   
     mcentroid <- ((centroid-1) * vspacing + vspacing/2)
     cubedim <- ceiling(radius/vspacing)
