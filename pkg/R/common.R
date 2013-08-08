@@ -5,7 +5,7 @@
 #' @rdname splitReduce-methods
 setMethod(f="splitReduce", signature=signature(x = "matrix", fac="factor", FUN="function"),
           def=function(x, fac, FUN) {
-            if (length(f) != nrow(x)) {
+            if (length(fac) != nrow(x)) {
               stop(paste("x must be same length as split variable"))
             }
             

@@ -15,7 +15,9 @@ setMethod(f="image", signature=signature(x = "BrainVolume"),
             grid.raster(ras)
           })
 
-
+#' create a Layer object
+#' 
+#' @export
 Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0)) {
   new("Layer", vol=vol, colorMap=colorMap, thresh=thresh)
 }
