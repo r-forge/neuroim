@@ -159,7 +159,9 @@ Searchlight <- function(mask, radius) {
 		if (index < nrow(grid)) { 
 			 index <<- index + 1
 		 	 search <- RegionSphere(mask, grid[index,], radius, nonzero=TRUE) 
-       search@coords
+       vox <- search@coords
+			 attr(vox, "center") <- grid[index,]
+       vox
 		} else {
 			stop('StopIteration')
 		}
