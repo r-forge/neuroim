@@ -135,6 +135,7 @@ RandomSearchlight <- function(mask, radius) {
       vox <- coords(search)
       vox <- vox[!done[vox],,drop=FALSE]
       done[vox] <<- TRUE
+      attr(vox, "center") <- grid[center,]
       vox
       
     } else {
