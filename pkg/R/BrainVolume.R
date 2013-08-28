@@ -221,16 +221,16 @@ setAs(from="DenseBrainVolume", to="array", def=function(from) from@.Data)
 
 
 #' @nord
-#' conversion from SparseBrainVolume to array
-#' @rdname as-methods
+# conversion from SparseBrainVolume to array
+# @rdname as-methods
 setAs(from="SparseBrainVolume", to="array", def=function(from) {
   vals <- as.numeric(from@data)
   array(vals, dim(from))
 })
 
 #' @nord
-#' conversion from SparseBrainVolume to numeric
-#' @rdname as-methods
+# conversion from SparseBrainVolume to numeric
+# @rdname as-methods
 setAs(from="SparseBrainVolume", to="numeric", def=function(from) {
   as.numeric(from@data)
 })

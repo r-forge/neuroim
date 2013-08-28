@@ -10,7 +10,15 @@
   \item{index}{the index of the volume (e.g. if the file is
   4-dimensional)}
 }
+\value{
+  an instance of the class \code{\linkS4class{BrainVolume}}
+}
 \description{
   load an image volume from a file
+}
+\examples{
+x <- loadVolume(system.file("/data/clusvol.nii", package="neuroim"))
+print(dim(x))
+space(x)
 }
 

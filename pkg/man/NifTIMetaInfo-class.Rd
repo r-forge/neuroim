@@ -1,6 +1,6 @@
 \name{NIfTIMetaInfo}
 \alias{NIfTIMetaInfo}
-\title{Constructor for \code{\linkS4class{NIfTIMetaInfo-class}} class}
+\title{Constructor for \code{\linkS4class{NIfTIMetaInfo}} class}
 \usage{
   NIfTIMetaInfo(descriptor, nifti_header)
 }
@@ -15,7 +15,6 @@
   an instance of class \code{\linkS4class{NIfTIMetaInfo}}
 }
 \description{
-  Constructor for \code{\linkS4class{NIfTIMetaInfo-class}}
-  class
+  Constructor for \code{\linkS4class{NIfTIMetaInfo}} class
 }
 
