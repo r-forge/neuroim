@@ -17,7 +17,8 @@
   load an image volume from a file
 }
 \examples{
-x <- loadVolume(system.file("/data/clusvol.nii", package="neuroim"))
+fname <- paste0(system.file(package="neuroim"), "/data/clusvol.nii")
+x <- loadVolume(fname)
 print(dim(x))
 space(x)
 }

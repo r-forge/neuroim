@@ -353,7 +353,8 @@ BrainVolumeSource <- function(input, index=1) {
 #' @param index the index of the volume (e.g. if the file is 4-dimensional)
 #' @return an instance of the class \code{\linkS4class{BrainVolume}}
 #' @examples
-#' x <- loadVolume(system.file("/data/clusvol.nii", package="neuroim"))
+#' fname <- paste0(system.file(package="neuroim"), "/data/clusvol.nii")
+#' x <- loadVolume(fname)
 #' print(dim(x))
 #' space(x)
 #' 
