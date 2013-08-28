@@ -1,5 +1,6 @@
-\name{BinaryWriter}
+\name{BinaryWriter-class}
 \alias{BinaryWriter}
+\alias{BinaryWriter-class}
 \title{BinaryWriter}
 \usage{
   BinaryWriter(output, byteOffset, dataType,
@@ -20,6 +21,9 @@
   \item{endian}{endianness of binary output connection}
 }
 \description{
+  This class supports writing of bulk binary data to a
+  connection
+
   Constructor for \code{\linkS4class{BinaryWriter}} class
 }
 

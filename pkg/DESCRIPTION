@@ -12,7 +12,7 @@ Author: Bradley Buchsbaum
 Description: neuroim is a collection of data structures that represent
     volumetric brain imaging data. In addition, there are function to
     read and write ANALYZE7.5 and NIFTI files.
-Version: 0.0.1
+Version: 0.0.2
 Date: 2011-01-22
 Depends:
     R (>= 2.11.0),

@@ -1,5 +1,6 @@
-\name{BrainMetaInfo}
+\name{BrainMetaInfo-class}
 \alias{BrainMetaInfo}
+\alias{BrainMetaInfo-class}
 \title{This class contains meta information from an image}
 \usage{
   BrainMetaInfo(Dim, spacing,
@@ -28,6 +29,8 @@
   an instance of class \code{\linkS4class{BrainMetaInfo}}
 }
 \description{
+  This class contains meta information from an image
+
   This class contains meta information from an image
 }
 

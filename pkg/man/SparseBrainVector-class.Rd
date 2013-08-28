@@ -1,5 +1,6 @@
-\name{SparseBrainVector}
+\name{SparseBrainVector-class}
 \alias{SparseBrainVector}
+\alias{SparseBrainVector-class}
 \title{SparseBrainVector}
 \usage{
   SparseBrainVector(data, space, mask, source = NULL,
@@ -19,6 +20,10 @@
   \item{label}{associated sub-image labels}
 }
 \description{
+  a sparse four-dimensional brain image, backed by a
+  \code{matrix}, where each column represents a vector
+  spanning the fourth dimension (e.g. time)
+
   constructs a SparseBrainVector object
 }
 

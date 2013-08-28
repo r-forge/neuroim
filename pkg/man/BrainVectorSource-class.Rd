@@ -1,6 +1,7 @@
-\name{BrainVectorSource}
+\name{BrainVectorSource-class}
 \alias{BrainVectorSource}
-\title{Construct a \code{\linkS4class{BrainVectorSource}} object}
+\alias{BrainVectorSource-class}
+\title{BrainVectorSource}
 \usage{
   BrainVectorSource(fileName, indices = NULL, mask = NULL)
 }
@@ -13,6 +14,9 @@
   \item{mask}{the subset of voxels that will be loaded}
 }
 \description{
+  A class that is used to produce a
+  \code{\linkS4class{BrainVector}} instance
+
   Construct a \code{\linkS4class{BrainVectorSource}} object
 }
 

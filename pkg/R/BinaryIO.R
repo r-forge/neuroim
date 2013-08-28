@@ -13,7 +13,7 @@ roxygen()
 #' @param dataType R data type of binary elements
 #' @param bytesPerElement number of bytes in each data element (e.g. 4 or 8 for floating point numbers)
 #' @param endian endianness of binary input connection
-#' @rdname BinaryReader-class
+#' @rdname BinaryReader
 #' @export 
 BinaryReader <- function(input, byteOffset, dataType, bytesPerElement, endian=.Platform$endian) {
 	if (is.character(input)) { 

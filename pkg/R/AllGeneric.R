@@ -65,7 +65,10 @@ setGeneric(name="fill", def=function(x, lookup) standardGeneric("fill"))
 #' Generic function to center/scale subsets of an object
 #' @param x a numeric matrix(like) object
 #' @param f the conditioning expression (usually a factor)
-#' @return a new matrix(like) object where the original values have been scaled
+#' @param center should values be centered?
+#' @param scale should values be scaled?
+#' @return a new matrix(like) object where the original values have been grouped by a factor and then centered and/or scaled for each grouping
+#' @docType methods
 #' @export splitScale
 #' @rdname splitScale-methods
 setGeneric(name="splitScale", def=function(x, f, center, scale) standardGeneric("splitScale"))
@@ -75,6 +78,7 @@ setGeneric(name="splitScale", def=function(x, f, center, scale) standardGeneric(
 #' @param fac the factor to define subsets of the object
 #' @param FUN the function to apply to each subset
 #' @return a new matrix(like) object where the original values have been scaled
+#' @docType methods
 #' @export splitReduce
 #' @rdname splitReduce-methods
 setGeneric(name="splitReduce", def=function(x, fac, FUN) standardGeneric("splitReduce"))

@@ -1,5 +1,6 @@
-\name{DenseBrainVolume}
+\name{DenseBrainVolume-class}
 \alias{DenseBrainVolume}
+\alias{DenseBrainVolume-class}
 \title{DenseBrainVolume}
 \usage{
   DenseBrainVolume(data, space, source = NULL, label = "",
@@ -22,6 +23,8 @@
   \code{\linkS4class{DenseBrainVolume}} instance
 }
 \description{
+  Three-dimensional brain image, backed by an \code{array}
+
   Construct a \code{\linkS4class{DenseBrainVolume}}
   instance
 }

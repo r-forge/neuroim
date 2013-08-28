@@ -88,6 +88,7 @@ setMethod(f="dropDim", signature=signature(x = "BrainSpace", dimnum="missing"),
 #' 
 #' @export
 #' @rdname dim-methods
+#' @aliases dim,BrainSpace,ANY-method
 setMethod(f="dim", signature=signature(x = "BrainSpace"),
 		def=function(x) x@Dim)
 

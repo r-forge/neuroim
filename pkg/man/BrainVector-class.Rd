@@ -1,6 +1,7 @@
-\name{BrainVector}
+\name{BrainVector-class}
 \alias{BrainVector}
-\title{BrainVector}
+\alias{BrainVector-class}
+\title{Four-dimensional brain image}
 \usage{
   BrainVector(data, space, mask = NULL, source = NULL,
     label = "")
@@ -23,6 +24,8 @@
   class
 }
 \description{
+  Four-dimensional brain image
+
   constructor function for virtual class
   \code{\linkS4class{BrainVector}}
 }

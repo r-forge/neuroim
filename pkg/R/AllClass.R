@@ -12,7 +12,7 @@ setOldClass(c("gzfile", "connection"))
 setClass("Base", contains=c("VIRTUAL"))
 
 #' This class represents an axis with a name attribute
-#'
+#' @name NamedAxis-class
 #' @slot axis the name of the axis
 #' @exportClass NamedAxis		 
 setClass("NamedAxis", representation=
@@ -20,34 +20,35 @@ setClass("NamedAxis", representation=
 
 
 #' Virtual base class representing an ordered set of named axes.
-#'
+#' @name AxisSet-class
 #' @slot ndim the number of axes (or dimensions)
 #' @exportClass AxisSet
 setClass("AxisSet", representation=representation(ndim="integer"))
 
 
 #' A one-dimensional axis set
-#'
+#' @name AxisSet1D-class
 #' @slot i the first axis
 #' @exportClass AxisSet1D
 setClass("AxisSet1D", representation=representation(i="NamedAxis"), contains=c("AxisSet"))
 
 #' A two-dimensional axis set
 #'
+#' @name AxisSet2D-class
 #' @slot j the first axis
 #' @exportClass AxisSet2D
 setClass("AxisSet2D", representation=representation(j="NamedAxis"), 
 		contains=c("AxisSet1D"))
 
 #' A three-dimensional axis set
-#'
+#' @name AxisSet3D-class
 #' @slot k the third axis
 #' @exportClass AxisSet3D
 setClass("AxisSet3D", representation=representation(k="NamedAxis"),
 		contains=c("AxisSet2D"))
 
 #' A four-dimensional axis set
-#'
+#' @name AxisSet4D-class
 #' @slot l the fourth axis
 #' @exportClass AxisSet4D
 setClass("AxisSet4D", representation=representation(l="NamedAxis"),
@@ -55,6 +56,7 @@ setClass("AxisSet4D", representation=representation(l="NamedAxis"),
 
 #' A five-dimensional axis set
 #'
+#' @name AxisSet5D-class
 #' @slot m the fifth axis
 #' @exportClass AxisSet5D
 setClass("AxisSet5D", representation=representation(m="NamedAxis"),
@@ -66,6 +68,7 @@ setClass("AxisSet5D", representation=representation(m="NamedAxis"),
 
 #' This class represents a neuroimaging file format
 #'
+#' @name BrainFileDescriptor-class
 #' @slot fileFormat the name of the file format (e.g. NIfTI)
 #' @slot headerEncoding the file encoding of the header file (e.g. 'raw' for binary, 'gzip' for gz compressed')
 #' @slot headerExtension the file extension for the header file (e.g. 'nii' for NIfTI single files)
@@ -82,21 +85,24 @@ setClass("BrainFileDescriptor",
 		contains=c("Base"))
 
 #' This class supports the NIfTI file format
-#'
+#' 
+#' @name NIfTIFileDescriptor-class
 #' @exportClass NIfTIFileDescriptor
 setClass("NIfTIFileDescriptor", contains=c("BrainFileDescriptor"))
 
 
 #' This class supports the AFNI file format
-#'
-#' @exportClass NIfTIFileDescriptor
+#' @name AFNIFileDescriptor-class
+#' @exportClass AFNIFileDescriptor
 setClass("AFNIFileDescriptor", contains=c("BrainFileDescriptor"))
 
 
 #' This is a base class to represent meta information
+#' @name BaseMetaInfo-class
 setClass("BaseMetaInfo")
 
 #' This is class is used to denote the absense of meta information
+#' @name NullMetaInfo-class
 setClass("NullMetaInfo", contains=c("BaseMetaInfo"))
 
 #' @nord
@@ -116,6 +122,7 @@ setMethod(f="show",
 	
 	
 #' This class contains meta information from an image
+#' @name BrainMetaInfo-class
 #' @slot dataType the data type code, e.g. FLOAT
 #' @slot Dim image dimensions
 #' @slot spatialAxes image axes for spatial dimensions (x,y,z)
@@ -140,6 +147,7 @@ setClass("BrainMetaInfo",
 
 #' This class contains meta information from an image data file
 #'
+#' @name FileMetaInfo-class
 #' @slot headerFile name of the file containing meta information
 #' @slot dataFile name of the file containing data
 #' @slot fileDescriptor descriptor of image file format
@@ -166,7 +174,7 @@ setClass("FileMetaInfo",
 		contains=c("BrainMetaInfo"))
 
 #' This class contains meta information for a NIfTI image file
-#'
+#' @name NifTIMetaInfo-class
 #' @slot nifti_header a list of attributes specific to the NIfTI file format 
 #' @exportClass NIfTIMetaInfo		 	
 setClass("NIfTIMetaInfo",
@@ -174,21 +182,21 @@ setClass("NIfTIMetaInfo",
 
 
 #' This class contains meta information for a AFNI image file
-#'
+#' @name AFNIMetaInfo-class  
 #' @slot afni_header a list of attributes specific to the AFNI file format 
-#' @exportClass AFNIMetaInfo		 	
+#' @exportClass AFNIMetaInfo	
 setClass("AFNIMetaInfo",
 		contains=c("FileMetaInfo"))
 
 
 #' This is a base class to rpresent a data source
-#' 
+#' @name BaseSource-class
 #' @slot metaInfo meta information for the data source
 #' @exportClass BaseSource
 setClass("BaseSource", representation=representation(metaInfo="BaseMetaInfo"))
 
 
-
+#' @nord
 NullSource <- function() {
 	ex <- exists(".NullSource", envir=.package_env)
 	if (!ex) {
@@ -204,6 +212,7 @@ NullSource <- function() {
 
 #' Base class for representing a data source for images. The purpose of this class is to provide a layer in between 
 #' low level IO and image loading functionality.
+#' @name BrainSource-class
 #' @slot metaInfo meta information for the data source
 #' @exportClass BrainSource
 setClass("BrainSource", representation=
@@ -212,6 +221,7 @@ setClass("BrainSource", representation=
 		
 #' Base class for representing a data source for images. The purpose of this class is to provide a layer in between 
 #' low level IO and image loading functionality.
+#' @name BrainFileSource-class
 #' @slot metaInfo meta information for the data source
 #' @exportClass BrainSource
 setClass("BrainFileSource", representation=
@@ -221,6 +231,7 @@ setClass("BrainFileSource", representation=
 		
 		
 #' A class is used to produce a \code{\linkS4class{BrainVolume}} instance
+#' @name BrainVolumeSource-class
 #' @slot index the index of the volume to be read -- must be of length 1.
 #' @exportClass BrainVolumeSource
 		setClass("BrainVolumeSource", representation=
@@ -230,6 +241,7 @@ setClass("BrainFileSource", representation=
 #' BrainVectorSource
 #' 
 #' A class that is used to produce a \code{\linkS4class{BrainVector}} instance
+#' @name BrainVectorSource-class
 #' @slot indices the index vector of the volumes to be loaded
 #' @exportClass BrainVectorSource
 		setClass("BrainVectorSource", representation=
@@ -243,6 +255,7 @@ setClass("BrainFileSource", representation=
 #' BrainBucketSource
 #' 
 #' A class that is used to produce a \code{\linkS4class{BrainBucket}} instance
+#' @name BrainBucketSource-class
 #' @slot sourceList a list of sources for the bucket sub-volumes
 #' @slot cache a cache used to store data in memory
 #' @exportClass BrainBucketSource
@@ -255,7 +268,7 @@ setClass("BrainFileSource", representation=
 #' BinaryReader
 #' 
 #' This class supports reading of bulk binary data from a connection
-#'
+#' @name BinaryReader-class
 #' @slot input the binary input connection
 #' @slot byteOffset the number of bytes to skip at the start of input
 #' @slot dataType the dataType of the binary Elements
@@ -272,7 +285,7 @@ setClass("BinaryReader", representation=
 #' BinaryWriter
 #' 
 #' This class supports writing of bulk binary data to a connection
-#'
+#' @name BinaryWriter-class
 #' @slot output the binary output connection
 #' @slot byteOffset the number of bytes to skip at the start of input
 #' @slot dataType the dataType of the binary Elements
@@ -289,6 +302,7 @@ setClass("BinaryWriter", representation=
 #' BrainSpace
 #' 
 #' This class represents the geometry of a brain image
+#' @name BrainSpace-class
 #' @slot Dim the grid dimensions of the image
 #' @slot origin the coordinates of the spatial origin
 #' @slot spacing the dimensions (in mm) of the grid units (voxels)
@@ -321,6 +335,9 @@ setClass("BrainSpace",
 #' BrainData
 #' 
 #' Base class for brain image data
+#' 
+#' 
+#' @name BrainData-class
 #' @slot source an instance of class \code{\linkS4class{BaseSource}} to store the source of the data
 #' @slot space an instance of class \code{\linkS4class{BrainSpace}} to represent the geometry of the data space
 #' @exportClass BrainData
@@ -330,14 +347,17 @@ setClass("BrainData",
 					       space="BrainSpace"), 
 	contains=c("VIRTUAL"))
 
-#' BrainVolume
+#' BrainSlice
 #' 
 #' Two-dimensional brain image
+#' @name BrainSlice-class
 #' @exportClass BrainSlice
 setClass("BrainSlice",       
 	    contains=c("BrainData", "array"))
 
 #' Three-dimensional brain image	   
+#' 
+#' @name BrainVolume-class
 #' @exportClass BrainVolume    
 setClass("BrainVolume", 	
 	    contains=c("BrainData"))
@@ -347,6 +367,7 @@ setClass("BrainVolume",
 #' DenseBrainVolume
 #' 
 #' Three-dimensional brain image, backed by an \code{array}	   
+#' @name DenseBrainVolume-class
 #' @exportClass DenseBrainVolume  
 setClass("DenseBrainVolume", 	
 		contains=c("BrainVolume", "array"))
@@ -354,7 +375,8 @@ setClass("DenseBrainVolume",
 
 #' SparseBrainVolume
 #' 
-#' Three-dimensional brain image, backed by an \code{sparseVector}     
+#' Three-dimensional brain image, backed by an \code{sparseVector}  
+#' @name SparseBrainVolume-class
 #' @exportClass SparseBrainVolume  
 setClass("SparseBrainVolume",   
          representation=representation(data="sparseVector"),
@@ -364,6 +386,7 @@ setClass("SparseBrainVolume",
 #' LogicalBrainVolume
 #' 
 #' Three-dimensional brain image where all values are either TRUE or FALSE	   
+#' @name LogicalBrainVolume-class
 #' @exportClass LogicalBrainVolume    
 setClass("LogicalBrainVolume", 	
 		contains=c("DenseBrainVolume"))
@@ -371,6 +394,7 @@ setClass("LogicalBrainVolume",
 #' ClusteredBrainVolume
 #' 
 #' Three-dimensional brain image that is divided into N disjoint partitions    
+#' @name ClusteredBrainVolume-class
 #' @exportClass ClusteredBrainVolume  
 setClass("ClusteredBrainVolume",   
          representation=representation(mask="LogicalBrainVolume", clusters="integer", labelMap="list", clusterMap="hash"),
@@ -381,6 +405,7 @@ setClass("ClusteredBrainVolume",
 #' 
 #' Three-dimensional brain image that can be used as a map between 1D grid indices and a table of values
 #' Currently used in the \code{\linkS4class{SparseBrainVector}} class. 
+#' @name IndexLookupVolume-class
 #' @exportClass IndexLookupVolume
 setClass("IndexLookupVolume", 
 		representation=
@@ -391,6 +416,7 @@ setClass("IndexLookupVolume",
 
 
 #' Four-dimensional brain image	   
+#' @name BrainVector-class
 #' @exportClass BrainVector  
 setClass("BrainVector", 
 		contains=c("BrainData"))
@@ -398,6 +424,7 @@ setClass("BrainVector",
 #' DenseBrainVector
 #' 
 #' Four-dimensional brain image, backed by an array   
+#' @name DenseBrainVector-class
 #' @exportClass DenseBrainVector  
 setClass("DenseBrainVector", 
 		contains=c("BrainVector", "array"))
@@ -415,6 +442,7 @@ setClass("DenseBrainVector",
 #' 
 #' a sparse four-dimensional brain image, backed by a \code{matrix}, where each column represents 
 #' a vector spanning the fourth dimension (e.g. time)
+#' @name SparseBrainVector-class
 #' @slot mask the mask defining the sparse domain
 #' @slot data the matrix of series, where rows span across voxel space and columns span the fourth dimensions
 #' @slot map instance of class \code{\linkS4class{IndexLookupVolume}} is used to map between spatial and index/row coordinates
@@ -426,6 +454,7 @@ setClass("SparseBrainVector",
 #' SparseBrainVectorSource
 #' 
 #' A class that is used to produce a \code{\linkS4class{SparseBrainVector}} instance
+#' @name SparseBrainVectorSource-class
 #' @slot mask the subset of voxels that will be stored in memory
 #' @export
 setClass("SparseBrainVectorSource", representation=
@@ -441,6 +470,7 @@ setClass("TiledBrainVector",
 #' ROIVolume
 #' 
 #' A class that is used to produce a \code{\linkS4class{SparseBrainVector}} instance
+#' @name ROIVolume-class
 #' @slot data the data stored in the ROI
 #' @slot coords the coordinates of the ROI
 #' @exportClass ROIVolume
@@ -455,6 +485,8 @@ setClass("ROIVolume",
 #' Kernel
 #' 
 #' A class representing an image kernel
+#' 
+#' @name Kernel-class
 #' @slot width the width in voxels of the kernel
 #' @slot weights the kernel weights
 #' @slot voxmat the relative voxel coordinates of the kernel
@@ -468,6 +500,7 @@ setClass("Kernel",
 #' BrainBucket
 #' 
 #' a four-dimensional image this conists of a sequence of labelled image volumes backed by a list
+#' @name BrainBucket-class
 #' @slot source the data source for the bucket volumes
 #' @slot labels the names of the sub-volumes contained in the bucket
 #' @slot data a list of \code{\linkS4class{BrainVolume}} instances with names corresponding to volume labels
@@ -477,8 +510,13 @@ setClass("BrainBucket",
 		contains=c("BrainVector"))
 				
 
-setClassUnion(name="index", members =  c("numeric", "logical", "character"))
+#setClassUnion(name="index", members =  c("numeric", "logical", "character"))
 
+#' Layer
+#' 
+#' A class used for displaying 2D images woith color maps
+#' @name Layer-class
+#' @exportClass Layer
 setClass("Layer",
          representation=representation(vol="BrainVolume", colorMap="vector", thresh="numeric"))
 

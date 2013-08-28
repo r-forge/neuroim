@@ -1,6 +1,7 @@
-\name{BrainVolume}
+\name{BrainVolume-class}
 \alias{BrainVolume}
-\title{BrainVolume}
+\alias{BrainVolume-class}
+\title{Three-dimensional brain image}
 \usage{
   BrainVolume(data, space, source = NULL, label = "",
     indices = NULL)
@@ -22,6 +23,8 @@
   \code{\linkS4class{DenseBrainVolume}} instance
 }
 \description{
+  Three-dimensional brain image
+
   Construct a \code{\linkS4class{BrainVolume}} instance,
   using default (dense) implementation
 }

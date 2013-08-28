@@ -1,6 +1,7 @@
-\name{AFNIMetaInfo}
+\name{AFNIMetaInfo-class}
 \alias{AFNIMetaInfo}
-\title{AFNIMetaInfo}
+\alias{AFNIMetaInfo-class}
+\title{This class contains meta information for a AFNI image file}
 \usage{
   AFNIMetaInfo(descriptor, afni_header)
 }
@@ -15,6 +16,9 @@
   an instance of class \code{\linkS4class{AFNIMetaInfo}}
 }
 \description{
+  This class contains meta information for a AFNI image
+  file
+
   Constructor for \code{\linkS4class{AFNIMetaInfo}} class
 }
 

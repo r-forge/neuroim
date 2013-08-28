@@ -164,7 +164,8 @@ setMethod(f="loadData", signature=c("SparseBrainVectorSource"),
 
 #' indices
 #' @export
-#' @rdname indices-methods           
+#' @rdname indices-methods   
+#' @aliases indices,SparseBrainVector,ANY-method        
 setMethod(f="indices", signature=signature(x="SparseBrainVector"),
           def=function(x) {
             indices(x@map)

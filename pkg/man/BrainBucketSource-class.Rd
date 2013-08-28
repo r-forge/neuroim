@@ -1,5 +1,6 @@
-\name{BrainBucketSource}
+\name{BrainBucketSource-class}
 \alias{BrainBucketSource}
+\alias{BrainBucketSource-class}
 \title{BrainBucketSource}
 \usage{
   BrainBucketSource(fileName, pattern = NULL,
@@ -15,6 +16,9 @@
   load}
 }
 \description{
+  A class that is used to produce a
+  \code{\linkS4class{BrainBucket}} instance
+
   Constructor function for
   \code{\linkS4class{BrainBucketSource}} class
 }

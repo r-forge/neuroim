@@ -1,6 +1,6 @@
 \name{BrainSlice}
 \alias{BrainSlice}
-\title{BrainVolume}
+\title{BrainSlice constructor}
 \usage{
   BrainSlice(data, space, indices = NULL)
 }
@@ -13,8 +13,6 @@
   elements}
 }
 \description{
-  Two-dimensional brain image
-
   BrainSlice constructor
 }
 

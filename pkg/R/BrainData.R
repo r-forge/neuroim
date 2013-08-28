@@ -15,7 +15,8 @@ setMethod(f="ndim", signature=signature(x = "BrainData"),
 #' dim
 #' 
 #' @export
-#' @nord
+#' @rdname dim-methods
+#' @aliases dim,BrainData,ANY-method
 setMethod(f="dim", signature=signature(x = "BrainData"),
           def=function(x) dim(x@space))
 

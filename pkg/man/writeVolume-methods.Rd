@@ -1,6 +1,5 @@
 \docType{methods}
 \name{writeVolume}
-\alias{writeVector}
 \alias{writeVolume}
 \title{Generic function to write an image volume to disk}
 \arguments{
@@ -14,8 +13,6 @@
 }
 \description{
   Generic function to write an image volume to disk
-
-  writeVector
 
   writeVolume
 

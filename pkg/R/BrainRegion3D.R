@@ -62,7 +62,7 @@ RegionCube <- function(bvol, centroid, surround, mask=NULL) {
 #' @param centroid the center of the sphere in voxel space
 #' @param radius the radius of the spherical ROI
 #' @param fill optional value to assign to data slot
-#' @param keep only nonzero elements from 'bvol' mask
+#' @param nonzero keep only nonzero elements from 'bvol' mask
 #' @export
 RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=TRUE) {
     ### TODO centroid doesn't work with matrix of one row
@@ -118,7 +118,7 @@ RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=TRUE) {
 
 #' Create an Random Searchlight iterator
 #' @param mask an image volume containing valid central voxels for roving searchlight
-#' @param the radius in mm of spherical searchlight
+#' @param radius in mm of spherical searchlight
 #' @export
 RandomSearchlight <- function(mask, radius) {
   done <- array(FALSE, dim(mask))
@@ -149,7 +149,7 @@ RandomSearchlight <- function(mask, radius) {
 
 #' Create an exhaustive searchlight iterator
 #' @param mask an image volume containing valid central voxels for roving searchlight
-#' @param the radius in mm of spherical searchlight
+#' @param radius in mm of spherical searchlight
 #' @export
 Searchlight <- function(mask, radius) {
 	grid <- indexToGrid(mask, which(mask != 0))
@@ -184,8 +184,9 @@ setAs(from="ROIVolume", to="DenseBrainVolume", def=function(from) {
 
 #' indices
 #' @param x an ROIVolume
-#' 
+#' @rdname indices-methods
 #' @export 
+#' @aliases indices,ROIVolume,ANY-method
 setMethod("indices", signature(x="ROIVolume"),
           function(x) {
 			  gridToIndex(x@space, x@coords)
@@ -280,6 +281,8 @@ Kernel <- function(kerndim, vdim, FUN=dnorm, ...) {
 #' @param vdim the dimensions of the voxels in real units
 #' @param FUN the kernel function taking as its first argument representing the distance from the center of the kernel
 #' @param ... additional parameters to the kernel FUN
+#' @rdname voxels-methods
+#' @aliases voxels,Kernel,ANY-method
 #' @export
 setMethod(f="voxels", signature=signature(x="Kernel"),
           function(x, centerVoxel=NULL) {

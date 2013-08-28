@@ -1,6 +1,7 @@
-\name{BrainSpace}
+\name{BrainSpace-class}
 \alias{BrainSpace}
-\title{Constructor function for BrainSpace class}
+\alias{BrainSpace-class}
+\title{BrainSpace}
 \usage{
   BrainSpace(Dim, origin = NULL, spacing = NULL,
     axes = NULL, trans = NULL)
@@ -18,6 +19,8 @@
   with the image space}
 }
 \description{
+  This class represents the geometry of a brain image
+
   Constructor function for BrainSpace class
 }
 

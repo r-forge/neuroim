@@ -19,6 +19,7 @@ setMethod(f="splitReduce", signature=signature(x = "matrix", fac="factor", FUN="
 #' 
 #' @export
 #' @rdname splitScale-methods
+#' @aliases splitScale,matrix,factor,logical,logical,ANY-method
 setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="logical", scale="logical"),
           def=function(x, f, center=TRUE, scale=TRUE) {
             if (length(f) != nrow(x)) {
@@ -35,7 +36,7 @@ setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="
             out
           })
 
-#' nord
+#' @nord
 setMethod(f="splitScale", signature=signature(x = "matrix", f="factor", center="missing", scale="missing"),
           def=function(x, f) {
             callGeneric(x,f, TRUE, TRUE)

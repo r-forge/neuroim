@@ -16,7 +16,9 @@ setMethod(f="image", signature=signature(x = "BrainVolume"),
           })
 
 #' create a Layer object
-#' 
+#' @param vol an image volume
+#' @param colorMap a lookup table defining mapping from image intensity values to colors
+#' @param thresh a range (min,max) defining the threshold window for determining image opacity
 #' @export
 Layer <- function(vol, colorMap=gray((0:255)/255, alpha=1), thresh=c(0,0)) {
   new("Layer", vol=vol, colorMap=colorMap, thresh=thresh)

@@ -1,5 +1,6 @@
-\name{LogicalBrainVolume}
+\name{LogicalBrainVolume-class}
 \alias{LogicalBrainVolume}
+\alias{LogicalBrainVolume-class}
 \title{LogicalBrainVolume}
 \usage{
   LogicalBrainVolume(data, space, source = NULL,
@@ -22,6 +23,9 @@
   \code{\linkS4class{LogicalBrainVolume}} instance
 }
 \description{
+  Three-dimensional brain image where all values are either
+  TRUE or FALSE
+
   Construct a \code{\linkS4class{LogicalBrainVolume}}
   instance
 }

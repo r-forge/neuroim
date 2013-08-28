@@ -24,6 +24,8 @@
 
   concat
 
+  concat
+
   concatenate two BrainVolumes
 }
 \note{

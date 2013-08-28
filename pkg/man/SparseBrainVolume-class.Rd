@@ -1,0 +1,32 @@
+\name{SparseBrainVolume-class}
+\alias{SparseBrainVolume}
+\alias{SparseBrainVolume-class}
+\title{SparseBrainVolume}
+\usage{
+  SparseBrainVolume(data, space, source = NULL, label = "",
+    indices = NULL)
+}
+\arguments{
+  \item{data}{a numeric vector}
+
+  \item{space}{an instance of class
+  \code{\linkS4class{BrainSpace}}}
+
+  \item{source}{an instance of class
+  \code{\linkS4class{BrainSource}}}
+
+  \item{label}{a \code{character} string}
+
+  \item{indices}{a 1-d index vector}
+}
+\value{
+  \code{\linkS4class{DenseBrainVolume}} instance
+}
+\description{
+  Three-dimensional brain image, backed by an
+  \code{sparseVector}
+
+  Construct a \code{\linkS4class{SparseBrainVolume}}
+  instance
+}
+
