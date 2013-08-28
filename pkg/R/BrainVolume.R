@@ -221,16 +221,16 @@ setAs(from="DenseBrainVolume", to="array", def=function(from) from@.Data)
 
 
 #' @nord
-# conversion from SparseBrainVolume to array
-# @rdname as-methods
+#' conversion from SparseBrainVolume to array
+#' @rdname as-methods
 setAs(from="SparseBrainVolume", to="array", def=function(from) {
   vals <- as.numeric(from@data)
   array(vals, dim(from))
 })
 
 #' @nord
-# conversion from SparseBrainVolume to numeric
-# @rdname as-methods
+#' conversion from SparseBrainVolume to numeric
+#' @rdname as-methods
 setAs(from="SparseBrainVolume", to="numeric", def=function(from) {
   as.numeric(from@data)
 })
@@ -351,6 +351,12 @@ BrainVolumeSource <- function(input, index=1) {
 #' load an image volume from a file
 #' @param fileName the name of the file to load
 #' @param index the index of the volume (e.g. if the file is 4-dimensional)
+#' @return an instance of the class \code{\linkS4class{BrainVolume}}
+#' @examples
+#' x <- loadVolume(system.file("/data/clusvol.nii", package="neuroim"))
+#' print(dim(x))
+#' space(x)
+#' 
 #' @export loadVolume
 loadVolume  <- function(fileName, index=1) {
 	src <- BrainVolumeSource(fileName, index)
