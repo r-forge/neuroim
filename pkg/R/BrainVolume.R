@@ -34,10 +34,15 @@ makeVolume <- function(data=NULL, refvol, source=NULL, label="", indices=NULL) {
 #' Construct a \code{\linkS4class{BrainVolume}} instance, using default (dense) implementation
 #' @param data a three-dimensional \code{array}
 #' @param space an instance of class \code{\linkS4class{BrainSpace}}
-#' @param label a \code{character} string
 #' @param source an instance of class \code{\linkS4class{BrainSource}}
-#' @param indices an optional 1-d index vector
-#' @return \code{\linkS4class{DenseBrainVolume}} instance 
+#' @param label a \code{character} string to identify volume
+#' @param indices an 1D vector that gives the linear indices of the associated \code{data} vector
+#' @return a \code{\linkS4class{DenseBrainVolume}} instance 
+#' @examples
+#' bspace <- BrainSpace(c(64,64,64), spacing=c(1,1,1))
+#' dat <- array(rnorm(64*64*64), c(64,64,64))
+#' bvol <- BrainVolume(dat,bspace, label="test")
+#' print(bvol) 
 #' @export BrainVolume
 #' @rdname BrainVolume-class
 BrainVolume <- function(data, space, source=NULL, label="", indices=NULL) {
