@@ -12,7 +12,7 @@
 #' @param trans a matrix representing the coordinate transformation associated with the image space (default is based on the NIFTI standard, Left-Posterior-Inferior)
 #' @return an instance of class \code{\linkS4class{BrainSpace}}
 #' @note one should rarely need to create a new \code{BrainSpace} instance, as it will almost always be created automatically using information stored in an image header.
-#' If one has an existing image, it's \code{BrainSpace} instance can be easily extracted with the \code{space} method.
+#' Also, If one already has an existing image object, it's \code{BrainSpace} instance can be easily extracted with the \code{space} method.
 #' @export
 #' @rdname BrainSpace
 #' @examples
