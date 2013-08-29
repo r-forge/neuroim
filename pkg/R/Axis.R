@@ -139,14 +139,14 @@ setMethod(f="print", signature=signature("NamedAxis"),
 setMethod(f="show", signature=signature("AxisSet1D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
-			cat("Axis 1:", print(object@i), "\n")
+			cat("Axis 1:", print(object@i@axis), "\n")
 		})
 
 #' @nord
 #' @export
 setMethod(f="print", signature=signature("AxisSet2D"), 
 		def=function(x, ...) {
-			paste(print(x@i), "-", print(x@j))
+			paste(x@i@axis, "-", x@j@axis)
 		})
 
 
@@ -156,15 +156,15 @@ setMethod(f="print", signature=signature("AxisSet2D"),
 setMethod(f="show", signature=signature("AxisSet2D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
-			cat("Axis 1:", print(object@i), "\n")
-			cat("Axis 2:", print(object@j), "\n")
+			cat("Axis 1:", object@i@axis, "\n")
+			cat("Axis 2:", object@j@axis, "\n")
 		})
 
 #' @nord
 #' @export
 setMethod(f="print", signature=signature("AxisSet3D"), 
 		def=function(x, ...) {
-			paste(print(x@i@axis), " -- ", print(x@j@axis), " -- ", print(x@k@axis))
+			paste(x@i@axis, " -- ", x@j@axis, " -- ", x@k@axis)
 		})
 
 
@@ -172,9 +172,9 @@ setMethod(f="print", signature=signature("AxisSet3D"),
 setMethod(f="show", signature=signature("AxisSet3D"), 
 		def=function(object) {
 			cat("instance of class:", class(object), "\n\n")
-			cat("Axis 1:", print(object@i), "\n")
-			cat("Axis 2:", print(object@j), "\n")
-			cat("Axis 3:", print(object@k), "\n")
+			cat("Axis 1:", object@i@axis, "\n")
+			cat("Axis 2:", object@j@axis, "\n")
+			cat("Axis 3:", object@k@axis, "\n")
 		})
 
 

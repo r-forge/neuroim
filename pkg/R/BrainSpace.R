@@ -3,14 +3,23 @@
 #' @include Axis.R
 {}
 
-#' Constructor function for BrainSpace class
-#' @param Dim the dimensions
+#' Constructor function for \code{\linkS4class{BrainSpace}} class
+#' 
+#' @param Dim a vector describing the dimensions of the spatial grid
 #' @param origin the coordinate origin of the image space
-#' @param spacing the voxel dimensions
-#' @param axes the images axes specification
-#' @param trans the coordinate transformation associated with the image space
+#' @param spacing the real-valued voxel dimensions (usually in millimeters)
+#' @param axes the image axes ordering (default is based on the NIFTI standard, Left-Posterior-Inferior)
+#' @param trans a matrix representing the coordinate transformation associated with the image space (default is based on the NIFTI standard, Left-Posterior-Inferior)
+#' @return an instance of class \code{\linkS4class{BrainSpace}}
 #' @export
-#' @rdname BrainSpace-class
+#' @rdname BrainSpace
+#' @examples
+#' bspace <- BrainSpace(c(64,64,64), origin=c(0,0,0), spacing=c(2,2,2))
+#' print(bspace)
+#' origin(bspace)
+#' axes(bspace)
+#' trans(bspace)
+#' 
 BrainSpace <- function(Dim, origin=NULL, spacing=NULL, axes=NULL, trans=NULL) {
 	
 	if (is.null(spacing)) {
@@ -38,6 +47,7 @@ BrainSpace <- function(Dim, origin=NULL, spacing=NULL, axes=NULL, trans=NULL) {
 			trans=trans,
 			inverseTrans=solve(trans))
 }
+
 
 #' @nord
 setMethod(f="show", signature=signature("BrainSpace"),

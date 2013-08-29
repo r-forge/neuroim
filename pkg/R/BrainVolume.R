@@ -663,7 +663,7 @@ setMethod(f="clusterCenters", signature=signature(x="ClusteredBrainVolume", feat
 setMethod(f="mergePartitions", signature=signature(x="ClusteredBrainVolume", K="numeric", features="matrix"), 
           def=function(x, K, features) {
             centers <- clusterCenters(x, features)
-            kres <- kmeans(centers, centers=48)
+            kres <- kmeans(centers, centers=K)
             oclusters <- numeric(prod(dim(x)))
             for (cnum in 1:nrow(centers)) {
               idx <- x@clusterMap[[as.character(cnum)]]
