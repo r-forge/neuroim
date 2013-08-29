@@ -788,6 +788,7 @@ setMethod(f="connComp", signature=signature(x="BrainVolume"),
 #' @export
 #' @docType methods
 #' @rdname writeVolume-methods
+#' @aliases writeVolume,BrainVolume,character,missing,missing,ANY-method
 setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="character", format="missing", dataType="missing"),
 		def=function(x, fileName) {
 			write.nifti.volume(x, fileName)           
@@ -798,6 +799,7 @@ setMethod(f="writeVolume",signature=signature(x="BrainVolume", fileName="charact
 #' @export
 #' @docType methods
 #' @rdname writeVolume-methods
+#' @aliases writeVolume,ClusteredBrainVolume,character,missing,missing,ANY-method
 setMethod(f="writeVolume",signature=signature(x="ClusteredBrainVolume", fileName="character", format="missing", dataType="missing"),
           def=function(x, fileName) {
             callGeneric(as(x, "DenseBrainVolume"), fileName)        
