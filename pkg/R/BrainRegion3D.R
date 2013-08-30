@@ -5,113 +5,150 @@
 
 
 #' Create an instance of class ROIVolume
-#' @param vspace the volume space
-#' @param coords matrix of coordinates
+#' @param vspace the volume \code{BrainSpace}
+#' @param coords matrix of voxel coordinates
 #' @param data the data values
+#' @return an instance of class \code{ROIVolume}
+#' @rdname ROIVolume
+#' @name ROIVolume
 #' @export
 ROIVolume <- function(vspace, coords, data=rep(length(indices),1)) {
   new("ROIVolume", space=vspace, data=data, coords=coords)
 }
   
-
-#' Create A Cuboid Region of interest
-#' @param bvol an image volume
-#' @param centroid the center of the cube in voxel space
-#' @param surround the number of voxels on either side of the central voxel
-#' @param mask an optional mask that wil be intersected with the ROI cube.
-#' @export
-RegionCube <- function(bvol, centroid, surround, mask=NULL) {
-  bspace <- space(bvol)
-
+#' @noRd
+.makeCubicGrid <- function(bvol, centroid, surround) {
   vspacing <- spacing(bvol)
   vdim <- dim(bvol)
-  
-  #mcentroid <- (centroid * vspacing)
   centroid <- as.integer(centroid)
-
-  x <- round(seq(centroid[1]-surround, centroid[1]+surround))
-  y <- round(seq(centroid[2]-surround, centroid[2]+surround))
-  z <- round(seq(centroid[3]-surround, centroid[3]+surround))
-
-  x <- x[x > 0 & x <= vdim[1]]
-  y <- y[y > 0 & y <= vdim[2]]
-  z <- z[z > 0 & z <= vdim[3]]
-
   
-  if (all(c(length(x), length(y), length(z)) == 0)) {
-    stop(paste("invalid sphere for centroid", centroid, " with surround", surround))
+  coords <- lapply(centroid, function(x) { round(seq(x-surround, x+surround)) })
+  coords <- lapply(1:3, function(i) {
+    x <- coords[[i]]
+    x[x > 0 & x <= vdim[i]]
+  })
+ 
+  if (all(sapply(coords, length) == 0)) {
+    stop(paste("invalid cube for centroid", centroid, " with surround", surround, ": volume is zero"))
   }
   
-  grid <- as.matrix(expand.grid(x=x,y=y,z=z))
-
-  if (!is.null(mask)) {
-    idx <- which(mask[grid] == 0)
-    if (length(idx) > 0) {
-      grid <- grid[-idx,]
-    }
-  }
-   
-  vals <- bvol[grid]
-  new("ROIVolume", space=space(bvol), data=vals, coords=grid)
-  
+  grid <- as.matrix(expand.grid(x=coords[[1]],y=coords[[2]],z=coords[[3]]))
 }
 
 
-#' Create A Spherical Region of interest
+
+
+
+  
+#' Create A Cuboid Region of Interest
+#' @param bvol an image volume
+#' @param centroid the center of the cube in voxel space
+#' @param surround the number of voxels on either side of the central voxel
+#' @param fill optional value(s) to assign to data slot
+#' @param nonzero keep only nonzero elements from \code{bvol}
+#' @return an instance of class \code{ROIVolume}
+#' @export
+RegionCube <- function(bvol, centroid, surround, fill=NULL, nonzero=TRUE) {
+  if (is.matrix(centroid)) {
+    centroid <- drop(centroid)
+  }
+  if (length(centroid) != 3) {
+    stop("RegionCube: centroid must have length of 3 (x,y,z coordinates)")
+  }
+  if (surround < 0) {
+    stop("'surround' argument cannot be negative")
+  }
+  
+  grid <- .makeCubicGrid(bvol,centroid,surround)
+  
+  vals <- if (!is.null(fill)) {
+    rep(fill, nrow(grid))
+  } else {
+    ## coercion to numeric shouldn't be necessary here.
+    as.numeric(bvol[grid])
+  }   
+  
+  keep <- if (nonzero) {
+    which(vals != 0)    
+  } else {
+    seq_along(vals)
+  }
+  
+  new("ROIVolume", space = space(bvol), data = vals[keep], coords = grid[keep, ])
+  
+}
+
+#' @noRd
+.makeSphericalGrid <- function(bvol, centroid, radius) {
+  vspacing <- spacing(bvol)
+  vdim <- dim(bvol)
+  centroid <- as.integer(centroid)
+  mcentroid <- ((centroid-1) * vspacing + vspacing/2)
+  cubedim <- ceiling(radius/vspacing)
+  
+  nsamples <- max(cubedim) * 2 + 1
+  vmat <- apply(cbind(cubedim, centroid), 1, function(cdim) {
+    round(seq(cdim[2] - cdim[1], cdim[2] + cdim[1], length.out=nsamples))
+  })
+  
+  vlist <- lapply(1:NCOL(vmat), function(i) {
+    v <- vmat[,i]
+    unique(v[v >= 1 & v <= vdim[i]])
+  })
+  
+  
+  if (all(sapply(vlist, length) == 0)) {
+    stop(paste("invalid sphere for centroid", centroid, " with radius",
+               radius))
+  }
+  
+  grid <- as.matrix(expand.grid(x = vlist[[1]], y = vlist[[2]], z = vlist[[3]]))
+  
+  
+}
+#' Create A Spherical Region of Interest
 #' @param bvol an image volume
 #' @param centroid the center of the sphere in voxel space
-#' @param radius the radius of the spherical ROI
-#' @param fill optional value to assign to data slot
-#' @param nonzero keep only nonzero elements from 'bvol' mask
+#' @param radius the radius in real units (e.g. millimeters) of the spherical ROI
+#' @param fill optional value(s) to assign to data slot
+#' @param nonzero keep only nonzero elements from \code{bvol}
+#' @return an instance of class \code{ROIVolume}
 #' @export
 RegionSphere <- function (bvol, centroid, radius, fill=NULL, nonzero=TRUE) {
-    ### TODO centroid doesn't work with matrix of one row
-    bspace <- space(bvol)
-    vspacing <- spacing(bvol)
-    vdim <- dim(bvol)
-    centroid <- as.integer(centroid)
+  if (is.matrix(centroid)) {
+    centroid <- drop(centroid)
+  }
+  if (length(centroid) != 3) {
+    stop("RegionSphere: centroid must have length of 3 (x,y,z coordinates)")
+  }
+  bspace <- space(bvol)
+  vspacing <- spacing(bvol)
+  vdim <- dim(bvol)
+  centroid <- as.integer(centroid)
   
-    mcentroid <- ((centroid-1) * vspacing + vspacing/2)
-    cubedim <- ceiling(radius/vspacing)
-
-    nsamples <- max(cubedim) * 2 + 1
-    vmat <- apply(cbind(cubedim, centroid), 1, function(cdim) {
-      round(seq(cdim[2] - cdim[1], cdim[2] + cdim[1], length.out=nsamples))
-    })
-
-    vlist <- lapply(1:NCOL(vmat), function(i) {
-      v <- vmat[,i]
-      unique(v[v >= 1 & v <= vdim[i]])
-    })
-    
-     
-    if (all(sapply(vlist, length) == 0)) {
-        stop(paste("invalid sphere for centroid", centroid, " with radius",
-            radius))
-    }
-    
-    grid <- as.matrix(expand.grid(x = vlist[[1]], y = vlist[[2]], z = vlist[[3]]))
-    dvals <- apply(grid, 1, function(gvals) {
-		coord <- (gvals-1) * vspacing + vspacing/2
-        sqrt(sum((coord - mcentroid)^2))
-    })
-    
-    idx <- which(dvals <= radius)
-    ## coercion to numeric is  a hack and needs to be fixed. subsetting of BrainVolume is broken?
-    
-    vals <- if (!is.null(fill)) {
-      rep(fill, length(idx))
-    } else {
-      as.numeric(bvol[grid[idx,]])
-    }   
-    
-    keep <- if (nonzero) {
-      which(vals != 0)    
-    } else {
-      seq_along(vals)
-    }
-    
-    new("ROIVolume", space = space(bvol), data = vals[keep], coords = grid[idx[keep], ])
+ 
+  dvals <- apply(grid, 1, function(gvals) {
+    coord <- (gvals-1) * vspacing + vspacing/2
+    sqrt(sum((coord - mcentroid)^2))
+  })
+  
+  idx <- which(dvals <= radius)
+  
+  
+  vals <- if (!is.null(fill)) {
+    rep(fill, length(idx))
+  } else {
+    ## coercion to numeric shouldn't be necessary here.
+    as.numeric(bvol[grid[idx,]])
+  }   
+  
+  keep <- if (nonzero) {
+    which(vals != 0)    
+  } else {
+    seq_along(vals)
+  }
+  
+  new("ROIVolume", space = space(bvol), data = vals[keep], coords = grid[idx[keep], ])
 }
 
 .resample <- function(x, ...) x[sample.int(length(x), ...)]
